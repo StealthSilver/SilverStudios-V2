@@ -1,0 +1,25 @@
+---
+description: Section and UI component templates for Silver Studios
+globs: src/sections/**/*,src/components/ui/**/*
+alwaysApply: false
+---
+
+# Sections (`src/sections/**`)
+
+Follow `src/sections/hero/HeroSection.tsx`:
+
+- Types at top, then local sub-components, then default export
+- Copy from `@/lib/data`, types from `@/types`
+- Server Component unless hooks/events/browser APIs required
+- `next/image` for images; semantic `<section>` + headings
+
+# UI (`src/components/ui/**`)
+
+Follow `src/components/ui/Button.tsx`:
+
+- Named export + exported `ComponentNameProps`
+- Default values for optional props
+- `cn(base, variant, className)` and `{...rest}`
+- Export `*Variants()` when links need the same styles
+
+Every file: JSDoc header with `@file` and `@description`.

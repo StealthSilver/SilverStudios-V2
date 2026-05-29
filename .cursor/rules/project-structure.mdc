@@ -1,0 +1,36 @@
+---
+description: Silver Studios folder layout, page.tsx discipline, and architecture
+alwaysApply: true
+---
+
+# Project structure
+
+Read `CONVENTIONS.md` for full rules. Summary:
+
+- `src/sections/` — page blocks (default export, one folder per section)
+- `src/components/ui/` — named UI primitives with `className` + `...rest`
+- `src/lib/data/` — all copy; never hardcode strings in JSX
+- `src/types/` — shared domain types
+- `src/hooks/` — client hooks only (`'use client'`)
+
+## page.tsx
+
+Imports sections only. No hooks, no logic, no long JSX.
+
+## Section file anatomy
+
+1. File header (`@file`, `@description`)
+2. Types
+3. Local sub-components
+4. `export default` section
+
+## UI primitives
+
+Named exports, exported `*Props` interfaces, `cn()` for classes, spread `...rest`.
+
+## Do not
+
+- Use `any`
+- Use `<img>` (use `next/image`)
+- Import sections from UI components
+- Put logic in `page.tsx`

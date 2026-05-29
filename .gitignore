@@ -43,3 +43,5 @@ next-env.d.ts
 #agent files
 AGENT.md
 CLAUDE.md
+CONVERSATION.md
+todos.md
