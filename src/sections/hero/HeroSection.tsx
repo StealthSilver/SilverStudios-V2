@@ -49,14 +49,14 @@ function HeroNavbar({ links, siteName, className }: HeroNavbarProps) {
       <nav
         aria-label="Primary"
         className={cn(
-          "flex h-11 items-center justify-between px-4 sm:h-12 sm:px-5",
+          "flex h-10 items-center justify-between px-4 sm:h-11 sm:px-5",
           NAV_RADIUS,
           "bg-white",
         )}
       >
         <Link
           href="/"
-          className="flex shrink-0 items-center"
+          className="flex shrink-0 translate-y-0.5 items-center"
           aria-label={siteName}
         >
           <Image
@@ -69,7 +69,7 @@ function HeroNavbar({ links, siteName, className }: HeroNavbarProps) {
           />
         </Link>
 
-        <ul className="flex items-center gap-4 sm:gap-6">
+        <ul className="flex translate-y-0.5 items-center gap-4 sm:gap-6">
           {links.map(({ label, href }) => (
             <li key={href}>
               <Link
