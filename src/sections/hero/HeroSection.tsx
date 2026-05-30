@@ -14,8 +14,12 @@ import { HeroBackgroundSlideshow } from "./HeroBackgroundSlideshow";
 import { HeroRotatingTagline } from "./HeroRotatingTagline";
 import { HeroSectionGate } from "./HeroSectionGate";
 import {
+  HERO_GRADIENT_BACKGROUND,
+  HERO_NOISE_OPACITY,
+  HERO_NOISE_TILE_SIZE,
   HERO_NAV_LINK_TYPOGRAPHY,
   HERO_NAVBAR_FIXED_POSITION,
+  HERO_NAVBAR_FIXED_POSITION_FULL_BLEED,
   HERO_NAVBAR_SHADOW,
   HERO_TITLE_SIZE,
   HERO_VIDEO_CONTAINER_HIDDEN,
@@ -44,6 +48,35 @@ interface HeroHeadlineProps {
 }
 
 // ——— Local sub-components ———
+
+const HERO_NOISE_TILE = encodeURIComponent(
+  '<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="1.2" numOctaves="3" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter><rect width="100%" height="100%" filter="url(#n)"/></svg>',
+);
+
+function HeroGradientBackground() {
+  const tileSize = `${HERO_NOISE_TILE_SIZE}px`;
+
+  return (
+    <div
+      aria-hidden="true"
+      className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
+    >
+      <div
+        className="absolute inset-0"
+        style={{ background: HERO_GRADIENT_BACKGROUND }}
+      />
+      <div
+        className="hero-bg-noise absolute inset-[-20%] h-[140%] w-[140%]"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,${HERO_NOISE_TILE}")`,
+          backgroundRepeat: "repeat",
+          backgroundSize: `${tileSize} ${tileSize}`,
+          opacity: HERO_NOISE_OPACITY,
+        }}
+      />
+    </div>
+  );
+}
 
 function HeroBackgroundOverlay() {
   return (
@@ -82,11 +115,13 @@ function HeroContainer({
     <div
       className={cn(
         "relative flex min-h-0 flex-1 flex-col overflow-hidden",
+        HERO_VIDEO_CONTAINER_HIDDEN && "min-h-full w-full",
         !HERO_VIDEO_CONTAINER_HIDDEN && HERO_RADIUS,
         !HERO_VIDEO_CONTAINER_HIDDEN && "bg-neutral-950",
         className,
       )}
     >
+      {HERO_VIDEO_CONTAINER_HIDDEN && <HeroGradientBackground />}
       <HeroBackgroundStack slides={backgroundSlides} />
 
       <div className="relative z-10 flex min-h-0 w-full flex-1 flex-col px-4 sm:px-6 md:px-9">
@@ -147,8 +182,7 @@ function HeroHeadline({ children, className }: HeroHeadlineProps) {
   return (
     <h1
       className={cn(
-        "shrink-0 whitespace-nowrap text-center font-display font-normal tracking-tight",
-        HERO_VIDEO_CONTAINER_HIDDEN ? "text-neutral-950" : "text-white",
+        "shrink-0 whitespace-nowrap text-center font-display font-normal tracking-tight text-white",
         HERO_TITLE_SIZE,
         className,
       )}
@@ -175,9 +209,7 @@ function HeroCtaRow({
         className={cn(
           HERO_NAV_LINK_TYPOGRAPHY,
           ctaTransition,
-          HERO_VIDEO_CONTAINER_HIDDEN
-            ? "inline-flex h-9 min-w-[10.5rem] items-center justify-center rounded-full bg-neutral-950 px-10 font-bold text-white hover:bg-neutral-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-950/20 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
-            : "inline-flex h-9 min-w-[10.5rem] items-center justify-center rounded-full bg-white px-10 font-bold text-neutral-950 hover:bg-neutral-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent",
+          "inline-flex h-9 min-w-[10.5rem] items-center justify-center rounded-full bg-white px-10 font-bold text-neutral-950 hover:bg-neutral-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent",
         )}
       >
         {primary.label}
@@ -187,9 +219,7 @@ function HeroCtaRow({
         className={cn(
           HERO_NAV_LINK_TYPOGRAPHY,
           ctaTransition,
-          HERO_VIDEO_CONTAINER_HIDDEN
-            ? "group inline-flex h-9 items-center gap-1.5 px-2 text-neutral-950/75 hover:text-neutral-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-950/20 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
-            : "group inline-flex h-9 items-center gap-1.5 px-2 text-white/75 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent",
+          "group inline-flex h-9 items-center gap-1.5 px-2 text-white/75 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent",
         )}
       >
         {secondary.label}
@@ -215,11 +245,20 @@ export default function HeroSection() {
       <HeroNavbar
         links={siteNavLinks}
         siteName={siteConfig.name}
-        className={HERO_NAVBAR_FIXED_POSITION}
+        className={
+          HERO_VIDEO_CONTAINER_HIDDEN
+            ? HERO_NAVBAR_FIXED_POSITION_FULL_BLEED
+            : HERO_NAVBAR_FIXED_POSITION
+        }
       />
       <section
         aria-label="Hero"
-        className="box-border flex h-dvh bg-white p-6 sm:p-8 md:p-9"
+        className={cn(
+          "relative box-border flex h-dvh flex-col",
+          HERO_VIDEO_CONTAINER_HIDDEN
+            ? "p-0"
+            : "bg-white p-6 sm:p-8 md:p-9",
+        )}
       >
         <HeroContainer backgroundSlides={backgroundSlides} className="min-h-0 flex-1">
           <div className="flex min-h-0 w-full flex-1 items-center justify-center">

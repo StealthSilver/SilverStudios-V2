@@ -11,9 +11,7 @@ import { cn } from "@/lib/utils";
 
 import {
   HERO_TAGLINE_FONT,
-  HERO_TAGLINE_FONT_LIGHT,
   HERO_TAGLINE_SIZE,
-  HERO_VIDEO_CONTAINER_HIDDEN,
 } from "./hero-styles";
 
 // ——— Types ———
@@ -69,7 +67,7 @@ export function HeroRotatingTagline({
 
   const taglineClassName = cn(
     "absolute inset-x-0 top-1/2 -translate-y-1/2 whitespace-nowrap text-center tracking-tight",
-    HERO_VIDEO_CONTAINER_HIDDEN ? HERO_TAGLINE_FONT_LIGHT : HERO_TAGLINE_FONT,
+    HERO_TAGLINE_FONT,
   );
 
   return (
