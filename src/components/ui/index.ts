@@ -23,6 +23,7 @@ export {
   LETTER_WAVE_STAGGER_MS,
   type LetterWaveLinkProps,
 } from "./LetterWaveLink";
+export { NavExternalLinkArrow } from "./NavExternalLinkArrow";
 export {
   ScrollRevealWords,
   type ScrollRevealWordsProps,

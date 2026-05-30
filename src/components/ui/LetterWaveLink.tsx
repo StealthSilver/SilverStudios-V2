@@ -59,9 +59,9 @@ export function LetterWaveLink({
     variant === "nav" ? LETTER_WAVE_NAV_STAGGER_MS : LETTER_WAVE_STAGGER_MS;
 
   const body = (
-    <span className="relative inline-grid place-items-center">
-      <span className="invisible col-start-1 row-start-1 select-none">{label}</span>
-      <span className="letter-wave__track col-start-1 row-start-1 whitespace-pre">
+    <span className="relative inline-flex whitespace-nowrap">
+      <span className="invisible select-none whitespace-nowrap">{label}</span>
+      <span className="letter-wave__track absolute left-0 top-1/2 inline-flex -translate-y-1/2 whitespace-nowrap">
         {chars.map((ch, i) => (
           <span
             key={`${label}-${i}-${ch}`}

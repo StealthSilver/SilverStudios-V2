@@ -4,6 +4,8 @@
  */
 
 export type {
+  FooterSocialIcon,
+  FooterSocialLink,
   HeroBackgroundSlide,
   HeroContent,
   SiteConfig,

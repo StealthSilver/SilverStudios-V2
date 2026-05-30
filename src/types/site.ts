@@ -6,6 +6,22 @@
 export interface SiteNavLink {
   label: string;
   href: string;
+  /** Opens in a new tab with an external-link affordance in the navbar */
+  external?: boolean;
+}
+
+export type FooterSocialIcon =
+  | "instagram"
+  | "linkedin"
+  | "x"
+  | "dribbble"
+  | "figma"
+  | "github";
+
+export interface FooterSocialLink {
+  label: string;
+  href: string;
+  icon: FooterSocialIcon;
 }
 
 export interface SiteConfig {

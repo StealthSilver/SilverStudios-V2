@@ -5,10 +5,13 @@
 
 export { useMediaQuery } from "./use-media-query";
 export {
+  isNavbarForegroundLight,
   mixNavbarForeground,
+  useNavbarForegroundColor,
   useNavbarScrollProgress,
 } from "./useNavbarScrollProgress";
 export { usePreloadHeroSlides } from "./use-preload-hero-slides";
+export { usePinnedScrollProgress } from "./usePinnedScrollProgress";
 export { useScrollProgress } from "./useScrollProgress";
 export {
   getScrollRevealProgress,

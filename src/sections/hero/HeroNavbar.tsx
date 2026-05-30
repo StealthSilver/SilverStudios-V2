@@ -11,9 +11,10 @@ import { useMemo } from "react";
 
 import { GlassSurface } from "@/components/ui/GlassSurface";
 import { LetterWaveLink } from "@/components/ui/LetterWaveLink";
+import { NavExternalLinkArrow } from "@/components/ui/NavExternalLinkArrow";
 import {
-  mixNavbarForeground,
-  useNavbarScrollProgress,
+  isNavbarForegroundLight,
+  useNavbarForegroundColor,
 } from "@/hooks/useNavbarScrollProgress";
 import { siteConfig, siteNavLinks } from "@/lib/data";
 import { cn } from "@/lib/utils";
@@ -36,13 +37,13 @@ export interface HeroNavbarProps {
 // ——— Component ———
 
 export default function HeroNavbar({ className }: HeroNavbarProps) {
-  const scrollProgress = useNavbarScrollProgress();
-  const foregroundColor = useMemo(
-    () => mixNavbarForeground(scrollProgress),
-    [scrollProgress],
+  const foregroundColor = useNavbarForegroundColor();
+  const foregroundIsLight = useMemo(
+    () => isNavbarForegroundLight(foregroundColor),
+    [foregroundColor],
   );
-  const lightLogoOpacity = 1 - scrollProgress;
-  const darkLogoOpacity = scrollProgress;
+  const lightLogoOpacity = foregroundIsLight ? 1 : 0;
+  const darkLogoOpacity = foregroundIsLight ? 0 : 1;
 
   const positionClass = HERO_VIDEO_CONTAINER_HIDDEN
     ? HERO_NAVBAR_FIXED_POSITION_FULL_BLEED
@@ -91,17 +92,28 @@ export default function HeroNavbar({ className }: HeroNavbarProps) {
           </Link>
 
           <ul className="mt-0.5 flex h-full items-center gap-4 sm:mt-2 sm:gap-6">
-            {siteNavLinks.map(({ label, href }) => (
+            {siteNavLinks.map(({ label, href, external }) => (
               <li key={href} className="flex h-full items-center">
                 <LetterWaveLink
                   href={href}
                   label={label}
                   variant="nav"
+                  target={external ? "_blank" : undefined}
+                  rel={external ? "noopener noreferrer" : undefined}
+                  ariaLabel={external ? `${label} (opens in new tab)` : undefined}
                   style={{ color: foregroundColor }}
                   className={cn(
                     "flex items-center transition-[color] duration-150 ease-linear",
                     HERO_NAV_LINK_TYPOGRAPHY,
+                    external && "group inline-flex items-center gap-1",
                   )}
+                  suffix={
+                    external ? (
+                      <span className="inline-flex opacity-0 transition-[opacity,transform] duration-300 ease-in-out group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 motion-reduce:opacity-100 motion-reduce:transform-none">
+                        <NavExternalLinkArrow />
+                      </span>
+                    ) : undefined
+                  }
                 />
               </li>
             ))}

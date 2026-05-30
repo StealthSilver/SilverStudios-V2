@@ -9,8 +9,8 @@ import { cn } from "@/lib/utils";
 
 import { LogoTickerClientLogos } from "./LogoTickerClientLogos";
 import {
+  LOGO_TICKER_BODY,
   LOGO_TICKER_CTA,
-  LOGO_TICKER_FOOTER,
   LOGO_TICKER_HEADLINE,
   LOGO_TICKER_HEADLINE_OFFSET,
   LOGO_TICKER_SECTION,
@@ -26,7 +26,7 @@ export default function LogoTickerSection() {
         className={cn(LOGO_TICKER_HEADLINE, LOGO_TICKER_HEADLINE_OFFSET)}
       />
 
-      <div className={cn(LOGO_TICKER_FOOTER)}>
+      <div className={cn(LOGO_TICKER_BODY)}>
         <LogoTickerClientLogos logos={logoTickerContent.logos} />
         <ScrollRevealWords
           text={logoTickerContent.cta}

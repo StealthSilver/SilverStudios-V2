@@ -3,7 +3,13 @@
  * @description Root page — imports sections only, zero business logic.
  */
 
-import { HeroNavbar, HeroTickerScrollTransition } from "@/sections";
+import {
+  FooterInviteTransition,
+  FooterSection,
+  HeroNavbar,
+  HeroTickerScrollTransition,
+  ProjectsSection,
+} from "@/sections";
 import { getFractionalHour } from "@/lib/hero-time";
 
 export default function Home() {
@@ -13,6 +19,9 @@ export default function Home() {
     <>
       <HeroNavbar />
       <HeroTickerScrollTransition initialHeroHour={initialHeroHour} />
+      <ProjectsSection />
+      <FooterInviteTransition />
+      <FooterSection />
     </>
   );
 }

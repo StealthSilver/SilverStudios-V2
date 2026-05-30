@@ -17,6 +17,7 @@ import HeroNavbar from "./HeroNavbar";
 import { HeroRotatingTagline } from "./HeroRotatingTagline";
 import { HeroSectionGate } from "./HeroSectionGate";
 import {
+  HERO_HEADLINE_FONT,
   HERO_NAV_LINK_TYPOGRAPHY,
   HERO_TITLE_SIZE,
   HERO_VIDEO_CONTAINER_HIDDEN,
@@ -112,7 +113,8 @@ function HeroHeadline({ children, className }: HeroHeadlineProps) {
   return (
     <h1
       className={cn(
-        "shrink-0 whitespace-nowrap text-center font-display font-normal tracking-[-0.04em] text-white",
+        "shrink-0 whitespace-nowrap text-white",
+        HERO_HEADLINE_FONT,
         HERO_TITLE_SIZE,
         className,
       )}

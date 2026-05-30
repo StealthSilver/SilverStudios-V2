@@ -7,6 +7,8 @@
 
 import { useEffect, useState } from "react";
 
+import type { CSSProperties } from "react";
+
 import { cn } from "@/lib/utils";
 
 import {
@@ -21,6 +23,10 @@ type TaglinePhase = "enter" | "hold" | "exit";
 interface HeroRotatingTaglineProps {
   lines: readonly string[];
   className?: string;
+  /** Replaces default `HERO_TAGLINE_FONT` (e.g. scroll-scrubbed color via `textStyle`). */
+  fontClassName?: string;
+  /** Applied to each rotating line (e.g. interpolated foreground on scroll). */
+  textStyle?: CSSProperties;
 }
 
 const HOLD_MS = 3000;
@@ -31,6 +37,8 @@ const TRANSITION_MS = 700;
 export function HeroRotatingTagline({
   lines,
   className,
+  fontClassName,
+  textStyle,
 }: HeroRotatingTaglineProps) {
   const [index, setIndex] = useState(0);
   const [phase, setPhase] = useState<TaglinePhase>("enter");
@@ -67,7 +75,7 @@ export function HeroRotatingTagline({
 
   const taglineClassName = cn(
     "absolute inset-x-0 top-1/2 -translate-y-1/2 whitespace-nowrap text-center tracking-tight",
-    HERO_TAGLINE_FONT,
+    fontClassName ?? HERO_TAGLINE_FONT,
   );
 
   return (
@@ -86,12 +94,14 @@ export function HeroRotatingTagline({
             <p
               key={`exit-${index}`}
               className={cn(taglineClassName, "animate-hero-tagline-out")}
+              style={textStyle}
             >
               {lines[index]}
             </p>
             <p
               key={`enter-${nextIndex}`}
               className={cn(taglineClassName, "animate-hero-tagline-in")}
+              style={textStyle}
             >
               {lines[nextIndex]}
             </p>
@@ -103,6 +113,7 @@ export function HeroRotatingTagline({
               taglineClassName,
               phase === "enter" && "animate-hero-tagline-in",
             )}
+            style={textStyle}
           >
             {lines[index]}
           </p>

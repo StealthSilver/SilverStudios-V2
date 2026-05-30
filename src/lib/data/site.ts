@@ -20,7 +20,11 @@ export const siteConfig: SiteConfig = {
 export const siteNavLinks: SiteNavLink[] = [
   { label: "Services", href: "#services" },
   { label: "Projects", href: "#projects" },
-  { label: "Silver UI", href: "#silver-ui" },
+  {
+    label: "Silver UI",
+    href: "https://silver-ui.vercel.app/",
+    external: true,
+  },
   { label: "Blog", href: "#blog" },
   { label: "Contact", href: "#contact" },
 ];

@@ -6,6 +6,10 @@
 /** Temporarily hide the hero video container (slideshow + dark backdrop). */
 export const HERO_VIDEO_CONTAINER_HIDDEN = true;
 
+/** Rounded slideshow frame (hero card / footer media). */
+export const HERO_MEDIA_FRAME =
+  "relative isolate min-h-0 overflow-hidden rounded-3xl bg-neutral-950";
+
 /** Periwinkle → royal blue (135deg). */
 export const HERO_GRADIENT_BACKGROUND =
   "linear-gradient(135deg, #8eb0f0 0%, #5278dc 28%, #2e52c8 58%, #122a94 100%)";
@@ -26,6 +30,10 @@ export const HERO_NOISE_TILE_SIZE = 120;
 
 export const HERO_TITLE_SIZE =
   "text-4xl sm:text-6xl md:text-7xl lg:text-8xl";
+
+/** Static headline typography (color applied per context). */
+export const HERO_HEADLINE_FONT =
+  "text-center font-display font-normal tracking-[-0.04em]";
 
 export const HERO_TAGLINE_SIZE =
   "text-4xl sm:text-6xl md:text-7xl lg:text-8xl py-2 sm:py-4 md:py-6 lg:py-4";
