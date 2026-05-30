@@ -6,6 +6,9 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import HeroGradientBackground, {
+  HeroGradientTimeProvider,
+} from "@/components/HeroGradientBackground";
 import { heroContent, siteConfig, siteNavLinks } from "@/lib/data";
 import { cn } from "@/lib/utils";
 import type { HeroBackgroundSlide, SiteNavLink } from "@/types";
@@ -14,9 +17,6 @@ import { HeroBackgroundSlideshow } from "./HeroBackgroundSlideshow";
 import { HeroRotatingTagline } from "./HeroRotatingTagline";
 import { HeroSectionGate } from "./HeroSectionGate";
 import {
-  HERO_GRADIENT_BACKGROUND,
-  HERO_NOISE_OPACITY,
-  HERO_NOISE_TILE_SIZE,
   HERO_NAV_LINK_TYPOGRAPHY,
   HERO_NAVBAR_FIXED_POSITION,
   HERO_NAVBAR_FIXED_POSITION_FULL_BLEED,
@@ -48,35 +48,6 @@ interface HeroHeadlineProps {
 }
 
 // ——— Local sub-components ———
-
-const HERO_NOISE_TILE = encodeURIComponent(
-  '<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="1.2" numOctaves="3" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter><rect width="100%" height="100%" filter="url(#n)"/></svg>',
-);
-
-function HeroGradientBackground() {
-  const tileSize = `${HERO_NOISE_TILE_SIZE}px`;
-
-  return (
-    <div
-      aria-hidden="true"
-      className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
-    >
-      <div
-        className="absolute inset-0"
-        style={{ background: HERO_GRADIENT_BACKGROUND }}
-      />
-      <div
-        className="hero-bg-noise absolute inset-[-20%] h-[140%] w-[140%]"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,${HERO_NOISE_TILE}")`,
-          backgroundRepeat: "repeat",
-          backgroundSize: `${tileSize} ${tileSize}`,
-          opacity: HERO_NOISE_OPACITY,
-        }}
-      />
-    </div>
-  );
-}
 
 function HeroBackgroundOverlay() {
   return (
@@ -121,12 +92,14 @@ function HeroContainer({
         className,
       )}
     >
-      {HERO_VIDEO_CONTAINER_HIDDEN && <HeroGradientBackground />}
-      <HeroBackgroundStack slides={backgroundSlides} />
+      <HeroGradientTimeProvider>
+        {HERO_VIDEO_CONTAINER_HIDDEN && <HeroGradientBackground />}
+        <HeroBackgroundStack slides={backgroundSlides} />
 
-      <div className="relative z-10 flex min-h-0 w-full flex-1 flex-col px-4 sm:px-6 md:px-9">
-        {children}
-      </div>
+        <div className="relative z-10 flex min-h-0 w-full flex-1 flex-col px-4 sm:px-6 md:px-9">
+          {children}
+        </div>
+      </HeroGradientTimeProvider>
     </div>
   );
 }
