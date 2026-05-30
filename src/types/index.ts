@@ -9,3 +9,4 @@ export type {
   SiteConfig,
   SiteNavLink,
 } from "./site";
+export type { ClientLogo } from "./logo-ticker";

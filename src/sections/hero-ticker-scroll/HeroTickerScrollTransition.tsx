@@ -20,7 +20,13 @@ function clamp(value: number, min: number, max: number): number {
 
 // ——— Main section ———
 
-export default function HeroTickerScrollTransition() {
+interface HeroTickerScrollTransitionProps {
+  initialHeroHour: number;
+}
+
+export default function HeroTickerScrollTransition({
+  initialHeroHour,
+}: HeroTickerScrollTransitionProps) {
   const heroRef = useRef<HTMLDivElement>(null);
   const [isEnhanced, setIsEnhanced] = useState(false);
 
@@ -40,6 +46,7 @@ export default function HeroTickerScrollTransition() {
           showNavbar={false}
           gradientOpacity={heroBgOpacity}
           contentOpacity={heroContentOpacity}
+          initialHeroHour={initialHeroHour}
         />
       </div>
       <LogoTickerSection />

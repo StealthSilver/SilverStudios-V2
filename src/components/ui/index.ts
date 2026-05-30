@@ -4,6 +4,9 @@
  */
 
 export {
+  GlassScrollbar,
+} from "./GlassScrollbar";
+export {
   Button,
   buttonVariants,
   type ButtonProps,
@@ -20,3 +23,7 @@ export {
   LETTER_WAVE_STAGGER_MS,
   type LetterWaveLinkProps,
 } from "./LetterWaveLink";
+export {
+  ScrollRevealWords,
+  type ScrollRevealWordsProps,
+} from "./ScrollRevealWords";

@@ -3,11 +3,18 @@
  * @description Fixed site navbar — shared across the hero, scroll transition, and page.
  */
 
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { useMemo } from "react";
 
 import { GlassSurface } from "@/components/ui/GlassSurface";
 import { LetterWaveLink } from "@/components/ui/LetterWaveLink";
+import {
+  mixNavbarForeground,
+  useNavbarScrollProgress,
+} from "@/hooks/useNavbarScrollProgress";
 import { siteConfig, siteNavLinks } from "@/lib/data";
 import { cn } from "@/lib/utils";
 
@@ -29,6 +36,14 @@ export interface HeroNavbarProps {
 // ——— Component ———
 
 export default function HeroNavbar({ className }: HeroNavbarProps) {
+  const scrollProgress = useNavbarScrollProgress();
+  const foregroundColor = useMemo(
+    () => mixNavbarForeground(scrollProgress),
+    [scrollProgress],
+  );
+  const lightLogoOpacity = 1 - scrollProgress;
+  const darkLogoOpacity = scrollProgress;
+
   const positionClass = HERO_VIDEO_CONTAINER_HIDDEN
     ? HERO_NAVBAR_FIXED_POSITION_FULL_BLEED
     : HERO_NAVBAR_FIXED_POSITION;
@@ -46,36 +61,51 @@ export default function HeroNavbar({ className }: HeroNavbarProps) {
           aria-label="Primary"
           className="flex h-10 items-center justify-between px-4 sm:h-11 sm:px-5"
         >
-        <Link
-          href="/"
-          className="flex h-full shrink-0 items-center"
-          aria-label={siteConfig.name}
-        >
-          <Image
-            src="/Logos/sitelogo-light.svg"
-            alt={siteConfig.name}
-            width={140}
-            height={22}
-            priority
-            className="block h-5 w-auto sm:h-6"
-          />
-        </Link>
-
-        <ul className="mt-0.5 flex h-full items-center gap-4 sm:mt-2 sm:gap-6">
-          {siteNavLinks.map(({ label, href }) => (
-            <li key={href} className="flex h-full items-center">
-              <LetterWaveLink
-                href={href}
-                label={label}
-                variant="nav"
-                className={cn(
-                  "flex items-center text-neutral-950",
-                  HERO_NAV_LINK_TYPOGRAPHY,
-                )}
+          <Link
+            href="/"
+            className="flex h-full shrink-0 items-center"
+            aria-label={siteConfig.name}
+          >
+            <span className="relative block h-5 sm:h-6">
+              <Image
+                src="/Logos/sitelogo-dark.svg"
+                alt=""
+                width={140}
+                height={22}
+                priority
+                aria-hidden
+                className="block h-5 w-auto transition-opacity duration-150 ease-linear sm:h-6"
+                style={{ opacity: lightLogoOpacity }}
               />
-            </li>
-          ))}
-        </ul>
+              <Image
+                src="/Logos/sitelogo-light.svg"
+                alt=""
+                width={140}
+                height={22}
+                priority
+                aria-hidden
+                className="absolute left-0 top-0 block h-5 w-auto transition-opacity duration-150 ease-linear sm:h-6"
+                style={{ opacity: darkLogoOpacity }}
+              />
+            </span>
+          </Link>
+
+          <ul className="mt-0.5 flex h-full items-center gap-4 sm:mt-2 sm:gap-6">
+            {siteNavLinks.map(({ label, href }) => (
+              <li key={href} className="flex h-full items-center">
+                <LetterWaveLink
+                  href={href}
+                  label={label}
+                  variant="nav"
+                  style={{ color: foregroundColor }}
+                  className={cn(
+                    "flex items-center transition-[color] duration-150 ease-linear",
+                    HERO_NAV_LINK_TYPOGRAPHY,
+                  )}
+                />
+              </li>
+            ))}
+          </ul>
         </nav>
       </GlassSurface>
     </header>

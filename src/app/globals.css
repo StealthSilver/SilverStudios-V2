@@ -17,45 +17,11 @@
 
 html {
   background-color: #ffffff;
-  color-scheme: light;
-  scrollbar-gutter: stable;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(13, 13, 13, 0.2) transparent;
 }
 
 body {
   background-color: #ffffff;
   color: var(--foreground);
-}
-
-/* Transparent scrollbar — Chrome, Safari, Brave, Edge */
-* {
-  scrollbar-width: thin;
-  scrollbar-color: rgba(13, 13, 13, 0.2) transparent;
-}
-
-*::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-*::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-*::-webkit-scrollbar-thumb {
-  background-color: rgba(13, 13, 13, 0.18);
-  border: 2px solid transparent;
-  border-radius: 9999px;
-  background-clip: padding-box;
-}
-
-*::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(13, 13, 13, 0.32);
-}
-
-*::-webkit-scrollbar-corner {
-  background: transparent;
 }
 
 @keyframes hero-tagline-enter {
@@ -343,5 +309,39 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .letter-wave:hover .letter-wave__char {
     animation: none;
+  }
+}
+
+/* Scroll-scrubbed word reveal (Luke Baffait about-text pattern) */
+.scroll-reveal-word {
+  display: inline-block;
+  opacity: 0;
+  filter: blur(8px);
+  will-change: opacity, filter;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .scroll-reveal-word {
+    filter: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-reveal-word {
+    opacity: 1;
+    filter: none;
+    will-change: auto;
+  }
+}
+
+/* Logo ticker — muted grey logos, full color on hover */
+.logo-ticker-logo__image {
+  filter: grayscale(1) opacity(0.42);
+  transition: filter 320ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (hover: hover) {
+  .logo-ticker-logo:hover .logo-ticker-logo__image {
+    filter: grayscale(0) opacity(1);
   }
 }

@@ -1,0 +1,84 @@
+/**
+ * Native scrollbar hidden — GlassScrollbar.tsx renders the overlay glass thumb.
+ */
+:root {
+  --scrollbar-size: 10px;
+  --scrollbar-thumb: rgba(255, 255, 255, 0.32);
+  --scrollbar-thumb-hover: rgba(255, 255, 255, 0.5);
+  --scrollbar-thumb-ring: rgba(255, 255, 255, 0.22);
+  --scrollbar-shadow: rgba(13, 13, 13, 0.18);
+}
+
+html {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+body {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
+.glass-scrollbar {
+  pointer-events: none;
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 9999;
+  width: var(--scrollbar-size);
+  height: 100vh;
+  height: 100dvh;
+}
+
+.glass-scrollbar__thumb {
+  position: absolute;
+  top: 0;
+  right: 1px;
+  width: 6px;
+  border-radius: 9999px;
+  border: 1px solid var(--scrollbar-thumb-ring);
+  background-color: var(--scrollbar-thumb);
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
+  backdrop-filter: blur(16px) saturate(150%);
+  box-shadow:
+    inset 0 0 0 1px var(--scrollbar-thumb-ring),
+    0 1px 6px var(--scrollbar-shadow);
+  opacity: 0.5;
+  transition: opacity 180ms ease;
+  will-change: transform, opacity;
+}
+
+.glass-scrollbar[data-visible="true"] .glass-scrollbar__thumb {
+  opacity: 1;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .glass-scrollbar {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glass-scrollbar__thumb {
+    transition: none;
+  }
+
+  .glass-scrollbar[data-visible="true"] .glass-scrollbar__thumb,
+  .glass-scrollbar .glass-scrollbar__thumb {
+    opacity: 1;
+  }
+}
+
+@supports not selector(::-webkit-scrollbar) {
+  html,
+  body {
+    scrollbar-width: none;
+  }
+}

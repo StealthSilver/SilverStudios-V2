@@ -6,8 +6,11 @@
 import { Cormorant_Garamond, DM_Sans } from "next/font/google";
 import localFont from "next/font/local";
 
-export { metadata, viewport } from "@/lib/metadata";
+import { GlassScrollbar } from "@/components/ui/GlassScrollbar";
+
 import "./globals.css";
+
+export { metadata, viewport } from "@/lib/metadata";
 
 const satoshi = localFont({
   src: [
@@ -73,8 +76,12 @@ export default function RootLayout({
       className={`${cormorantGaramond.variable} ${dmSans.variable} ${satoshi.variable} ${ranade.variable} ${editorialNew.variable} h-full bg-white antialiased`}
       suppressHydrationWarning
     >
+      <head>
+        <link rel="stylesheet" href="/scrollbar.css" />
+      </head>
       <body className="flex min-h-full flex-col bg-white font-sans text-foreground">
         {children}
+        <GlassScrollbar />
       </body>
     </html>
   );

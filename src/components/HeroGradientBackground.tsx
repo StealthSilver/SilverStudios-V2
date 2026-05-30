@@ -16,6 +16,7 @@ import {
 } from "react";
 
 import { cn } from "@/lib/utils";
+import { getFractionalHour } from "@/lib/hero-time";
 
 // ——— Types ———
 
@@ -46,10 +47,14 @@ interface HeroGradientBackgroundProps {
   className?: string;
   /** 0–1, defaults to 1 */
   opacity?: number;
+  /** SSR snapshot — pass from a Server Component for hydration-safe first paint. */
+  initialHour?: number;
 }
 
 interface HeroGradientTimeProviderProps {
   children: React.ReactNode;
+  /** Fractional hour (0–23.99) for the first render; defaults to live browser time. */
+  initialHour?: number;
 }
 
 // ——— Constants ———
@@ -108,8 +113,6 @@ const GRADIENT_KEYFRAMES: readonly GradientKeyframe[] = [
 const SCRUBBER_WIDTH_PX = 52;
 const TRACK_INSET_PX = 60;
 const SCRUBBER_HOUR_MAX = 23.99;
-/** Stable SSR default — live clock sync runs after mount in useEffect. */
-const DEFAULT_HERO_HOUR = 9;
 const GRAIN_INTERVAL_MS = 200;
 const GRAIN_OPACITY = 0.18;
 const TEXT_DARK_LUMINANCE_THRESHOLD = 160;
@@ -212,8 +215,7 @@ function resolveHeroTime(
 }
 
 function getCurrentBrowserHour(): number {
-  const now = new Date();
-  return now.getHours() + now.getMinutes() / 60 + now.getSeconds() / 3600;
+  return getFractionalHour();
 }
 
 /** Fractional hour (0–23.99) → `HH:MM` in 24-hour clock. */
@@ -228,13 +230,16 @@ function formatHour24(fractionalHour: number): string {
 
 const HeroTimeContext = createContext<HeroTimeState | null>(null);
 
-function useHeroTimeState(): HeroTimeState {
-  const [hour, setHourState] = useState(DEFAULT_HERO_HOUR);
+function useHeroTimeState(initialHour: number): HeroTimeState {
+  const [hour, setHourState] = useState(initialHour);
   const [isDragging, setDragging] = useState(false);
   const isDraggingRef = useRef(false);
 
   const syncToLiveClock = useCallback(() => {
-    setHourState(getCurrentBrowserHour());
+    const liveHour = getCurrentBrowserHour();
+    setHourState((current) =>
+      Math.abs(current - liveHour) < 1 / 3600 ? current : liveHour,
+    );
   }, []);
 
   useEffect(() => {
@@ -309,8 +314,9 @@ export function useHeroTime(): { hour: number; label: string; textDark: boolean 
 
 export function HeroGradientTimeProvider({
   children,
+  initialHour = getFractionalHour(),
 }: HeroGradientTimeProviderProps) {
-  const value = useHeroTimeState();
+  const value = useHeroTimeState(initialHour);
 
   return (
     <HeroTimeContext.Provider value={value}>{children}</HeroTimeContext.Provider>
@@ -648,7 +654,10 @@ function HeroGradientBackgroundLayers({
   );
 }
 
-export default function HeroGradientBackground(props: HeroGradientBackgroundProps) {
+export default function HeroGradientBackground({
+  initialHour,
+  ...props
+}: HeroGradientBackgroundProps) {
   const context = useContext(HeroTimeContext);
 
   if (context) {
@@ -656,7 +665,7 @@ export default function HeroGradientBackground(props: HeroGradientBackgroundProp
   }
 
   return (
-    <HeroGradientTimeProvider>
+    <HeroGradientTimeProvider initialHour={initialHour}>
       <HeroGradientBackgroundLayers {...props} />
     </HeroGradientTimeProvider>
   );

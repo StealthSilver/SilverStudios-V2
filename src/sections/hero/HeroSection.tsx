@@ -32,6 +32,7 @@ interface HeroContainerProps {
   children?: React.ReactNode;
   gradientOpacity?: number;
   contentOpacity?: number;
+  initialHeroHour: number;
 }
 
 interface HeroHeadlineProps {
@@ -75,6 +76,7 @@ function HeroContainer({
   children,
   gradientOpacity = 1,
   contentOpacity = 1,
+  initialHeroHour,
 }: HeroContainerProps) {
   return (
     <div
@@ -86,9 +88,12 @@ function HeroContainer({
         className,
       )}
     >
-      <HeroGradientTimeProvider>
+      <HeroGradientTimeProvider initialHour={initialHeroHour}>
         {HERO_VIDEO_CONTAINER_HIDDEN && (
-          <HeroGradientBackground opacity={gradientOpacity} />
+          <HeroGradientBackground
+            initialHour={initialHeroHour}
+            opacity={gradientOpacity}
+          />
         )}
         <HeroBackgroundStack slides={backgroundSlides} />
 
@@ -107,7 +112,7 @@ function HeroHeadline({ children, className }: HeroHeadlineProps) {
   return (
     <h1
       className={cn(
-        "shrink-0 whitespace-nowrap text-center font-display font-normal tracking-tight text-white",
+        "shrink-0 whitespace-nowrap text-center font-display font-normal tracking-[-0.04em] text-white",
         HERO_TITLE_SIZE,
         className,
       )}
@@ -136,7 +141,7 @@ function HeroCtaRow({
           className={cn(
             HERO_NAV_LINK_TYPOGRAPHY,
             ctaTransition,
-            "inline-flex h-9 min-w-[10.5rem] items-center justify-center rounded-full px-10 font-bold text-neutral-950 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent",
+            "inline-flex h-9 min-w-[10.5rem] items-center justify-center rounded-full px-10 font-bold text-white hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent",
           )}
         />
       </GlassSurface>
@@ -164,12 +169,14 @@ interface HeroSectionProps {
   gradientOpacity?: number;
   contentOpacity?: number;
   showNavbar?: boolean;
+  initialHeroHour: number;
 }
 
 export default function HeroSection({
   gradientOpacity = 1,
   contentOpacity = 1,
   showNavbar = true,
+  initialHeroHour,
 }: HeroSectionProps) {
   const { title, rotatingLines, backgroundSlides, primaryCta, secondaryCta } =
     heroContent;
@@ -191,6 +198,7 @@ export default function HeroSection({
           className="min-h-0 flex-1"
           gradientOpacity={gradientOpacity}
           contentOpacity={contentOpacity}
+          initialHeroHour={initialHeroHour}
         >
           <div className="flex min-h-0 w-full flex-1 items-center justify-center">
             <div className="-translate-y-28 flex flex-col items-center gap-3 sm:gap-4">

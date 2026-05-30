@@ -5,7 +5,12 @@
 
 "use client";
 
-import type { HTMLAttributeAnchorTarget, MouseEventHandler, ReactNode } from "react";
+import type {
+  CSSProperties,
+  HTMLAttributeAnchorTarget,
+  MouseEventHandler,
+  ReactNode,
+} from "react";
 import Link from "next/link";
 import { useMemo } from "react";
 
@@ -30,6 +35,7 @@ export interface LetterWaveLinkProps {
   /** e.g. `_blank` for external links */
   target?: HTMLAttributeAnchorTarget;
   rel?: string;
+  style?: CSSProperties;
   /** Decorative content after the label (e.g. arrow icon) */
   suffix?: ReactNode;
 }
@@ -44,6 +50,7 @@ export function LetterWaveLink({
   variant = "default",
   target,
   rel,
+  style,
   suffix,
 }: LetterWaveLinkProps) {
   const chars = useMemo(() => [...label], [label]);
@@ -80,6 +87,7 @@ export function LetterWaveLink({
       )}
       aria-label={ariaLabel ?? label}
       onClick={onClick}
+      style={style}
     >
       <span
         aria-hidden
