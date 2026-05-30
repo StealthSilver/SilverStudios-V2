@@ -26,7 +26,7 @@ function HeroPreloadScreen() {
     <div
       aria-busy="true"
       aria-label="Loading hero"
-      className="box-border flex h-dvh bg-white p-6 sm:p-8 md:p-9"
+      className="box-border flex h-dvh p-6 sm:p-8 md:p-9"
     >
       <div className="flex min-h-0 flex-1 animate-pulse rounded-3xl bg-neutral-950" />
     </div>
