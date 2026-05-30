@@ -6,7 +6,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import { siteConfig, siteNavLinks } from "@/lib/data";
+import { heroContent, siteConfig, siteNavLinks } from "@/lib/data";
 import { cn } from "@/lib/utils";
 import type { SiteNavLink } from "@/types";
 
@@ -23,6 +23,11 @@ interface HeroContainerProps {
 interface HeroNavbarProps {
   links: SiteNavLink[];
   siteName: string;
+  className?: string;
+}
+
+interface HeroHeadlineProps {
+  children: string;
   className?: string;
 }
 
@@ -56,7 +61,7 @@ function HeroNavbar({ links, siteName, className }: HeroNavbarProps) {
       >
         <Link
           href="/"
-          className="flex shrink-0 translate-y-0.5 items-center"
+          className="flex h-full shrink-0 items-center"
           aria-label={siteName}
         >
           <Image
@@ -65,16 +70,16 @@ function HeroNavbar({ links, siteName, className }: HeroNavbarProps) {
             width={140}
             height={22}
             priority
-            className="h-5 w-auto sm:h-6"
+            className="block h-5 w-auto sm:h-6"
           />
         </Link>
 
-        <ul className="flex translate-y-0.5 items-center gap-4 sm:gap-6">
+        <ul className="flex h-full items-center gap-4 sm:gap-6">
           {links.map(({ label, href }) => (
-            <li key={href}>
+            <li key={href} className="flex h-full items-center">
               <Link
                 href={href}
-                className="font-nav text-[11px] font-light uppercase tracking-[0.12em] text-neutral-950 transition-opacity hover:opacity-70 sm:text-xs"
+                className="flex items-center font-nav text-[11px] font-normal uppercase leading-none tracking-[0.06em] text-neutral-950 transition-opacity hover:opacity-70 sm:text-xs"
               >
                 {label}
               </Link>
@@ -86,13 +91,31 @@ function HeroNavbar({ links, siteName, className }: HeroNavbarProps) {
   );
 }
 
+function HeroHeadline({ children, className }: HeroHeadlineProps) {
+  return (
+    <h1
+      className={cn(
+        "shrink-0 -translate-y-20 whitespace-nowrap text-center font-display text-3xl font-normal tracking-tight text-white sm:text-5xl md:text-6xl lg:text-7xl",
+        className,
+      )}
+    >
+      {children}
+    </h1>
+  );
+}
+
 // ——— Main section ———
 
 export default function HeroSection() {
+  const { title } = heroContent;
+
   return (
     <section aria-label="Hero" className="box-border flex h-dvh bg-white p-6 sm:p-8 md:p-9">
       <HeroContainer>
         <HeroNavbar links={siteNavLinks} siteName={siteConfig.name} />
+        <div className="flex min-h-0 w-full flex-1 items-center justify-center">
+          <HeroHeadline>{title}</HeroHeadline>
+        </div>
       </HeroContainer>
     </section>
   );

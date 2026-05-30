@@ -10,9 +10,16 @@ export { metadata, viewport } from "@/lib/metadata";
 import "./globals.css";
 
 const satoshi = localFont({
-  src: "../../public/Fonts/Satoshi/Satoshi-Light.otf",
+  src: "../../public/Fonts/Satoshi/Satoshi-Regular.otf",
   variable: "--font-satoshi",
-  weight: "300",
+  weight: "400",
+  display: "swap",
+});
+
+const ranade = localFont({
+  src: "../../public/Fonts/Ranade/Ranade-Regular.otf",
+  variable: "--font-ranade",
+  weight: "400",
   display: "swap",
 });
 
@@ -39,7 +46,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${cormorantGaramond.variable} ${dmSans.variable} ${satoshi.variable} h-full bg-white antialiased`}
+      className={`${cormorantGaramond.variable} ${dmSans.variable} ${satoshi.variable} ${ranade.variable} h-full bg-white antialiased`}
       suppressHydrationWarning
     >
       <body className="flex min-h-full flex-col bg-white font-sans text-foreground">

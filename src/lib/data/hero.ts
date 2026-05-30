@@ -7,7 +7,7 @@ import type { HeroContent } from "@/types";
 
 export const heroContent: HeroContent = {
   eyebrow: "Silver Studios",
-  title: "Crafting digital experiences with clarity and intent.",
+  title: "We Craft The Finest",
   description:
     "We partner with teams to shape brand, product, and motion — from first sketch to shipped interface.",
   primaryCta: {

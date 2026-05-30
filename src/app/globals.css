@@ -11,6 +11,7 @@
   --font-sans: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
   --font-serif: var(--font-cormorant), ui-serif, Georgia, serif;
   --font-nav: var(--font-satoshi), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-ranade), ui-serif, Georgia, serif;
 }
 
 @media (prefers-color-scheme: dark) {
