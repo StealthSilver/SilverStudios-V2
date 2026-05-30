@@ -3,24 +3,20 @@
  * @description Landing hero — full-viewport neutral container with top navbar.
  */
 
-import Image from "next/image";
-import Link from "next/link";
-
+import { LetterWaveLink } from "@/components/ui/LetterWaveLink";
 import HeroGradientBackground, {
   HeroGradientTimeProvider,
 } from "@/components/HeroGradientBackground";
-import { heroContent, siteConfig, siteNavLinks } from "@/lib/data";
+import { heroContent } from "@/lib/data";
 import { cn } from "@/lib/utils";
 import type { HeroBackgroundSlide, SiteNavLink } from "@/types";
 
 import { HeroBackgroundSlideshow } from "./HeroBackgroundSlideshow";
+import HeroNavbar from "./HeroNavbar";
 import { HeroRotatingTagline } from "./HeroRotatingTagline";
 import { HeroSectionGate } from "./HeroSectionGate";
 import {
   HERO_NAV_LINK_TYPOGRAPHY,
-  HERO_NAVBAR_FIXED_POSITION,
-  HERO_NAVBAR_FIXED_POSITION_FULL_BLEED,
-  HERO_NAVBAR_SHADOW,
   HERO_TITLE_SIZE,
   HERO_VIDEO_CONTAINER_HIDDEN,
 } from "./hero-styles";
@@ -28,18 +24,13 @@ import {
 // ——— Types ———
 
 const HERO_RADIUS = "rounded-3xl";
-const NAV_RADIUS = "rounded-xl";
 
 interface HeroContainerProps {
   backgroundSlides: readonly HeroBackgroundSlide[];
   className?: string;
   children?: React.ReactNode;
-}
-
-interface HeroNavbarProps {
-  links: SiteNavLink[];
-  siteName: string;
-  className?: string;
+  gradientOpacity?: number;
+  contentOpacity?: number;
 }
 
 interface HeroHeadlineProps {
@@ -81,6 +72,8 @@ function HeroContainer({
   backgroundSlides,
   className,
   children,
+  gradientOpacity = 1,
+  contentOpacity = 1,
 }: HeroContainerProps) {
   return (
     <div
@@ -93,61 +86,19 @@ function HeroContainer({
       )}
     >
       <HeroGradientTimeProvider>
-        {HERO_VIDEO_CONTAINER_HIDDEN && <HeroGradientBackground />}
+        {HERO_VIDEO_CONTAINER_HIDDEN && (
+          <HeroGradientBackground opacity={gradientOpacity} />
+        )}
         <HeroBackgroundStack slides={backgroundSlides} />
 
-        <div className="relative z-10 flex min-h-0 w-full flex-1 flex-col px-4 sm:px-6 md:px-9">
+        <div
+          className="relative z-10 flex min-h-0 w-full flex-1 flex-col px-4 sm:px-6 md:px-9"
+          style={{ opacity: contentOpacity }}
+        >
           {children}
         </div>
       </HeroGradientTimeProvider>
     </div>
-  );
-}
-
-function HeroNavbar({ links, siteName, className }: HeroNavbarProps) {
-  return (
-    <header className={cn("relative mx-auto w-full max-w-5xl shrink-0", className)}>
-      <nav
-        aria-label="Primary"
-        className={cn(
-          "flex h-10 items-center justify-between px-4 sm:h-11 sm:px-5",
-          NAV_RADIUS,
-          "bg-white",
-          HERO_NAVBAR_SHADOW,
-        )}
-      >
-        <Link
-          href="/"
-          className="flex h-full shrink-0 items-center"
-          aria-label={siteName}
-        >
-          <Image
-            src="/Logos/sitelogo-light.svg"
-            alt={siteName}
-            width={140}
-            height={22}
-            priority
-            className="block h-5 w-auto sm:h-6"
-          />
-        </Link>
-
-        <ul className="mt-0.5 flex h-full items-center gap-4 sm:mt-2 sm:gap-6">
-          {links.map(({ label, href }) => (
-            <li key={href} className="flex h-full items-center">
-              <Link
-                href={href}
-                className={cn(
-                  "flex items-center text-neutral-950 transition-opacity hover:opacity-70",
-                  HERO_NAV_LINK_TYPOGRAPHY,
-                )}
-              >
-                {label}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </nav>
-    </header>
   );
 }
 
@@ -177,53 +128,52 @@ function HeroCtaRow({
 
   return (
     <div className="mt-4 flex shrink-0 flex-row flex-wrap items-center justify-center gap-3 sm:mt-5 sm:gap-4">
-      <Link
+      <LetterWaveLink
         href={primary.href}
+        label={primary.label}
         className={cn(
           HERO_NAV_LINK_TYPOGRAPHY,
           ctaTransition,
           "inline-flex h-9 min-w-[10.5rem] items-center justify-center rounded-full bg-white px-10 font-bold text-neutral-950 hover:bg-neutral-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent",
         )}
-      >
-        {primary.label}
-      </Link>
-      <Link
+      />
+      <LetterWaveLink
         href={secondary.href}
+        label={secondary.label}
         className={cn(
           HERO_NAV_LINK_TYPOGRAPHY,
           ctaTransition,
           "group inline-flex h-9 items-center gap-1.5 px-2 text-white/75 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent",
         )}
-      >
-        {secondary.label}
-        <span
-          aria-hidden="true"
-          className="inline-block transition-transform duration-300 ease-in-out group-hover:translate-x-1"
-        >
-          →
-        </span>
-      </Link>
+        suffix={
+          <span className="inline-block transition-transform duration-300 ease-in-out group-hover:translate-x-1">
+            →
+          </span>
+        }
+      />
     </div>
   );
 }
 
 // ——— Main section ———
 
-export default function HeroSection() {
+interface HeroSectionProps {
+  gradientOpacity?: number;
+  contentOpacity?: number;
+  showNavbar?: boolean;
+}
+
+export default function HeroSection({
+  gradientOpacity = 1,
+  contentOpacity = 1,
+  showNavbar = true,
+}: HeroSectionProps) {
   const { title, rotatingLines, backgroundSlides, primaryCta, secondaryCta } =
     heroContent;
 
   return (
     <HeroSectionGate slides={backgroundSlides}>
-      <HeroNavbar
-        links={siteNavLinks}
-        siteName={siteConfig.name}
-        className={
-          HERO_VIDEO_CONTAINER_HIDDEN
-            ? HERO_NAVBAR_FIXED_POSITION_FULL_BLEED
-            : HERO_NAVBAR_FIXED_POSITION
-        }
-      />
+      {showNavbar && <HeroNavbar />}
       <section
         aria-label="Hero"
         className={cn(
@@ -233,7 +183,12 @@ export default function HeroSection() {
             : "bg-white p-6 sm:p-8 md:p-9",
         )}
       >
-        <HeroContainer backgroundSlides={backgroundSlides} className="min-h-0 flex-1">
+        <HeroContainer
+          backgroundSlides={backgroundSlides}
+          className="min-h-0 flex-1"
+          gradientOpacity={gradientOpacity}
+          contentOpacity={contentOpacity}
+        >
           <div className="flex min-h-0 w-full flex-1 items-center justify-center">
             <div className="-translate-y-28 flex flex-col items-center gap-3 sm:gap-4">
               <HeroHeadline>{title}</HeroHeadline>

@@ -28,7 +28,7 @@ export const HERO_TITLE_SIZE =
   "text-4xl sm:text-6xl md:text-7xl lg:text-8xl";
 
 export const HERO_TAGLINE_SIZE =
-  "text-4xl sm:text-6xl md:text-7xl lg:text-8xl";
+  "text-4xl sm:text-6xl md:text-7xl lg:text-8xl py-2 sm:py-4 md:py-6 lg:py-4";
 
 export const HERO_TAGLINE_FONT_FAMILY =
   "[font-family:var(--font-editorial-new)] font-normal italic leading-none";

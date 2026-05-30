@@ -4,3 +4,4 @@
  */
 
 export { default } from "./HeroSection";
+export { default as HeroNavbar } from "./HeroNavbar";

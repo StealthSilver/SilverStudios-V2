@@ -44,6 +44,8 @@ interface HeroTimeState {
 
 interface HeroGradientBackgroundProps {
   className?: string;
+  /** 0–1, defaults to 1 */
+  opacity?: number;
 }
 
 interface HeroGradientTimeProviderProps {
@@ -609,7 +611,10 @@ function HeroTimeScrubber({
 
 // ——— Background layers ———
 
-function HeroGradientBackgroundLayers({ className }: HeroGradientBackgroundProps) {
+function HeroGradientBackgroundLayers({
+  className,
+  opacity = 1,
+}: HeroGradientBackgroundProps) {
   const state = useContext(HeroTimeContext);
 
   if (!state) {
@@ -627,6 +632,7 @@ function HeroGradientBackgroundLayers({ className }: HeroGradientBackgroundProps
         ref={containerRef}
         aria-hidden="true"
         className={cn("absolute inset-0 z-0 overflow-hidden", className)}
+        style={{ opacity }}
       >
         <div
           className="absolute inset-0"
