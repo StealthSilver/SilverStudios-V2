@@ -8,7 +8,10 @@
 import type { ReactNode } from "react";
 
 import { usePreloadHeroSlides } from "@/hooks/use-preload-hero-slides";
+import { cn } from "@/lib/utils";
 import type { HeroBackgroundSlide } from "@/types";
+
+import { HERO_NAVBAR_FIXED_POSITION, HERO_VIDEO_CONTAINER_HIDDEN } from "./hero-styles";
 
 import { HeroSlidesPreloader } from "./HeroSlidesPreloader";
 
@@ -28,8 +31,18 @@ function HeroPreloadScreen() {
       aria-label="Loading hero"
       className="box-border flex h-dvh p-6 sm:p-8 md:p-9"
     >
-      <div className="relative flex min-h-0 flex-1 overflow-hidden rounded-3xl bg-neutral-950">
-        <div className="absolute inset-x-4 top-3 h-10 rounded-xl bg-white/10 sm:inset-x-6 sm:top-4 sm:h-11 md:inset-x-9 md:top-6" />
+      <div
+        className={cn(
+          HERO_NAVBAR_FIXED_POSITION,
+          "h-10 rounded-xl bg-neutral-200/90 sm:h-11",
+        )}
+      />
+      <div
+        className={cn(
+          "relative flex min-h-0 flex-1 overflow-hidden rounded-3xl bg-neutral-950",
+          HERO_VIDEO_CONTAINER_HIDDEN && "hidden",
+        )}
+      >
         <div className="flex flex-1 animate-pulse bg-neutral-900/40" />
       </div>
     </div>
@@ -44,7 +57,7 @@ export function HeroSectionGate({ slides, children }: HeroSectionGateProps) {
   return (
     <>
       <HeroSlidesPreloader slides={slides} onSlideLoaded={markLoaded} />
-      {allLoaded ? children : <HeroPreloadScreen />}
+      {HERO_VIDEO_CONTAINER_HIDDEN || allLoaded ? children : <HeroPreloadScreen />}
     </>
   );
 }

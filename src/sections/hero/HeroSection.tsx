@@ -15,8 +15,10 @@ import { HeroRotatingTagline } from "./HeroRotatingTagline";
 import { HeroSectionGate } from "./HeroSectionGate";
 import {
   HERO_NAV_LINK_TYPOGRAPHY,
+  HERO_NAVBAR_FIXED_POSITION,
   HERO_NAVBAR_SHADOW,
   HERO_TITLE_SIZE,
+  HERO_VIDEO_CONTAINER_HIDDEN,
 } from "./hero-styles";
 
 // ——— Types ———
@@ -60,7 +62,10 @@ function HeroBackgroundStack({
   return (
     <div
       aria-hidden="true"
-      className="absolute inset-0 z-0 isolate overflow-hidden"
+      className={cn(
+        "absolute inset-0 z-0 isolate overflow-hidden",
+        HERO_VIDEO_CONTAINER_HIDDEN && "hidden",
+      )}
     >
       <HeroBackgroundSlideshow slides={slides} className="absolute inset-0" />
       <HeroBackgroundOverlay />
@@ -77,8 +82,8 @@ function HeroContainer({
     <div
       className={cn(
         "relative flex min-h-0 flex-1 flex-col overflow-hidden",
-        HERO_RADIUS,
-        "bg-neutral-950",
+        !HERO_VIDEO_CONTAINER_HIDDEN && HERO_RADIUS,
+        !HERO_VIDEO_CONTAINER_HIDDEN && "bg-neutral-950",
         className,
       )}
     >
@@ -142,7 +147,8 @@ function HeroHeadline({ children, className }: HeroHeadlineProps) {
   return (
     <h1
       className={cn(
-        "shrink-0 whitespace-nowrap text-center font-display font-normal tracking-tight text-white",
+        "shrink-0 whitespace-nowrap text-center font-display font-normal tracking-tight",
+        HERO_VIDEO_CONTAINER_HIDDEN ? "text-neutral-950" : "text-white",
         HERO_TITLE_SIZE,
         className,
       )}
@@ -169,7 +175,9 @@ function HeroCtaRow({
         className={cn(
           HERO_NAV_LINK_TYPOGRAPHY,
           ctaTransition,
-          "inline-flex h-9 min-w-[10.5rem] items-center justify-center rounded-full px-10 font-bold bg-white text-neutral-950 hover:bg-neutral-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent",
+          HERO_VIDEO_CONTAINER_HIDDEN
+            ? "inline-flex h-9 min-w-[10.5rem] items-center justify-center rounded-full bg-neutral-950 px-10 font-bold text-white hover:bg-neutral-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-950/20 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+            : "inline-flex h-9 min-w-[10.5rem] items-center justify-center rounded-full bg-white px-10 font-bold text-neutral-950 hover:bg-neutral-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent",
         )}
       >
         {primary.label}
@@ -179,7 +187,9 @@ function HeroCtaRow({
         className={cn(
           HERO_NAV_LINK_TYPOGRAPHY,
           ctaTransition,
-          "group inline-flex h-9 items-center gap-1.5 px-2 text-white/75 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent",
+          HERO_VIDEO_CONTAINER_HIDDEN
+            ? "group inline-flex h-9 items-center gap-1.5 px-2 text-neutral-950/75 hover:text-neutral-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-950/20 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+            : "group inline-flex h-9 items-center gap-1.5 px-2 text-white/75 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent",
         )}
       >
         {secondary.label}
@@ -202,16 +212,16 @@ export default function HeroSection() {
 
   return (
     <HeroSectionGate slides={backgroundSlides}>
+      <HeroNavbar
+        links={siteNavLinks}
+        siteName={siteConfig.name}
+        className={HERO_NAVBAR_FIXED_POSITION}
+      />
       <section
         aria-label="Hero"
         className="box-border flex h-dvh bg-white p-6 sm:p-8 md:p-9"
       >
         <HeroContainer backgroundSlides={backgroundSlides} className="min-h-0 flex-1">
-          <HeroNavbar
-            links={siteNavLinks}
-            siteName={siteConfig.name}
-            className="absolute inset-x-4 top-3 z-20 sm:inset-x-6 sm:top-4 md:inset-x-9 md:top-6"
-          />
           <div className="flex min-h-0 w-full flex-1 items-center justify-center">
             <div className="-translate-y-28 flex flex-col items-center gap-3 sm:gap-4">
               <HeroHeadline>{title}</HeroHeadline>
