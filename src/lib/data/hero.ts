@@ -44,7 +44,7 @@ export const heroContent: HeroContent = {
   description:
     "We partner with teams to shape brand, product, and motion — from first sketch to shipped interface.",
   primaryCta: {
-    label: "Start a project",
+    label: "Let's talk",
     href: "mailto:hello@silverstudios.com",
   },
   secondaryCta: {

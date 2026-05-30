@@ -10,9 +10,24 @@ export { metadata, viewport } from "@/lib/metadata";
 import "./globals.css";
 
 const satoshi = localFont({
-  src: "../../public/Fonts/Satoshi/Satoshi-Regular.otf",
+  src: [
+    {
+      path: "../../public/Fonts/Satoshi/Satoshi-Regular.otf",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../../public/Fonts/Satoshi/Satoshi-Medium.otf",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "../../public/Fonts/Satoshi/Satoshi-Bold.otf",
+      weight: "700",
+      style: "normal",
+    },
+  ],
   variable: "--font-satoshi",
-  weight: "400",
   display: "swap",
 });
 
