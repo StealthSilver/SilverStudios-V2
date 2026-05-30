@@ -11,6 +11,7 @@ import { cn } from "@/lib/utils";
 import type { SiteNavLink } from "@/types";
 
 import { HeroRotatingTagline } from "./HeroRotatingTagline";
+import { HERO_TITLE_SIZE } from "./hero-styles";
 
 // ——— Types ———
 
@@ -76,7 +77,7 @@ function HeroNavbar({ links, siteName, className }: HeroNavbarProps) {
           />
         </Link>
 
-        <ul className="flex h-full items-center gap-4 sm:gap-6">
+        <ul className="mt-0.5 flex h-full items-center gap-4 sm:mt-2 sm:gap-6">
           {links.map(({ label, href }) => (
             <li key={href} className="flex h-full items-center">
               <Link
@@ -97,7 +98,8 @@ function HeroHeadline({ children, className }: HeroHeadlineProps) {
   return (
     <h1
       className={cn(
-        "shrink-0 whitespace-nowrap text-center font-display text-4xl font-normal tracking-tight text-white sm:text-6xl md:text-7xl lg:text-8xl",
+        "shrink-0 whitespace-nowrap text-center font-display font-normal tracking-tight text-white",
+        HERO_TITLE_SIZE,
         className,
       )}
     >

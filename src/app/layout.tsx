@@ -29,6 +29,7 @@ const editorialNew = localFont({
   weight: "200",
   style: "italic",
   display: "swap",
+  fallback: ["Georgia", "Times New Roman", "serif"],
 });
 
 const cormorantGaramond = Cormorant_Garamond({

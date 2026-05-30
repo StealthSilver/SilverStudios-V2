@@ -9,6 +9,11 @@ import { useEffect, useState } from "react";
 
 import { cn } from "@/lib/utils";
 
+import {
+  HERO_TAGLINE_FONT,
+  HERO_TAGLINE_SIZE,
+} from "./hero-styles";
+
 // ——— Types ———
 
 type TaglinePhase = "enter" | "hold" | "exit";
@@ -60,44 +65,49 @@ export function HeroRotatingTagline({
     return null;
   }
 
-  const taglineClassName =
-    "absolute whitespace-nowrap font-editorial text-2xl font-extralight italic text-white sm:text-3xl md:text-4xl lg:text-5xl";
+  const taglineClassName = cn(
+    "absolute inset-x-0 top-1/2 -translate-y-1/2 whitespace-nowrap text-center tracking-tight",
+    HERO_TAGLINE_FONT,
+  );
 
   return (
     <div
       aria-live="polite"
       aria-atomic="true"
       className={cn(
-        "relative flex h-10 w-full items-center justify-center overflow-hidden sm:h-12 md:h-14 lg:h-16",
+        "relative w-full overflow-hidden text-center",
+        HERO_TAGLINE_SIZE,
         className,
       )}
     >
-      {phase === "exit" ? (
-        <>
+      <div className="relative min-h-[1.15em] w-full">
+        {phase === "exit" ? (
+          <>
+            <p
+              key={`exit-${index}`}
+              className={cn(taglineClassName, "animate-hero-tagline-out")}
+            >
+              {lines[index]}
+            </p>
+            <p
+              key={`enter-${nextIndex}`}
+              className={cn(taglineClassName, "animate-hero-tagline-in")}
+            >
+              {lines[nextIndex]}
+            </p>
+          </>
+        ) : (
           <p
-            key={`exit-${index}`}
-            className={cn(taglineClassName, "animate-hero-tagline-out")}
+            key={`line-${index}`}
+            className={cn(
+              taglineClassName,
+              phase === "enter" && "animate-hero-tagline-in",
+            )}
           >
             {lines[index]}
           </p>
-          <p
-            key={`enter-${nextIndex}`}
-            className={cn(taglineClassName, "animate-hero-tagline-in")}
-          >
-            {lines[nextIndex]}
-          </p>
-        </>
-      ) : (
-        <p
-          key={`line-${index}`}
-          className={cn(
-            taglineClassName,
-            phase === "enter" && "animate-hero-tagline-in",
-          )}
-        >
-          {lines[index]}
-        </p>
-      )}
+        )}
+      </div>
     </div>
   );
 }
