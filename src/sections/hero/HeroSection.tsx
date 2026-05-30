@@ -151,7 +151,10 @@ export default function HeroSection() {
 
   return (
     <HeroSectionGate slides={backgroundSlides}>
-      <section aria-label="Hero" className="box-border flex h-dvh bg-white p-6 sm:p-8 md:p-9">
+      <section
+        aria-label="Hero"
+        className="box-border flex h-dvh bg-[#D8D8D8] p-6 sm:p-8 md:p-9"
+      >
         <HeroContainer backgroundSlides={backgroundSlides}>
           <HeroNavbar links={siteNavLinks} siteName={siteConfig.name} />
           <div className="flex min-h-0 w-full flex-1 items-center justify-center">

@@ -3,12 +3,13 @@
  * @description Root page — imports sections only, zero business logic.
  */
 
-import { HeroSection } from "@/sections";
+import { HeroSection, LogoTickerSection } from "@/sections";
 
 export default function Home() {
   return (
     <>
       <HeroSection />
+      <LogoTickerSection />
     </>
   );
 }

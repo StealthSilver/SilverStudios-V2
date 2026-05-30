@@ -4,3 +4,4 @@
  */
 
 export { default as HeroSection } from "./hero";
+export { default as LogoTickerSection } from "./logo-ticker";

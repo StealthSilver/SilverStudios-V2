@@ -4,4 +4,5 @@
  */
 
 export { heroContent } from "./hero";
+export { logoTickerContent } from "./logo-ticker";
 export { siteConfig, siteNavLinks } from "./site";
