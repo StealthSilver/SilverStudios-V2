@@ -9,6 +9,11 @@
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 
+import {
+  getHeroSlideUrl,
+  HERO_SLIDE_IMAGE_QUALITY,
+  HERO_SLIDE_IMAGE_SIZES,
+} from "@/lib/hero-slides";
 import { cn } from "@/lib/utils";
 import type { HeroBackgroundSlide } from "@/types";
 
@@ -27,18 +32,11 @@ interface HeroSlideProps {
   zoomClassName?: string;
   priority?: boolean;
   zIndexClassName?: string;
+  hidden?: boolean;
 }
 
 const TRANSITION_MS = 1000;
 const ZOOM_MS = 2800;
-
-function slideSrc(slide: HeroBackgroundSlide): string {
-  if (slide.version === undefined) {
-    return slide.src;
-  }
-
-  return `${slide.src}?v=${slide.version}`;
-}
 
 // ——— Local sub-components ———
 
@@ -48,6 +46,7 @@ function HeroSlide({
   zoomClassName,
   priority = false,
   zIndexClassName,
+  hidden = false,
 }: HeroSlideProps) {
   return (
     <div
@@ -55,18 +54,20 @@ function HeroSlide({
         "absolute inset-0 will-change-transform",
         zIndexClassName,
         slideClassName,
+        hidden && "pointer-events-none invisible",
       )}
+      aria-hidden={hidden}
     >
       <div
         className={cn("h-full w-full origin-center will-change-transform", zoomClassName)}
       >
         <Image
-          src={slideSrc(slide)}
+          src={getHeroSlideUrl(slide)}
           alt={slide.alt}
           fill
           priority={priority}
-          unoptimized
-          sizes="100vw"
+          sizes={HERO_SLIDE_IMAGE_SIZES}
+          quality={HERO_SLIDE_IMAGE_QUALITY}
           className="object-cover"
         />
       </div>
@@ -135,22 +136,36 @@ export function HeroBackgroundSlideshow({
       aria-hidden="true"
       className={cn("absolute inset-0 z-0 overflow-hidden", className)}
     >
-      {phase === "transition" ? (
-        <HeroSlide
-          slide={slides[nextIndex]}
-          slideClassName="animate-hero-slide-in"
-          zIndexClassName="z-[1]"
-          priority={nextIndex === 0}
-        />
-      ) : null}
-      <HeroSlide
-        key={index}
-        slide={slides[index]}
-        slideClassName={phase === "transition" ? "animate-hero-slide-out" : undefined}
-        zoomClassName="animate-hero-slide-zoom"
-        zIndexClassName="z-0"
-        priority={index === 0}
-      />
+      {slides.map((slide, slideIndex) => {
+        const isCurrent = slideIndex === index;
+        const isIncoming = phase === "transition" && slideIndex === nextIndex;
+        const isActive = isCurrent || isIncoming;
+
+        let slideClassName: string | undefined;
+        let zoomClassName: string | undefined;
+        let zIndexClassName = "z-0";
+
+        if (isIncoming) {
+          slideClassName = "animate-hero-slide-in";
+          zIndexClassName = "z-[1]";
+        } else if (isCurrent && phase === "transition") {
+          slideClassName = "animate-hero-slide-out";
+        } else if (isCurrent && phase === "display") {
+          zoomClassName = "animate-hero-slide-zoom";
+        }
+
+        return (
+          <HeroSlide
+            key={getHeroSlideUrl(slide)}
+            slide={slide}
+            slideClassName={slideClassName}
+            zoomClassName={zoomClassName}
+            zIndexClassName={zIndexClassName}
+            hidden={!isActive}
+            priority={slideIndex === 0}
+          />
+        );
+      })}
     </div>
   );
 }

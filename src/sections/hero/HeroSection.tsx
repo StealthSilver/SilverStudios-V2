@@ -12,6 +12,7 @@ import type { HeroBackgroundSlide, SiteNavLink } from "@/types";
 
 import { HeroBackgroundSlideshow } from "./HeroBackgroundSlideshow";
 import { HeroRotatingTagline } from "./HeroRotatingTagline";
+import { HeroSectionGate } from "./HeroSectionGate";
 import { HERO_TITLE_SIZE } from "./hero-styles";
 
 // ——— Types ———
@@ -149,16 +150,18 @@ export default function HeroSection() {
   const { title, rotatingLines, backgroundSlides } = heroContent;
 
   return (
-    <section aria-label="Hero" className="box-border flex h-dvh bg-white p-6 sm:p-8 md:p-9">
-      <HeroContainer backgroundSlides={backgroundSlides}>
-        <HeroNavbar links={siteNavLinks} siteName={siteConfig.name} />
-        <div className="flex min-h-0 w-full flex-1 items-center justify-center">
-          <div className="-translate-y-28 flex flex-col items-center gap-3 sm:gap-4">
-            <HeroHeadline>{title}</HeroHeadline>
-            <HeroRotatingTagline lines={rotatingLines} />
+    <HeroSectionGate slides={backgroundSlides}>
+      <section aria-label="Hero" className="box-border flex h-dvh bg-white p-6 sm:p-8 md:p-9">
+        <HeroContainer backgroundSlides={backgroundSlides}>
+          <HeroNavbar links={siteNavLinks} siteName={siteConfig.name} />
+          <div className="flex min-h-0 w-full flex-1 items-center justify-center">
+            <div className="-translate-y-28 flex flex-col items-center gap-3 sm:gap-4">
+              <HeroHeadline>{title}</HeroHeadline>
+              <HeroRotatingTagline lines={rotatingLines} />
+            </div>
           </div>
-        </div>
-      </HeroContainer>
-    </section>
+        </HeroContainer>
+      </section>
+    </HeroSectionGate>
   );
 }
