@@ -3,4 +3,9 @@
  * @description Barrel export for shared domain types.
  */
 
-export type { HeroContent, SiteConfig, SiteNavLink } from "./site";
+export type {
+  HeroBackgroundSlide,
+  HeroContent,
+  SiteConfig,
+  SiteNavLink,
+} from "./site";

@@ -8,8 +8,9 @@ import Link from "next/link";
 
 import { heroContent, siteConfig, siteNavLinks } from "@/lib/data";
 import { cn } from "@/lib/utils";
-import type { SiteNavLink } from "@/types";
+import type { HeroBackgroundSlide, SiteNavLink } from "@/types";
 
+import { HeroBackgroundSlideshow } from "./HeroBackgroundSlideshow";
 import { HeroRotatingTagline } from "./HeroRotatingTagline";
 import { HERO_TITLE_SIZE } from "./hero-styles";
 
@@ -19,6 +20,7 @@ const HERO_RADIUS = "rounded-3xl";
 const NAV_RADIUS = "rounded-xl";
 
 interface HeroContainerProps {
+  backgroundSlides: readonly HeroBackgroundSlide[];
   className?: string;
   children?: React.ReactNode;
 }
@@ -36,17 +38,35 @@ interface HeroHeadlineProps {
 
 // ——— Local sub-components ———
 
-function HeroContainer({ className, children }: HeroContainerProps) {
+function HeroBackgroundOverlay() {
+  return (
+    <div
+      aria-hidden="true"
+      className="absolute inset-0 z-[1] bg-black/45"
+    />
+  );
+}
+
+function HeroContainer({
+  backgroundSlides,
+  className,
+  children,
+}: HeroContainerProps) {
   return (
     <div
       className={cn(
-        "flex min-h-0 flex-1 flex-col items-center px-4 pt-3 sm:px-6 sm:pt-4 md:px-9 md:pt-6",
+        "relative flex min-h-0 flex-1 flex-col overflow-hidden",
         HERO_RADIUS,
         "bg-neutral-950",
         className,
       )}
     >
-      {children}
+      <HeroBackgroundSlideshow slides={backgroundSlides} />
+      <HeroBackgroundOverlay />
+
+      <div className="relative z-10 flex min-h-0 w-full flex-1 flex-col items-center px-4 pt-3 sm:px-6 sm:pt-4 md:px-9 md:pt-6">
+        {children}
+      </div>
     </div>
   );
 }
@@ -111,11 +131,11 @@ function HeroHeadline({ children, className }: HeroHeadlineProps) {
 // ——— Main section ———
 
 export default function HeroSection() {
-  const { title, rotatingLines } = heroContent;
+  const { title, rotatingLines, backgroundSlides } = heroContent;
 
   return (
     <section aria-label="Hero" className="box-border flex h-dvh bg-white p-6 sm:p-8 md:p-9">
-      <HeroContainer>
+      <HeroContainer backgroundSlides={backgroundSlides}>
         <HeroNavbar links={siteNavLinks} siteName={siteConfig.name} />
         <div className="flex min-h-0 w-full flex-1 items-center justify-center">
           <div className="-translate-y-28 flex flex-col items-center gap-3 sm:gap-4">

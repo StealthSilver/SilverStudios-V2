@@ -14,6 +14,25 @@ export const heroContent: HeroContent = {
     "Brands.",
     "Experiences.",
   ],
+  backgroundSlides: [
+    {
+      src: "/Hero_Mockups/meshspire.png",
+      alt: "Meshspire project mockup",
+    },
+    {
+      src: "/Hero_Mockups/Harit.png",
+      alt: "Harit plantation monitoring project mockup",
+      version: 2,
+    },
+    {
+      src: "/Hero_Mockups/8thlight.png",
+      alt: "8th Light project mockup",
+    },
+    {
+      src: "/Hero_Mockups/Solx.png",
+      alt: "Solx project mockup",
+    },
+  ],
   description:
     "We partner with teams to shape brand, product, and motion — from first sketch to shipped interface.",
   primaryCta: {

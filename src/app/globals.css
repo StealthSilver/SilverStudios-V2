@@ -62,9 +62,40 @@ body {
   animation: hero-tagline-exit 550ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
+@keyframes hero-slide-out {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-100%);
+  }
+}
+
+@keyframes hero-slide-in {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.animate-hero-slide-out {
+  animation: hero-slide-out 900ms cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+
+.animate-hero-slide-in {
+  animation: hero-slide-in 900ms cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-hero-tagline-in,
   .animate-hero-tagline-out {
+    animation: none;
+  }
+
+  .animate-hero-slide-out,
+  .animate-hero-slide-in {
     animation: none;
   }
 }
