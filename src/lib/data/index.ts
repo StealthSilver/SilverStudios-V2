@@ -4,4 +4,4 @@
  */
 
 export { heroContent } from "./hero";
-export { siteConfig } from "./site";
+export { siteConfig, siteNavLinks } from "./site";

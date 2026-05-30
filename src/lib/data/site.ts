@@ -3,7 +3,7 @@
  * @description Site-wide copy and metadata — never hardcode in JSX.
  */
 
-import type { SiteConfig } from "@/types";
+import type { SiteConfig, SiteNavLink } from "@/types";
 
 export const siteConfig: SiteConfig = {
   name: "Silver Studios",
@@ -16,3 +16,11 @@ export const siteConfig: SiteConfig = {
   locale: "en_US",
   themeColor: "#0d0d0d",
 };
+
+export const siteNavLinks: SiteNavLink[] = [
+  { label: "Services", href: "#services" },
+  { label: "Projects", href: "#projects" },
+  { label: "Silver UI", href: "#silver-ui" },
+  { label: "Blog", href: "#blog" },
+  { label: "Contact", href: "#contact" },
+];

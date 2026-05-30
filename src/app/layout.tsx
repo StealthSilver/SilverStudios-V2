@@ -4,9 +4,17 @@
  */
 
 import { Cormorant_Garamond, DM_Sans } from "next/font/google";
+import localFont from "next/font/local";
 
 export { metadata, viewport } from "@/lib/metadata";
 import "./globals.css";
+
+const satoshi = localFont({
+  src: "../../public/Fonts/Satoshi/Satoshi-Light.otf",
+  variable: "--font-satoshi",
+  weight: "300",
+  display: "swap",
+});
 
 const cormorantGaramond = Cormorant_Garamond({
   variable: "--font-cormorant",
@@ -31,10 +39,10 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${cormorantGaramond.variable} ${dmSans.variable} h-full antialiased`}
+      className={`${cormorantGaramond.variable} ${dmSans.variable} ${satoshi.variable} h-full bg-white antialiased`}
       suppressHydrationWarning
     >
-      <body className="flex min-h-full flex-col bg-background font-sans text-foreground">
+      <body className="flex min-h-full flex-col bg-white font-sans text-foreground">
         {children}
       </body>
     </html>
