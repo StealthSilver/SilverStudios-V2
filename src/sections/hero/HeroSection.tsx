@@ -3,6 +3,7 @@
  * @description Landing hero — full-viewport neutral container with top navbar.
  */
 
+import { GlassSurface } from "@/components/ui/GlassSurface";
 import { LetterWaveLink } from "@/components/ui/LetterWaveLink";
 import HeroGradientBackground, {
   HeroGradientTimeProvider,
@@ -128,15 +129,17 @@ function HeroCtaRow({
 
   return (
     <div className="mt-4 flex shrink-0 flex-row flex-wrap items-center justify-center gap-3 sm:mt-5 sm:gap-4">
-      <LetterWaveLink
-        href={primary.href}
-        label={primary.label}
-        className={cn(
-          HERO_NAV_LINK_TYPOGRAPHY,
-          ctaTransition,
-          "inline-flex h-9 min-w-[10.5rem] items-center justify-center rounded-full bg-white px-10 font-bold text-neutral-950 hover:bg-neutral-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent",
-        )}
-      />
+      <GlassSurface className="inline-flex rounded-full">
+        <LetterWaveLink
+          href={primary.href}
+          label={primary.label}
+          className={cn(
+            HERO_NAV_LINK_TYPOGRAPHY,
+            ctaTransition,
+            "inline-flex h-9 min-w-[10.5rem] items-center justify-center rounded-full px-10 font-bold text-neutral-950 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent",
+          )}
+        />
+      </GlassSurface>
       <LetterWaveLink
         href={secondary.href}
         label={secondary.label}

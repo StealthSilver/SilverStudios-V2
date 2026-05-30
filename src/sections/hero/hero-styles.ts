@@ -41,10 +41,6 @@ export const HERO_TAGLINE_FONT_LIGHT = `${HERO_TAGLINE_FONT_FAMILY} text-neutral
 export const HERO_NAV_LINK_TYPOGRAPHY =
   "font-nav text-[11px] font-normal uppercase leading-none tracking-[0.06em] sm:text-xs";
 
-/** Elevation for the hero navbar bar. */
-export const HERO_NAVBAR_SHADOW =
-  "shadow-[0_2px_8px_rgba(0,0,0,0.08),0_8px_24px_rgba(0,0,0,0.12)]";
-
 /**
  * Pins the navbar to the viewport. Top aligns with hero section padding;
  * horizontal inset matches section padding + inner card inset.

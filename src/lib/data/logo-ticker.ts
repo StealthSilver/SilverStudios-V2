@@ -4,5 +4,6 @@
  */
 
 export const logoTickerContent = {
-  placeholderLabel: "logo ticker",
+  headline:
+    "We build transformative digital experiences for the world's leading brands by blending AI, design, and technology.",
 } as const;

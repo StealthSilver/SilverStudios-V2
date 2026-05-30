@@ -10,6 +10,11 @@ export {
   type ButtonVariant,
 } from "./Button";
 export {
+  GlassSurface,
+  GLASS_SURFACE_SHADOW,
+  type GlassSurfaceProps,
+} from "./GlassSurface";
+export {
   LetterWaveLink,
   LETTER_WAVE_NAV_STAGGER_MS,
   LETTER_WAVE_STAGGER_MS,

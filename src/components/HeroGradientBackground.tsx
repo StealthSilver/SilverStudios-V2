@@ -107,6 +107,9 @@ const GRADIENT_KEYFRAMES: readonly GradientKeyframe[] = [
 
 const SCRUBBER_WIDTH_PX = 52;
 const TRACK_INSET_PX = 60;
+const SCRUBBER_HOUR_MAX = 23.99;
+/** Stable SSR default — live clock sync runs after mount in useEffect. */
+const DEFAULT_HERO_HOUR = 9;
 const GRAIN_INTERVAL_MS = 200;
 const GRAIN_OPACITY = 0.18;
 const TEXT_DARK_LUMINANCE_THRESHOLD = 160;
@@ -226,9 +229,8 @@ function formatHour24(fractionalHour: number): string {
 const HeroTimeContext = createContext<HeroTimeState | null>(null);
 
 function useHeroTimeState(): HeroTimeState {
-  const [hour, setHourState] = useState(9);
+  const [hour, setHourState] = useState(DEFAULT_HERO_HOUR);
   const [isDragging, setDragging] = useState(false);
-  const [hasMounted, setHasMounted] = useState(false);
   const isDraggingRef = useRef(false);
 
   const syncToLiveClock = useCallback(() => {
@@ -237,7 +239,6 @@ function useHeroTimeState(): HeroTimeState {
 
   useEffect(() => {
     syncToLiveClock();
-    setHasMounted(true);
 
     const tick = () => {
       if (!isDraggingRef.current) {
@@ -262,7 +263,7 @@ function useHeroTimeState(): HeroTimeState {
   }, [syncToLiveClock]);
 
   const setHour = useCallback((nextHour: number) => {
-    const clamped = Math.min(23.99, Math.max(0, nextHour));
+    const clamped = Math.min(SCRUBBER_HOUR_MAX, Math.max(0, nextHour));
     setHourState(clamped);
   }, []);
 
@@ -283,12 +284,12 @@ function useHeroTimeState(): HeroTimeState {
   return useMemo(
     () => ({
       ...resolved,
-      hour: hasMounted ? hour : 9,
+      hour,
       setHour,
       isDragging,
       setIsDragging,
     }),
-    [hasMounted, hour, resolved, setHour, isDragging, setIsDragging],
+    [hour, resolved, setHour, isDragging, setIsDragging],
   );
 }
 
@@ -432,7 +433,7 @@ function HeroTimeScrubber({
     const { top, height } = trackMetricsRef.current;
     const y = clientY - rect.top - top;
     const ratio = Math.min(1, Math.max(0, y / height));
-    return ratio * 23.99;
+    return ratio * SCRUBBER_HOUR_MAX;
   }, []);
 
   const onHourChangeRef = useRef(onHourChange);
@@ -514,19 +515,21 @@ function HeroTimeScrubber({
     };
   }, [handleMouseUp, handleTouchEnd, updateTrackMetrics]);
 
-  const thumbTopPercent = (hour / 23.99) * 100;
-  const thumbTransition = isDragging ? "none" : "top 0.15s ease";
-  const thumbTop = `calc(${TRACK_INSET_PX}px + (${thumbTopPercent} / 100) * (100% - ${TRACK_INSET_PX * 2}px))`;
   const timeLabel = formatHour24(hour);
+  const scrubberStyle = {
+    width: SCRUBBER_WIDTH_PX,
+    "--scrubber-hour-ratio": hour / SCRUBBER_HOUR_MAX,
+  } as React.CSSProperties;
 
   return (
     <div
       ref={scrubberRef}
       className={cn(
-        "absolute top-0 bottom-0 left-0 z-30",
+        "hero-scrubber absolute top-0 bottom-0 left-0 z-30",
+        isDragging && "hero-scrubber--dragging",
         isDragging ? "cursor-grabbing" : "cursor-grab",
       )}
-      style={{ width: SCRUBBER_WIDTH_PX }}
+      style={scrubberStyle}
       onMouseDown={(event) => {
         event.preventDefault();
         startDrag(event.clientY);
@@ -555,27 +558,24 @@ function HeroTimeScrubber({
           <div
             key={tickHour}
             aria-hidden="true"
-            className="absolute left-1/2 h-px -translate-x-1/2 -translate-y-1/2"
-            style={{
-              top: `calc(${TRACK_INSET_PX}px + (${tickHour} / 23) * (100% - ${TRACK_INSET_PX * 2}px))`,
-              width: isMajor ? 14 : 8,
-              backgroundColor: isMajor
-                ? "rgba(255,255,255,0.5)"
-                : "rgba(255,255,255,0.3)",
-            }}
+            className="hero-scrubber-tick absolute left-1/2 h-px -translate-x-1/2 -translate-y-1/2"
+            style={
+              {
+                "--scrubber-tick-ratio": tickHour / 23,
+                width: isMajor ? "14px" : "8px",
+                backgroundColor: isMajor
+                  ? "rgba(255,255,255,0.5)"
+                  : "rgba(255,255,255,0.3)",
+              } as React.CSSProperties
+            }
           />
         );
       })}
 
       <div
         aria-hidden="true"
-        className="absolute left-1/2 w-0.5 -translate-x-1/2"
-        style={{
-          top: `calc(${thumbTop} - 15px)`,
-          height: 30,
-          backgroundColor: "rgba(255,255,255,0.08)",
-          transition: thumbTransition,
-        }}
+        className="hero-scrubber-thumb-indicator absolute left-1/2 w-0.5 -translate-x-1/2"
+        style={{ backgroundColor: "rgba(255,255,255,0.08)" }}
       />
 
       <div
@@ -585,23 +585,17 @@ function HeroTimeScrubber({
         aria-valuenow={Math.round(hour)}
         aria-valuetext={timeLabel}
         aria-label="Time of day"
-        className="absolute left-1/2 h-0.5 -translate-x-1/2 -translate-y-1/2"
+        className="hero-scrubber-thumb absolute left-1/2 h-0.5 -translate-x-1/2 -translate-y-1/2"
         style={{
-          top: thumbTop,
-          width: 20,
+          width: "20px",
           backgroundColor: "rgba(255,255,255,0.9)",
-          transition: thumbTransition,
         }}
       />
 
       <span
         aria-hidden="true"
-        className="pointer-events-none absolute -translate-y-1/2 font-nav text-[10px] leading-none font-normal tracking-[0.04em] whitespace-nowrap text-white/90 tabular-nums sm:text-[11px]"
-        style={{
-          top: thumbTop,
-          left: "calc(50% + 14px)",
-          transition: thumbTransition,
-        }}
+        className="hero-scrubber-time-label pointer-events-none absolute -translate-y-1/2 font-nav text-[10px] leading-none font-normal tracking-[0.04em] whitespace-nowrap text-white/90 tabular-nums sm:text-[11px]"
+        style={{ left: "calc(50% + 14px)" }}
       >
         {timeLabel}
       </span>
