@@ -52,6 +52,7 @@ function HeroSlide({ slide, animationClassName, priority = false }: HeroSlidePro
         alt={slide.alt}
         fill
         priority={priority}
+        unoptimized
         sizes="100vw"
         className="object-cover"
       />

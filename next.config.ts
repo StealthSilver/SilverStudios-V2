@@ -10,6 +10,10 @@ const nextConfig: NextConfig = {
         pathname: "/Logos/**",
         search: "",
       },
+      {
+        pathname: "/icon.svg",
+        search: "",
+      },
     ],
   },
 };
