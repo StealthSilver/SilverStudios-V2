@@ -67,25 +67,38 @@ body {
     transform: translateY(0);
   }
   to {
-    transform: translateY(-100%);
+    transform: translateY(100%);
   }
 }
 
 @keyframes hero-slide-in {
   from {
-    transform: translateY(100%);
+    transform: translateY(-100%);
   }
   to {
     transform: translateY(0);
   }
 }
 
+@keyframes hero-slide-zoom {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.06);
+  }
+}
+
 .animate-hero-slide-out {
-  animation: hero-slide-out 900ms cubic-bezier(0.65, 0, 0.35, 1) forwards;
+  animation: hero-slide-out 1000ms cubic-bezier(0.45, 0, 0.55, 1) forwards;
 }
 
 .animate-hero-slide-in {
-  animation: hero-slide-in 900ms cubic-bezier(0.65, 0, 0.35, 1) forwards;
+  animation: hero-slide-in 1000ms cubic-bezier(0.45, 0, 0.55, 1) forwards;
+}
+
+.animate-hero-slide-zoom {
+  animation: hero-slide-zoom 2800ms cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -95,7 +108,8 @@ body {
   }
 
   .animate-hero-slide-out,
-  .animate-hero-slide-in {
+  .animate-hero-slide-in,
+  .animate-hero-slide-zoom {
     animation: none;
   }
 }

@@ -42,8 +42,24 @@ function HeroBackgroundOverlay() {
   return (
     <div
       aria-hidden="true"
-      className="absolute inset-0 z-[1] bg-black/45"
+      className="pointer-events-none absolute inset-0 bg-black/45"
     />
+  );
+}
+
+function HeroBackgroundStack({
+  slides,
+}: {
+  slides: readonly HeroBackgroundSlide[];
+}) {
+  return (
+    <div
+      aria-hidden="true"
+      className="absolute inset-0 z-0 isolate overflow-hidden"
+    >
+      <HeroBackgroundSlideshow slides={slides} className="absolute inset-0" />
+      <HeroBackgroundOverlay />
+    </div>
   );
 }
 
@@ -61,8 +77,7 @@ function HeroContainer({
         className,
       )}
     >
-      <HeroBackgroundSlideshow slides={backgroundSlides} />
-      <HeroBackgroundOverlay />
+      <HeroBackgroundStack slides={backgroundSlides} />
 
       <div className="relative z-10 flex min-h-0 w-full flex-1 flex-col items-center px-4 pt-3 sm:px-6 sm:pt-4 md:px-9 md:pt-6">
         {children}
