@@ -32,6 +32,14 @@ export const heroContent: HeroContent = {
       src: "/Hero_Mockups/Solx.png",
       alt: "Solx project mockup",
     },
+    {
+      src: "/Hero_Mockups/spardha.png",
+      alt: "Spardha project mockup",
+    },
+    {
+      src: "/Hero_Mockups/sgrids.png",
+      alt: "Sgrids project mockup",
+    },
   ],
   description:
     "We partner with teams to shape brand, product, and motion — from first sketch to shipped interface.",

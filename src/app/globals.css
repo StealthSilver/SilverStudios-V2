@@ -35,10 +35,12 @@ body {
 @keyframes hero-tagline-enter {
   from {
     opacity: 0;
-    transform: translateY(1.25rem) scale(0.96);
+    filter: blur(8px);
+    transform: translateY(1.5rem) scale(0.97);
   }
   to {
     opacity: 1;
+    filter: blur(0);
     transform: translateY(0) scale(1);
   }
 }
@@ -46,20 +48,24 @@ body {
 @keyframes hero-tagline-exit {
   from {
     opacity: 1;
+    filter: blur(0);
     transform: translateY(0) scale(1);
   }
   to {
     opacity: 0;
-    transform: translateY(-1.25rem) scale(1.04);
+    filter: blur(14px);
+    transform: translateY(-2rem) scale(1.02);
   }
 }
 
 .animate-hero-tagline-in {
-  animation: hero-tagline-enter 550ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation: hero-tagline-enter 700ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  will-change: transform, opacity, filter;
 }
 
 .animate-hero-tagline-out {
-  animation: hero-tagline-exit 550ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation: hero-tagline-exit 700ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  will-change: transform, opacity, filter;
 }
 
 @keyframes hero-slide-out {
@@ -105,6 +111,7 @@ body {
   .animate-hero-tagline-in,
   .animate-hero-tagline-out {
     animation: none;
+    filter: none;
   }
 
   .animate-hero-slide-out,

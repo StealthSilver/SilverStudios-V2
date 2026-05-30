@@ -1,6 +1,6 @@
 /**
  * @file HeroRotatingTagline.tsx
- * @description Cycles hero sub-lines with smooth enter-from-bottom / exit-to-top motion.
+ * @description Cycles hero sub-lines — enter from below, hold, exit upward through a top blur.
  */
 
 "use client";
@@ -23,8 +23,8 @@ interface HeroRotatingTaglineProps {
   className?: string;
 }
 
-const HOLD_MS = 1500;
-const TRANSITION_MS = 550;
+const HOLD_MS = 3000;
+const TRANSITION_MS = 700;
 
 // ——— Component ———
 
