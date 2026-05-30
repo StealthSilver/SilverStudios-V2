@@ -8,6 +8,12 @@ import type { HeroContent } from "@/types";
 export const heroContent: HeroContent = {
   eyebrow: "Silver Studios",
   title: "We Craft The Finest",
+  rotatingLines: [
+    "Designs.",
+    "Stories.",
+    "Brands.",
+    "Experiences.",
+  ],
   description:
     "We partner with teams to shape brand, product, and motion — from first sketch to shipped interface.",
   primaryCta: {

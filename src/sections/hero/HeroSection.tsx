@@ -10,6 +10,8 @@ import { heroContent, siteConfig, siteNavLinks } from "@/lib/data";
 import { cn } from "@/lib/utils";
 import type { SiteNavLink } from "@/types";
 
+import { HeroRotatingTagline } from "./HeroRotatingTagline";
+
 // ——— Types ———
 
 const HERO_RADIUS = "rounded-3xl";
@@ -95,7 +97,7 @@ function HeroHeadline({ children, className }: HeroHeadlineProps) {
   return (
     <h1
       className={cn(
-        "shrink-0 -translate-y-20 whitespace-nowrap text-center font-display text-3xl font-normal tracking-tight text-white sm:text-5xl md:text-6xl lg:text-7xl",
+        "shrink-0 whitespace-nowrap text-center font-display text-4xl font-normal tracking-tight text-white sm:text-6xl md:text-7xl lg:text-8xl",
         className,
       )}
     >
@@ -107,14 +109,17 @@ function HeroHeadline({ children, className }: HeroHeadlineProps) {
 // ——— Main section ———
 
 export default function HeroSection() {
-  const { title } = heroContent;
+  const { title, rotatingLines } = heroContent;
 
   return (
     <section aria-label="Hero" className="box-border flex h-dvh bg-white p-6 sm:p-8 md:p-9">
       <HeroContainer>
         <HeroNavbar links={siteNavLinks} siteName={siteConfig.name} />
         <div className="flex min-h-0 w-full flex-1 items-center justify-center">
-          <HeroHeadline>{title}</HeroHeadline>
+          <div className="-translate-y-28 flex flex-col items-center gap-3 sm:gap-4">
+            <HeroHeadline>{title}</HeroHeadline>
+            <HeroRotatingTagline lines={rotatingLines} />
+          </div>
         </div>
       </HeroContainer>
     </section>

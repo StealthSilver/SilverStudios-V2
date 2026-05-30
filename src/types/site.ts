@@ -22,6 +22,7 @@ export interface SiteConfig {
 export interface HeroContent {
   eyebrow: string;
   title: string;
+  rotatingLines: readonly string[];
   description: string;
   primaryCta: SiteNavLink;
   secondaryCta: SiteNavLink;

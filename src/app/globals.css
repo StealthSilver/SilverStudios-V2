@@ -12,6 +12,7 @@
   --font-serif: var(--font-cormorant), ui-serif, Georgia, serif;
   --font-nav: var(--font-satoshi), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-ranade), ui-serif, Georgia, serif;
+  --font-editorial: var(--font-editorial-new), ui-serif, Georgia, serif;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -29,4 +30,41 @@ html {
 body {
   background-color: #ffffff;
   color: var(--foreground);
+}
+
+@keyframes hero-tagline-enter {
+  from {
+    opacity: 0;
+    transform: translateY(1.25rem) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes hero-tagline-exit {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-1.25rem) scale(1.04);
+  }
+}
+
+.animate-hero-tagline-in {
+  animation: hero-tagline-enter 550ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.animate-hero-tagline-out {
+  animation: hero-tagline-exit 550ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-hero-tagline-in,
+  .animate-hero-tagline-out {
+    animation: none;
+  }
 }

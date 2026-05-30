@@ -23,6 +23,14 @@ const ranade = localFont({
   display: "swap",
 });
 
+const editorialNew = localFont({
+  src: "../../public/Fonts/EditorialNew/PPEditorialNew-UltralightItalic.otf",
+  variable: "--font-editorial-new",
+  weight: "200",
+  style: "italic",
+  display: "swap",
+});
+
 const cormorantGaramond = Cormorant_Garamond({
   variable: "--font-cormorant",
   subsets: ["latin"],
@@ -46,7 +54,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${cormorantGaramond.variable} ${dmSans.variable} ${satoshi.variable} ${ranade.variable} h-full bg-white antialiased`}
+      className={`${cormorantGaramond.variable} ${dmSans.variable} ${satoshi.variable} ${ranade.variable} ${editorialNew.variable} h-full bg-white antialiased`}
       suppressHydrationWarning
     >
       <body className="flex min-h-full flex-col bg-white font-sans text-foreground">
