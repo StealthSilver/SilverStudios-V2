@@ -10,7 +10,6 @@ import { cn } from "@/lib/utils";
 
 import { ServiceListItem } from "./ServiceListItem";
 import {
-  SERVICES_EYEBROW,
   SERVICES_INNER,
   SERVICES_LIST,
   SERVICES_SECTION,
@@ -23,19 +22,15 @@ import {
 // ——— Main section ———
 
 export default function ServicesSection() {
-  const { title, items, seeAllLabel, seeAllHref } = servicesContent;
+  const { items, seeAllLabel, seeAllHref } = servicesContent;
 
   return (
     <section
       id="services"
-      aria-labelledby="services-title"
+      aria-label="Services"
       className={cn(SERVICES_SECTION)}
     >
       <div className={cn(SERVICES_INNER)}>
-        <h2 id="services-title" className={cn(SERVICES_EYEBROW)}>
-          {title}
-        </h2>
-
         <ul className={cn(SERVICES_LIST)}>
           {items.map((item) => (
             <ServiceListItem key={item.id} item={item} />

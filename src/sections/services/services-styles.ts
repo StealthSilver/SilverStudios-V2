@@ -4,13 +4,13 @@
  */
 
 /** Hide hover preview images on service rows (code kept for later). */
-export const SERVICES_ITEM_MEDIA_HIDDEN = false;
+export const SERVICES_ITEM_MEDIA_HIDDEN = true;
 
 /** Hide secondary labels beside each service (code kept for later). */
 export const SERVICES_ITEM_SECONDARY_HIDDEN = false;
 
 /** Hide the “See all” link below the list (code kept for later). */
-export const SERVICES_SEE_ALL_HIDDEN = false;
+export const SERVICES_SEE_ALL_HIDDEN = true;
 
 export const SERVICES_SECTION =
   "relative bg-white px-4 py-24 sm:px-6 sm:py-32 md:px-9 md:py-40 lg:py-48";
@@ -21,7 +21,7 @@ export const SERVICES_EYEBROW =
   "w-full font-nav text-[11px] font-normal uppercase leading-none tracking-[0.06em] text-neutral-900 sm:text-xs";
 
 export const SERVICES_LIST =
-  "mt-10 flex w-full flex-col items-stretch gap-1 sm:mt-12 sm:gap-2 md:mt-14 md:gap-3";
+  "flex w-full flex-col items-stretch gap-1 sm:gap-2 md:gap-3";
 
 export const SERVICES_ITEM =
   "group relative flex w-full cursor-default items-center justify-center py-3 sm:py-4 md:py-5 lg:py-6";
