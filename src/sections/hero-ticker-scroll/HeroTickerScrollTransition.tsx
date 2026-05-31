@@ -4,8 +4,10 @@
  */
 
 import HeroSection from "../hero/HeroSection";
+import { ImageGalleryCarousel } from "../image-gallery/ImageGalleryCarousel";
 import LogoTickerSection from "../logo-ticker/LogoTickerSection";
 import { LOGO_TICKER_SECTION_HIDDEN } from "../logo-ticker/logo-ticker-styles";
+import { imageGalleryContent } from "@/lib/data";
 
 // ——— Main section ———
 
@@ -19,6 +21,7 @@ export default function HeroTickerScrollTransition({
   return (
     <>
       <HeroSection showNavbar={false} initialHeroHour={initialHeroHour} />
+      <ImageGalleryCarousel images={imageGalleryContent.images} />
       {!LOGO_TICKER_SECTION_HIDDEN && (
         <section style={{ position: "relative", zIndex: 10 }}>
           <LogoTickerSection />

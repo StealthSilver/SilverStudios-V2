@@ -10,6 +10,7 @@ export { default as ProjectsSection } from "./projects";
 export { default as ServicesSection } from "./services";
 export { default as SilverUISection } from "./silver-ui";
 export { default as FeaturedNewsSection } from "./featured-news";
+export { default as ImageGallerySection } from "./image-gallery";
 export { default as FooterInviteTransition } from "./footer-invite";
 export {
   default as FooterSection,

@@ -31,8 +31,8 @@ export default function Home() {
         <HeroTickerScrollTransition initialHeroHour={initialHeroHour} />
         <div className="relative z-10 bg-white">
           <AboutSection />
-          <ProjectsSection />
           <ServicesSection />
+          <ProjectsSection />
           {!FEATURED_NEWS_SECTION_HIDDEN && <FeaturedNewsSection />}
           {!SILVER_UI_SECTION_HIDDEN && <SilverUISection />}
           <FooterInviteTransition />

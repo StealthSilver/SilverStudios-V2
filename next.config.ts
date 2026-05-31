@@ -15,6 +15,9 @@ const nextConfig: NextConfig = {
         pathname: "/Hero_Mockups/**",
       },
       {
+        pathname: "/Images/**",
+      },
+      {
         pathname: "/Logos/**",
         search: "",
       },

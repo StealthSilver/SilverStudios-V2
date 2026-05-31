@@ -75,7 +75,9 @@ export function ProjectCard({ project }: ProjectCardProps) {
       </div>
       <div className={cn(PROJECT_CARD_COPY)}>
         <h3 className={cn(PROJECT_CARD_NAME)}>{project.name}</h3>
-        <p className={cn(PROJECT_CARD_DESCRIPTION)}>{project.description}</p>
+        <p className={cn("project-card__description", PROJECT_CARD_DESCRIPTION)}>
+          {project.description}
+        </p>
       </div>
     </>
   );

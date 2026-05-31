@@ -3,10 +3,7 @@
  * @description Layout class strings for the services showcase section.
  */
 
-import {
-  SECTION_HEADLINE,
-  SECTION_HEADLINE_SPACING,
-} from "@/lib/section-headline-styles";
+import { SECTION_HEADLINE } from "@/lib/section-headline-styles";
 
 /** Hide hover preview images on service rows (code kept for later). */
 export const SERVICES_ITEM_MEDIA_HIDDEN = true;
@@ -24,7 +21,9 @@ export const SERVICES_INNER = "mx-auto flex w-full max-w-7xl flex-col";
 
 export const SERVICES_HEADLINE = SECTION_HEADLINE;
 
-export const SERVICES_HEADLINE_WRAP = SECTION_HEADLINE_SPACING;
+/** Space between the section headline and the services list. */
+export const SERVICES_HEADLINE_WRAP =
+  "mb-16 sm:mb-20 md:mb-24 lg:mb-28";
 
 export const SERVICES_EYEBROW =
   "w-full font-nav text-[11px] font-normal uppercase leading-none tracking-[0.06em] text-neutral-900 sm:text-xs";

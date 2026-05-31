@@ -75,6 +75,14 @@ export function LetterWaveLink({
     </span>
   );
 
+  const handleClick: MouseEventHandler<HTMLAnchorElement> = (event) => {
+    if (href === "#") {
+      event.preventDefault();
+    }
+
+    onClick?.(event);
+  };
+
   return (
     <Link
       href={href}
@@ -86,7 +94,7 @@ export function LetterWaveLink({
         variant === "nav" && "letter-wave--nav",
       )}
       aria-label={ariaLabel ?? label}
-      onClick={onClick}
+      onClick={handleClick}
       style={style}
     >
       <span

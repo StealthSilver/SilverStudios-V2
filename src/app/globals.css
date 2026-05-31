@@ -377,6 +377,14 @@ body {
   }
 }
 
+@media (hover: none) {
+  .project-card__description {
+    opacity: 1 !important;
+    max-height: 7rem !important;
+    transform: none !important;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   [data-project-card] {
     opacity: 1;
@@ -393,3 +401,4 @@ body {
     transform: none;
   }
 }
+
