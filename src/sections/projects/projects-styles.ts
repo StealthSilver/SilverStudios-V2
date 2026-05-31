@@ -12,7 +12,7 @@ export const PROJECTS_TITLE =
   "font-display text-3xl font-normal tracking-tight text-black sm:text-4xl md:text-5xl lg:text-[3.25rem]";
 
 export const PROJECTS_GRID =
-  "mt-4 grid grid-cols-1 gap-x-6 gap-y-56 sm:mt-5 sm:gap-x-8 sm:gap-y-72 md:mt-6 md:grid-cols-2 md:gap-x-10 md:gap-y-0 lg:mt-8 lg:gap-x-12";
+  "mt-1 grid grid-cols-1 gap-x-6 gap-y-56 sm:mt-2 sm:gap-x-8 sm:gap-y-72 md:mt-2 md:grid-cols-2 md:gap-x-10 md:gap-y-0 lg:mt-3 lg:gap-x-12";
 
 export const PROJECTS_COLUMN = "flex flex-col";
 
@@ -24,7 +24,7 @@ export const PROJECTS_COLUMN_RIGHT =
   "md:pt-[clamp(18rem,44vw,34rem)]";
 
 export const PROJECT_CARD =
-  "project-card group block w-full py-14 text-left sm:py-20 md:py-24 lg:py-32 xl:py-40";
+  "project-card group block w-full pt-6 pb-14 text-left sm:pt-8 sm:pb-20 md:pt-10 md:pb-24 lg:pt-12 lg:pb-32 xl:pt-14 xl:pb-40";
 
 /** Extra offset above the Harit card in the staggered right column. */
 export const PROJECT_CARD_HARIT =
