@@ -5,11 +5,14 @@
 
 import Link from "next/link";
 
+import { ScrollRevealWords } from "@/components/ui/ScrollRevealWords";
 import { servicesContent } from "@/lib/data/services";
 import { cn } from "@/lib/utils";
 
 import { ServiceListItem } from "./ServiceListItem";
 import {
+  SERVICES_HEADLINE,
+  SERVICES_HEADLINE_WRAP,
   SERVICES_INNER,
   SERVICES_LIST,
   SERVICES_SECTION,
@@ -22,15 +25,21 @@ import {
 // ——— Main section ———
 
 export default function ServicesSection() {
-  const { items, seeAllLabel, seeAllHref } = servicesContent;
+  const { title, items, seeAllLabel, seeAllHref } = servicesContent;
 
   return (
     <section
       id="services"
-      aria-label="Services"
+      aria-labelledby="services-title"
       className={cn(SERVICES_SECTION)}
     >
       <div className={cn(SERVICES_INNER)}>
+        <ScrollRevealWords
+          id="services-title"
+          text={title}
+          className={cn(SERVICES_HEADLINE, SERVICES_HEADLINE_WRAP)}
+        />
+
         <ul className={cn(SERVICES_LIST)}>
           {items.map((item) => (
             <ServiceListItem key={item.id} item={item} />

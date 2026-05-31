@@ -6,14 +6,14 @@
 import type { ServicesContent } from "@/types/services";
 
 export const servicesContent = {
-  title: "Services",
+  title: "OUR SERVICES",
   items: [
-    { id: "branding", primary: "branding", secondary: "Identity" },
-    { id: "webflow", primary: "Webflow", secondary: "Integration" },
-    { id: "ui-ux", primary: "UI/UX Design", secondary: "Wireframes" },
-    { id: "gsap", primary: "GSAP animations", secondary: "Transitions" },
-    { id: "advertising", primary: "advertising", secondary: "Creative Ads" },
-    { id: "seo", primary: "SEO & Content", secondary: "Ranking" },
+    { id: "branding", primary: "Branding", secondary: "" },
+    { id: "development", primary: "Development", secondary: "" },
+    { id: "digital-products", primary: "Digital Products", secondary: "" },
+    { id: "ui-ux", primary: "UI/UX Design", secondary: "" },
+    { id: "websites", primary: "Websites", secondary: "" },
+    { id: "content-seo", primary: "Content & SEO", secondary: "" },
   ],
   seeAllLabel: "See all",
   seeAllHref: "#contact",

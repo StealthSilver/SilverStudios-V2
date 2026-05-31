@@ -6,7 +6,7 @@
 import type { ProjectsContent } from "@/types/projects";
 
 export const projectsContent = {
-  title: "Featured projects",
+  title: "FEATURED PROJECTS",
   projects: [
     {
       id: "8th-light",
@@ -16,6 +16,7 @@ export const projectsContent = {
       imageSrc: "/Hero_Mockups/8thlight.png",
       imageWidth: 1535,
       imageHeight: 1024,
+      layout: { size: "small", align: "top" },
     },
     {
       id: "harit",
@@ -25,6 +26,7 @@ export const projectsContent = {
       imageSrc: "/Hero_Mockups/Harit.png",
       imageWidth: 1600,
       imageHeight: 983,
+      layout: { size: "medium", align: "bottom" },
     },
     {
       id: "meshspire",
@@ -34,6 +36,7 @@ export const projectsContent = {
       imageSrc: "/Hero_Mockups/meshspire.png",
       imageWidth: 1536,
       imageHeight: 1024,
+      layout: { size: "large" },
     },
     {
       id: "sgrids",
@@ -43,6 +46,7 @@ export const projectsContent = {
       imageSrc: "/Hero_Mockups/sgrids.png",
       imageWidth: 1654,
       imageHeight: 951,
+      layout: { size: "small", align: "bottom" },
     },
     {
       id: "spardha",
@@ -52,6 +56,7 @@ export const projectsContent = {
       imageSrc: "/Hero_Mockups/spardha.png",
       imageWidth: 1536,
       imageHeight: 1024,
+      layout: { size: "medium", align: "top" },
     },
     {
       id: "solx",
@@ -61,6 +66,7 @@ export const projectsContent = {
       imageSrc: "/Hero_Mockups/Solx.png",
       imageWidth: 1601,
       imageHeight: 983,
+      layout: { size: "large" },
     },
   ],
 } satisfies ProjectsContent;

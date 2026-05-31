@@ -3,15 +3,18 @@
  * @description Layout and typography for the about section.
  */
 
+/** Horizontal inset matches {@link HERO_NAVBAR_FIXED_POSITION_FULL_BLEED} (left-5 / sm:7 / md:8). */
 export const ABOUT_SECTION =
-  "flex min-h-screen flex-col justify-center bg-white px-4 py-24 sm:px-6 sm:py-28 md:px-9 md:py-32";
+  "flex min-h-screen flex-col justify-center bg-white px-5 py-24 sm:px-7 sm:py-28 md:px-8 md:py-32";
 
-export const ABOUT_INNER = "mx-auto w-full max-w-5xl lg:max-w-6xl";
+export const ABOUT_INNER = "mx-auto w-full max-w-7xl";
 
-export const ABOUT_HEADLINE =
-  "font-display text-4xl font-normal uppercase leading-none tracking-tight text-neutral-950 sm:text-5xl md:text-6xl lg:text-7xl";
+import { SECTION_HEADLINE } from "@/lib/section-headline-styles";
+
+export const ABOUT_HEADLINE = SECTION_HEADLINE;
 
 export const ABOUT_BODY =
-  "font-display text-2xl font-normal leading-snug tracking-tight text-neutral-900 sm:text-3xl md:text-4xl lg:text-[2.75rem] lg:leading-[1.15]";
+  "font-display text-xl font-normal leading-snug tracking-tight text-neutral-900 sm:text-2xl md:text-3xl lg:text-4xl lg:leading-[1.2]";
 
-export const ABOUT_BODY_STACK = "mt-8 flex flex-col gap-6 sm:mt-10 sm:gap-8 md:mt-12 md:gap-10";
+export const ABOUT_BODY_STACK =
+  "mt-8 flex max-w-4xl flex-col gap-6 sm:mt-10 sm:gap-8 md:mt-12 md:gap-10 lg:max-w-5xl";

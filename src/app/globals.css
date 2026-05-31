@@ -351,7 +351,7 @@ body {
   }
 }
 
-/* Featured projects — Cuberto-style card reveal, parallax, and hover zoom */
+/* Featured projects — scroll reveal, parallax, and hover zoom */
 [data-project-card] {
   opacity: 0;
   will-change: transform, opacity, filter;

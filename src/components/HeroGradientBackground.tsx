@@ -755,6 +755,15 @@ function HeroGradientBackgroundLayers({
     secondaryBlobRef.current?.style.setProperty("background", nextGradient);
   }, []);
 
+  useEffect(() => {
+    if (isDragging) {
+      return;
+    }
+
+    primaryBlobRef.current?.style.setProperty("background", gradient);
+    secondaryBlobRef.current?.style.setProperty("background", gradient);
+  }, [gradient, isDragging]);
+
   const gradientTransition = isDragging
     ? "none"
     : "background 0.8s ease, filter 0.8s ease";

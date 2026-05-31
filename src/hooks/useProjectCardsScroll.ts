@@ -12,8 +12,8 @@ import type { RefObject } from "react";
 const REVEAL_START_RATIO = 0.88;
 const REVEAL_END_RATIO = 0.55;
 const REVEAL_TRANSLATE_PX = 48;
-const PARALLAX_LEFT_FACTOR = 0.045;
-const PARALLAX_RIGHT_FACTOR = 0.075;
+const PARALLAX_NARROW_FACTOR = 0.05;
+const PARALLAX_WIDE_FACTOR = 0.035;
 
 function getRevealProgress(elementTop: number, viewportHeight: number): number {
   const startY = viewportHeight * REVEAL_START_RATIO;
@@ -35,7 +35,7 @@ function prefersNoBlur(): boolean {
 
 /**
  * Scrubs each `[data-project-card]` from hidden to visible and applies
- * staggered column parallax while scrolling (Cuberto-style).
+ * light parallax while scrolling the work grid.
  */
 export function useProjectCardsScroll(
   containerRef: RefObject<HTMLElement | null>,
@@ -72,12 +72,12 @@ export function useProjectCardsScroll(
         const opacity = progress;
         const revealY = REVEAL_TRANSLATE_PX * (1 - progress);
 
-        const column = card.dataset.projectColumn;
+        const size = card.dataset.projectSize;
         const viewportCenter = viewportHeight * 0.5;
         const elementCenter = rect.top + rect.height * 0.5;
         const distanceFromCenter = elementCenter - viewportCenter;
         const parallaxFactor =
-          column === "left" ? PARALLAX_LEFT_FACTOR : PARALLAX_RIGHT_FACTOR;
+          size === "large" ? PARALLAX_WIDE_FACTOR : PARALLAX_NARROW_FACTOR;
         const parallaxY = distanceFromCenter * parallaxFactor * -1;
 
         card.style.opacity = String(opacity);
