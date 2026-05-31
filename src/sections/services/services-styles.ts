@@ -30,15 +30,15 @@ export const SERVICES_EYEBROW =
   "w-full font-nav text-[11px] font-normal uppercase leading-none tracking-[0.06em] text-neutral-900 sm:text-xs";
 
 export const SERVICES_LIST =
-  "flex w-full flex-col items-start gap-4 sm:gap-5 md:gap-6 lg:gap-8";
+  "flex w-full flex-col items-start gap-1 sm:gap-1.5 md:gap-2";
 
 export const SERVICES_ITEM =
-  "group relative flex w-full cursor-default items-center justify-start py-4 sm:py-5 md:py-6 lg:py-8";
+  "group relative flex w-full cursor-default items-center justify-start py-1 sm:py-1.5 md:py-2";
 
 export const SERVICES_ITEM_INNER = "relative z-[2] text-left";
 
 export const SERVICES_ITEM_PRIMARY =
-  "font-nav text-[2.75rem] font-bold leading-[0.95] tracking-[-0.03em] text-neutral-950 sm:text-[3.5rem] md:text-[4.5rem] lg:text-[5.5rem] xl:text-[6.5rem]";
+  "font-nav text-2xl font-normal leading-snug tracking-[-0.02em] text-neutral-950 sm:text-3xl md:text-4xl lg:text-[2.75rem] xl:text-[3.25rem]";
 
 export const SERVICES_ITEM_SECONDARY =
   "pointer-events-none absolute top-1/2 right-0 z-[2] hidden -translate-y-1/2 translate-x-[calc(100%+0.75rem)] font-nav text-[10px] font-normal uppercase leading-none tracking-[0.06em] text-neutral-500 transition-opacity duration-300 ease-out sm:block sm:text-[11px] sm:opacity-100 md:translate-x-[calc(100%+1rem)] md:group-hover:opacity-100";

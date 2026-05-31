@@ -14,7 +14,7 @@ import { SECTION_HEADLINE } from "@/lib/section-headline-styles";
 export const ABOUT_HEADLINE = SECTION_HEADLINE;
 
 export const ABOUT_BODY =
-  "font-display text-xl font-normal leading-snug tracking-tight text-neutral-900 sm:text-2xl md:text-3xl lg:text-4xl lg:leading-[1.2]";
+  "font-nav text-xl font-normal leading-snug tracking-tight text-neutral-900 sm:text-2xl md:text-3xl lg:text-4xl lg:leading-[1.2]";
 
 export const ABOUT_BODY_STACK =
   "mt-8 flex max-w-4xl flex-col gap-6 sm:mt-10 sm:gap-8 md:mt-12 md:gap-10 lg:max-w-5xl";
