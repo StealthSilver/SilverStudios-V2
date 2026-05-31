@@ -1,158 +1,170 @@
 /**
  * @file FooterReboundGraphic.tsx
- * @description Sui-style rebound SVG — blue towers and dotted guides revealed on overscroll.
+ * @description Sui-style footer rebound graphic revealed during bottom overscroll.
  */
 
 "use client";
 
-import { useId } from "react";
+import { useEffect, useMemo, useState } from "react";
 
-import { FOOTER_REBOUND_BLUE } from "@/lib/footer-overscroll";
+import { getFractionalHour } from "@/lib/hero-time";
 import { cn } from "@/lib/utils";
 
 import { FOOTER_REBOUND_GRAPHIC } from "./footer-styles";
 
 export interface FooterReboundGraphicProps {
   scale: number;
+  progress: number;
+  pullPx: number;
   className?: string;
+}
+
+interface GradientKeyframe {
+  hour: number;
+  stops: [string, string, string, string];
+}
+
+const HERO_GRADIENT_KEYFRAMES: readonly GradientKeyframe[] = [
+  { hour: 5, stops: ["#1a1535", "#2e2050", "#3d2d6e", "#2a1f4a"] },
+  { hour: 7, stops: ["#c4785a", "#d9907a", "#a0b4cc", "#7898b8"] },
+  { hour: 9, stops: ["#8eb0f0", "#5278dc", "#2e52c8", "#122a94"] },
+  { hour: 12, stops: ["#c8ddf0", "#a8c8e8", "#d4e8f5", "#b0d0ea"] },
+  { hour: 14, stops: ["#b8b0d0", "#9a90be", "#7a88b0", "#6070a0"] },
+  { hour: 17, stops: ["#d4a882", "#c8907a", "#b07868", "#8a5848"] },
+  { hour: 19, stops: ["#8a6070", "#6a5080", "#504070", "#3a2c5a"] },
+  { hour: 22, stops: ["#141824", "#1a2030", "#1e1a2e", "#141020"] },
+] as const;
+
+function clamp(value: number, min: number, max: number): number {
+  return Math.min(max, Math.max(min, value));
+}
+
+function hexToRgb(hex: string): { r: number; g: number; b: number } {
+  const normalized = hex.replace("#", "");
+  const value =
+    normalized.length === 3
+      ? normalized
+          .split("")
+          .map((char) => char + char)
+          .join("")
+      : normalized;
+
+  return {
+    r: Number.parseInt(value.slice(0, 2), 16),
+    g: Number.parseInt(value.slice(2, 4), 16),
+    b: Number.parseInt(value.slice(4, 6), 16),
+  };
+}
+
+function lerpColor(a: string, b: string, t: number): string {
+  const from = hexToRgb(a);
+  const to = hexToRgb(b);
+  const clamped = clamp(t, 0, 1);
+
+  const r = Math.round(from.r + (to.r - from.r) * clamped);
+  const g = Math.round(from.g + (to.g - from.g) * clamped);
+  const bChannel = Math.round(from.b + (to.b - from.b) * clamped);
+
+  return `#${[r, g, bChannel]
+    .map((channel) => channel.toString(16).padStart(2, "0"))
+    .join("")}`;
+}
+
+function withAlpha(hex: string, alpha: number): string {
+  const { r, g, b } = hexToRgb(hex);
+  return `rgba(${r}, ${g}, ${b}, ${clamp(alpha, 0, 1)})`;
+}
+
+function getInterpolatedHeroStops(hour: number): [string, string, string, string] {
+  const keyframes = HERO_GRADIENT_KEYFRAMES;
+  const count = keyframes.length;
+  let normalizedHour = hour;
+
+  for (let index = 0; index < count; index += 1) {
+    const current = keyframes[index];
+    const next = keyframes[(index + 1) % count];
+    const startHour = current.hour;
+    let endHour = next.hour;
+
+    if (index === count - 1) {
+      endHour += 24;
+      if (normalizedHour < keyframes[0].hour) {
+        normalizedHour += 24;
+      }
+    }
+
+    if (normalizedHour >= startHour && normalizedHour < endHour) {
+      const t = (normalizedHour - startHour) / (endHour - startHour);
+      return current.stops.map((stop, stopIndex) =>
+        lerpColor(stop, next.stops[stopIndex], t),
+      ) as [string, string, string, string];
+    }
+  }
+
+  return [...keyframes[0].stops];
 }
 
 export default function FooterReboundGraphic({
   scale,
+  progress,
+  pullPx,
   className,
 }: FooterReboundGraphicProps) {
-  const uid = useId().replace(/:/g, "");
-  const gradient1 = `footer-rebound-g1-${uid}`;
-  const gradient2 = `footer-rebound-g2-${uid}`;
-  const gradient3 = `footer-rebound-g3-${uid}`;
+  const [hour, setHour] = useState(() => getFractionalHour());
+
+  useEffect(() => {
+    const interval = window.setInterval(() => setHour(getFractionalHour()), 1000);
+    return () => {
+      window.clearInterval(interval);
+    };
+  }, []);
+
+  const [stopA, stopB, stopC, stopD] = useMemo(
+    () => getInterpolatedHeroStops(hour),
+    [hour],
+  );
+  const reveal = clamp(pullPx / 22, 0, 1);
+  const opacity = reveal * clamp(0.72 + progress * 0.32, 0, 1);
+  const visualScale = 0.22 + scale * 0.78;
+  const yOffset = (1 - reveal) * 7;
+  const haloOpacity = clamp(progress * 0.54, 0, 0.54);
+  const grainOpacity = clamp(progress * 0.2, 0, 0.2);
+  const circleRadius = "96vmax";
+  const centerBelow = "74vmax";
+  const gradientCenter = `50% calc(100% + ${centerBelow})`;
+  const gradient = `radial-gradient(circle ${circleRadius} at ${gradientCenter}, ${withAlpha(stopD, 0)} 0%, ${withAlpha(stopA, 0.06)} 52%, ${withAlpha(stopB, 0.32)} 76%, ${withAlpha(stopC, 0.14)} 86%, ${withAlpha(stopD, 0)} 100%)`;
+  const diffusion = `radial-gradient(circle ${circleRadius} at ${gradientCenter}, ${withAlpha(stopD, 0)} 0%, ${withAlpha(stopA, 0.04)} 58%, ${withAlpha(stopB, 0.14)} 80%, ${withAlpha(stopD, 0)} 100%), repeating-radial-gradient(circle at ${gradientCenter}, rgba(255, 255, 255, 0.2) 0 1px, rgba(255, 255, 255, 0) 1px 4px)`;
 
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 1481 535"
-      fill="none"
+    <div
       aria-hidden
       className={cn(FOOTER_REBOUND_GRAPHIC, className)}
       style={{
-        color: FOOTER_REBOUND_BLUE,
-        transform: `scaleY(${scale})`,
+        opacity,
+        transform: `translate3d(0, ${yOffset}px, 0) scale(${visualScale})`,
         transformOrigin: "center bottom",
       }}
     >
-      <defs>
-        <linearGradient
-          id={gradient1}
-          x1="0%"
-          y1="0%"
-          x2="0"
-          y2="100%"
-          gradientUnits="userSpaceOnUse"
-        >
-          <stop stopColor="#FFFFFF" stopOpacity="0" offset="0%" />
-          <stop stopColor="#FFFFFF" stopOpacity="1" offset="100%" />
-        </linearGradient>
-        <linearGradient
-          id={gradient2}
-          x1="0%"
-          y1="20%"
-          x2="0"
-          y2="100%"
-          gradientUnits="userSpaceOnUse"
-        >
-          <stop stopColor="#FFFFFF" stopOpacity="0" offset="0%" />
-          <stop stopColor="#FFFFFF" stopOpacity="1" offset="100%" />
-        </linearGradient>
-        <linearGradient
-          id={gradient3}
-          x1="0%"
-          y1="40%"
-          x2="0"
-          y2="100%"
-          gradientUnits="userSpaceOnUse"
-        >
-          <stop stopColor="#FFFFFF" stopOpacity="0" offset="0%" />
-          <stop stopColor="#FFFFFF" stopOpacity="1" offset="100%" />
-        </linearGradient>
-      </defs>
-
-      <g className="footer-rebound-blocks">
-        <path
-          opacity="0.8"
-          d="M634.196 152.52H846.378V535.131H634.196V222.52Z"
-          fill="currentColor"
-        />
-        <path
-          opacity="0.8"
-          d="M423 221.6H635V535H423V277Z"
-          fill="currentColor"
-        />
-        <path
-          opacity="0.6"
-          d="M211.583 284.416H423.765V535.131H211.583V330.52Z"
-          fill="currentColor"
-        />
-        <path
-          opacity="0.4"
-          d="M0.275879 355.52H212.458V535.131H0.275879V402.52Z"
-          fill="currentColor"
-        />
-        <path
-          opacity="0.8"
-          d="M1058.23 221.6H846.052V535.131H1058.23V276.52Z"
-          fill="currentColor"
-        />
-        <path
-          opacity="0.6"
-          d="M1269.54 284.416H1057.36V535.131H1269.54V330.52Z"
-          fill="currentColor"
-        />
-        <path
-          opacity="0.4"
-          d="M1480.85 355.52H1268.67V535.131H1480.85V402.52Z"
-          fill="currentColor"
-        />
-      </g>
-
-      <g className="footer-rebound-dots">
-        <path
-          d="M1269.54 238.676L1269.54 541.232"
-          stroke={`url(#${gradient3})`}
-          strokeWidth="2"
-          strokeDasharray="2 10"
-        />
-        <path
-          d="M1058.23 156.064V541.232"
-          stroke={`url(#${gradient2})`}
-          strokeWidth="2"
-          strokeDasharray="2 10"
-          fill="none"
-        />
-        <path
-          d="M846.928 0.597656V541.232"
-          stroke={`url(#${gradient1})`}
-          strokeWidth="2"
-          strokeDasharray="2 10"
-          fill="none"
-        />
-        <path
-          d="M635.621 0.597656V541.232"
-          stroke={`url(#${gradient1})`}
-          strokeWidth="2"
-          strokeDasharray="2 10"
-        />
-        <path
-          d="M424.314 156.064V541.232"
-          stroke={`url(#${gradient2})`}
-          strokeWidth="2"
-          strokeDasharray="2 10"
-        />
-        <path
-          d="M213.007 238.676L213.007 541.232"
-          stroke={`url(#${gradient3})`}
-          strokeWidth="2"
-          strokeDasharray="2 10"
-        />
-      </g>
-    </svg>
+      <div
+        className="absolute inset-x-0 bottom-0 h-full w-full"
+        style={{
+          backgroundImage: gradient,
+          filter: "blur(18px) saturate(108%)",
+          transition: "background-image 0.8s ease",
+          opacity: haloOpacity,
+        }}
+      />
+      <div
+        className="absolute inset-x-0 bottom-0 h-full w-full"
+        style={{
+          backgroundImage: diffusion,
+          backgroundSize: "100% 100%, 16px 16px",
+          mixBlendMode: "screen",
+          filter: "blur(1.5px) contrast(130%)",
+          transition: "background-image 0.8s ease",
+          opacity: grainOpacity,
+        }}
+      />
+    </div>
   );
 }

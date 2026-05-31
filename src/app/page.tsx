@@ -24,8 +24,8 @@ export default function Home() {
       <HeroTickerScrollTransition initialHeroHour={initialHeroHour} />
       <ProjectsSection />
       <ServicesSection />
-      <SilverUISection />
       <FeaturedNewsSection />
+      <SilverUISection />
       <FooterInviteTransition />
       <FooterScrollSection />
     </>

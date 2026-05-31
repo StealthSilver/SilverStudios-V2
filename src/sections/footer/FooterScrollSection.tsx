@@ -25,7 +25,12 @@ export default function FooterScrollSection() {
   const prefersReducedMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
   const isMobile = useMediaQuery("(max-width: 479px)");
   const enabled = !prefersReducedMotion && !isMobile;
-  const { scale } = useFooterOverscroll(shellRef, enabled);
+  const { pullPx, progress, scale } = useFooterOverscroll(shellRef, enabled);
+  const contentReboundOffset = Math.min(pullPx * 0.24, 28);
+  const maxRunwayPx = FOOTER_OVERSCROLL_RUNWAY_VH * 10;
+  const runwayHeightPx = enabled
+    ? Math.min(maxRunwayPx, Math.max(0, pullPx - 2) * 1.08)
+    : 0;
 
   return (
     <div
@@ -33,19 +38,28 @@ export default function FooterScrollSection() {
       className={cn(FOOTER_SCROLL_SHELL)}
       data-footer-scroll-shell
     >
-      <FooterSection />
+      <div
+        className="relative will-change-transform"
+        style={
+          enabled
+            ? { transform: `translate3d(0, ${-contentReboundOffset}px, 0)` }
+            : undefined
+        }
+      >
+        <FooterSection />
 
-      {enabled ? (
-        <div
-          className={cn(FOOTER_OVERSCROLL_RUNWAY)}
-          style={{ height: `${FOOTER_OVERSCROLL_RUNWAY_VH}vh` }}
-          aria-hidden
-        >
-          <div className={cn(FOOTER_OVERSCROLL_EXPander)}>
-            <FooterReboundGraphic scale={scale} />
+        {enabled ? (
+          <div
+            className={cn(FOOTER_OVERSCROLL_RUNWAY)}
+            style={{ height: `${runwayHeightPx}px` }}
+            aria-hidden
+          >
+            <div className={cn(FOOTER_OVERSCROLL_EXPander)}>
+              <FooterReboundGraphic scale={scale} progress={progress} pullPx={pullPx} />
+            </div>
           </div>
-        </div>
-      ) : null}
+        ) : null}
+      </div>
     </div>
   );
 }

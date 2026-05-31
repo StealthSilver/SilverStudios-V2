@@ -7,6 +7,12 @@ export const FOOTER_MAX_WIDTH = "mx-auto w-full max-w-7xl";
 
 export const FOOTER_LOWER = "flex w-full shrink-0 flex-col gap-8";
 
+export const FOOTER_TOP =
+  "flex w-full shrink-0 flex-col items-start gap-2 sm:flex-row sm:items-start sm:justify-between";
+
+export const FOOTER_TOP_LEFT =
+  "flex flex-col items-start gap-1 sm:flex-row sm:items-start sm:gap-x-8";
+
 export const FOOTER_PRE_BOTTOM =
   "flex w-full flex-col gap-8 sm:flex-row sm:items-end sm:justify-between";
 
@@ -33,28 +39,28 @@ export const FOOTER_NAV_LINK =
   "inline-flex shrink-0 items-center justify-end whitespace-nowrap text-right";
 
 export const FOOTER_BOTTOM =
-  "flex shrink-0 flex-col gap-6 border-t border-white/15 pt-8 sm:flex-row sm:items-center sm:justify-between";
+  "flex shrink-0 flex-col gap-2 border-t border-white/15 pt-3 sm:flex-row sm:items-end sm:justify-between";
 
 export const FOOTER_BOTTOM_LEFT =
-  "flex flex-wrap items-center gap-x-6 gap-y-3 sm:gap-x-8";
+  "flex flex-wrap items-end gap-x-6 gap-y-1 sm:gap-x-8";
 
 export const FOOTER_SOCIAL_LIST =
   "flex flex-wrap items-center justify-end gap-2 sm:gap-2.5";
 
 export const FOOTER_SOCIAL_BUTTON =
-  "inline-flex size-10 items-center justify-center rounded-xl text-white transition-colors duration-150 ease-linear hover:text-white/90 sm:size-11";
+  "inline-flex size-9 items-center justify-center rounded-xl text-white transition-colors duration-150 ease-linear hover:text-white/90 sm:size-10";
 
 /** Wrapper for footer + overscroll runway (sui.io scroll_footer pattern). */
 export const FOOTER_SCROLL_SHELL =
   "footer-scroll-shell relative z-[2] overflow-visible bg-black";
 
-/** In-flow runway below footer — sui.io custom_scroll pattern. */
+/** Overscroll runway anchored below footer; removed from normal layout flow. */
 export const FOOTER_OVERSCROLL_RUNWAY =
-  "relative z-0 flex w-full items-end justify-center overflow-visible bg-black";
+  "pointer-events-none absolute inset-x-0 top-full z-0 flex w-full items-end justify-center overflow-hidden bg-black";
 
 export const FOOTER_OVERSCROLL_EXPander =
-  "relative block w-full min-w-0 overflow-visible";
+  "relative block h-full w-full min-w-0 overflow-visible";
 
-/** Rebound SVG graphic — scaled from bottom on overscroll. */
+/** Rebound gradient layer — scaled from bottom on overscroll. */
 export const FOOTER_REBOUND_GRAPHIC =
-  "pointer-events-none block w-full min-w-0 overflow-visible will-change-transform";
+  "pointer-events-none relative block h-full w-full min-w-0 overflow-hidden will-change-transform";

@@ -1,18 +1,18 @@
 /**
  * @file FeaturedNewsSection.tsx
- * @description Featured news — full-viewport shell below Silver UI.
+ * @description Featured news section with interactive gradient-card carousel.
  */
 
 import { featuredNewsContent } from "@/lib/data/featured-news";
 import { cn } from "@/lib/utils";
 
-const SECTION_SHELL =
-  "flex h-screen flex-col items-start justify-start bg-white px-4 py-12 sm:px-6 sm:py-14 md:px-9 md:py-16";
-
-const SECTION_INNER = "mx-auto w-full max-w-7xl";
-
-const SECTION_TITLE =
-  "font-display text-3xl font-normal tracking-tight text-neutral-900 sm:text-4xl md:text-5xl";
+import { FeaturedNewsCarousel } from "./FeaturedNewsCarousel";
+import {
+  FEATURED_NEWS_CAROUSEL_WRAP,
+  FEATURED_NEWS_INNER,
+  FEATURED_NEWS_SECTION,
+  FEATURED_NEWS_TITLE,
+} from "./featured-news-styles";
 
 // ——— Main section ———
 
@@ -21,12 +21,20 @@ export default function FeaturedNewsSection() {
     <section
       id="featured-news"
       aria-labelledby="featured-news-title"
-      className={cn(SECTION_SHELL)}
+      className={cn(FEATURED_NEWS_SECTION)}
     >
-      <div className={cn(SECTION_INNER)}>
-        <h2 id="featured-news-title" className={cn(SECTION_TITLE)}>
+      <div className={cn(FEATURED_NEWS_INNER)}>
+        <h2 id="featured-news-title" className={cn(FEATURED_NEWS_TITLE)}>
           {featuredNewsContent.title}
         </h2>
+
+        <div className={cn(FEATURED_NEWS_CAROUSEL_WRAP)}>
+          <FeaturedNewsCarousel
+            slides={featuredNewsContent.slides}
+            ctaHref={featuredNewsContent.ctaHref}
+            ctaLabel={featuredNewsContent.ctaLabel}
+          />
+        </div>
       </div>
     </section>
   );

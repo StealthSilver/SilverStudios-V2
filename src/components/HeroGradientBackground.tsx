@@ -114,8 +114,11 @@ const SCRUBBER_WIDTH_PX = 52;
 const TRACK_INSET_PX = 60;
 const SCRUBBER_HOUR_MAX = 23.99;
 const GRAIN_INTERVAL_MS = 200;
-const GRAIN_OPACITY = 0.18;
+const GRAIN_OPACITY = 0.06;
 const TEXT_DARK_LUMINANCE_THRESHOLD = 160;
+const HERO_RADIAL_BLOB_SIZE = "170vmax";
+const HERO_RADIAL_BLUR = "220px";
+const SHOW_HERO_TIME_SCRUBBER = true;
 /** How often to sync scrubber + gradient to the live clock when not dragging. */
 const LIVE_CLOCK_SYNC_MS = 1000;
 
@@ -158,7 +161,7 @@ function stopLuminance(hex: string): number {
 }
 
 function buildGradientString(stops: [string, string, string, string]): string {
-  return `linear-gradient(135deg, ${stops[0]} 0%, ${stops[1]} 28%, ${stops[2]} 58%, ${stops[3]} 100%)`;
+  return `radial-gradient(circle at 50% 50%, ${stops[0]} 0%, ${stops[1]} 30%, ${stops[2]} 62%, ${stops[3]} 100%)`;
 }
 
 function getKeyframeBlend(hour: number): {
@@ -634,22 +637,42 @@ function HeroGradientBackgroundLayers({
         className={cn("absolute inset-0 z-0 overflow-hidden", className)}
         style={{ opacity }}
       >
+        <div className="absolute inset-0 bg-[#0f1533]" />
         <div
-          className="absolute inset-0"
+          className="absolute left-1/2 top-1/2 rounded-full"
           style={{
+            width: HERO_RADIAL_BLOB_SIZE,
+            height: HERO_RADIAL_BLOB_SIZE,
+            transform: "translate(-50%, -50%)",
             background: gradient,
-            transition: "background 0.6s ease",
+            filter: `blur(${HERO_RADIAL_BLUR})`,
+            transition: "background 0.8s ease, filter 0.8s ease",
+            opacity: 0.98,
+          }}
+        />
+        <div
+          className="absolute left-1/2 top-1/2 rounded-full"
+          style={{
+            width: HERO_RADIAL_BLOB_SIZE,
+            height: HERO_RADIAL_BLOB_SIZE,
+            transform: "translate(-50%, -50%) scale(1.12)",
+            background: gradient,
+            filter: "blur(280px)",
+            transition: "background 0.8s ease, filter 0.8s ease",
+            opacity: 0.58,
           }}
         />
         <HeroGrainCanvas containerRef={containerRef} />
       </div>
-      <HeroTimeScrubber
-        hour={hour}
-        isDragging={isDragging}
-        onHourChange={setHour}
-        onDragStart={() => setIsDragging(true)}
-        onDragEnd={() => setIsDragging(false)}
-      />
+      {SHOW_HERO_TIME_SCRUBBER && (
+        <HeroTimeScrubber
+          hour={hour}
+          isDragging={isDragging}
+          onHourChange={setHour}
+          onDragStart={() => setIsDragging(true)}
+          onDragEnd={() => setIsDragging(false)}
+        />
+      )}
     </>
   );
 }

@@ -7,25 +7,34 @@
 export const FOOTER_REBOUND_BLUE = "#298dff";
 
 /** In-flow runway below footer (matches sui.io custom_scroll). */
-export const FOOTER_OVERSCROLL_RUNWAY_VH = 30;
+export const FOOTER_OVERSCROLL_RUNWAY_VH = 20;
 
 /** Pull distance (px) required to fully expand the rebound graphic. */
-export const FOOTER_OVERSCROLL_MAX_PULL_PX = 200;
+export const FOOTER_OVERSCROLL_MAX_PULL_PX = 180;
 
 /** Compressed scale when the rebound graphic is at rest. */
-export const FOOTER_OVERSCROLL_MIN_SCALE = 0.06;
+export const FOOTER_OVERSCROLL_MIN_SCALE = 0.055;
 
 /** Fully expanded scale at max overscroll. */
 export const FOOTER_OVERSCROLL_MAX_SCALE = 1;
 
 /** Wheel delta multiplier. */
-export const FOOTER_OVERSCROLL_WHEEL_GAIN = 1;
+export const FOOTER_OVERSCROLL_WHEEL_GAIN = 0.95;
 
 /** Touch pull multiplier. */
-export const FOOTER_OVERSCROLL_TOUCH_GAIN = 1.15;
+export const FOOTER_OVERSCROLL_TOUCH_GAIN = 1.05;
 
-/** Spring release duration (ms). */
-export const FOOTER_OVERSCROLL_RELEASE_MS = 900;
+/** Spring stiffness used for rebound release. */
+export const FOOTER_OVERSCROLL_RELEASE_STIFFNESS = 132;
+
+/** Spring damping used for rebound release. */
+export const FOOTER_OVERSCROLL_RELEASE_DAMPING = 27;
+
+/** Velocity cutoff to stop the spring frame loop. */
+export const FOOTER_OVERSCROLL_RELEASE_VELOCITY_EPSILON = 0.18;
+
+/** Position cutoff to stop the spring frame loop. */
+export const FOOTER_OVERSCROLL_RELEASE_POSITION_EPSILON = 0.16;
 
 function clamp(value: number, min: number, max: number): number {
   return Math.min(max, Math.max(min, value));
@@ -59,6 +68,16 @@ export function pullToProgress(pullPx: number): number {
     clamp(pullPx, 0, FOOTER_OVERSCROLL_MAX_PULL_PX) /
       FOOTER_OVERSCROLL_MAX_PULL_PX,
   );
+}
+
+/**
+ * Add resistance as pull increases so overscroll feels elastic
+ * instead of linear.
+ */
+export function applyPullResistance(currentPullPx: number, deltaPx: number): number {
+  const normalized = clamp(currentPullPx / FOOTER_OVERSCROLL_MAX_PULL_PX, 0, 1);
+  const resistance = 1 - normalized ** 1.6 * 0.72;
+  return currentPullPx + deltaPx * clamp(resistance, 0.2, 1);
 }
 
 export function progressToScale(progress: number): number {

@@ -13,3 +13,5 @@ export type {
 } from "./site";
 export type { ClientLogo } from "./logo-ticker";
 export type { Project, ProjectsContent } from "./projects";
+export type { FeaturedNewsContent, FeaturedNewsSlide } from "./featured-news";
+export type { ServiceItem, ServicesContent } from "./services";

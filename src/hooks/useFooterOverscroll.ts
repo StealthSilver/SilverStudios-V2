@@ -8,8 +8,12 @@
 import { type RefObject, useCallback, useEffect, useRef, useState } from "react";
 
 import {
+  applyPullResistance,
   FOOTER_OVERSCROLL_MAX_PULL_PX,
-  FOOTER_OVERSCROLL_RELEASE_MS,
+  FOOTER_OVERSCROLL_RELEASE_DAMPING,
+  FOOTER_OVERSCROLL_RELEASE_POSITION_EPSILON,
+  FOOTER_OVERSCROLL_RELEASE_STIFFNESS,
+  FOOTER_OVERSCROLL_RELEASE_VELOCITY_EPSILON,
   FOOTER_OVERSCROLL_TOUCH_GAIN,
   FOOTER_OVERSCROLL_WHEEL_GAIN,
   getWheelDeltaPx,
@@ -51,8 +55,8 @@ export function useFooterOverscroll(
   const [state, setState] = useState<FooterOverscrollState>(INITIAL_STATE);
   const pullRef = useRef(0);
   const releaseFrameRef = useRef<number | undefined>(undefined);
-  const releaseStartRef = useRef(0);
-  const releaseFromRef = useRef(0);
+  const releaseLastTsRef = useRef<number | undefined>(undefined);
+  const releaseVelocityRef = useRef(0);
   const wheelIdleTimerRef = useRef<number | undefined>(undefined);
   const touchStartYRef = useRef<number | null>(null);
   const isTouchPullingRef = useRef(false);
@@ -62,6 +66,8 @@ export function useFooterOverscroll(
       cancelAnimationFrame(releaseFrameRef.current);
       releaseFrameRef.current = undefined;
     }
+    releaseLastTsRef.current = undefined;
+    releaseVelocityRef.current = 0;
   }, []);
 
   const applyPull = useCallback(
@@ -74,39 +80,59 @@ export function useFooterOverscroll(
     [cancelRelease],
   );
 
-  const startRelease = useCallback(() => {
-    if (pullRef.current <= 0) {
-      applyPull(0);
-      return;
-    }
-
-    cancelRelease();
-    releaseStartRef.current = performance.now();
-    releaseFromRef.current = pullRef.current;
-
-    const tick = (now: number) => {
-      const elapsed = now - releaseStartRef.current;
-      const t = Math.min(elapsed / FOOTER_OVERSCROLL_RELEASE_MS, 1);
-      const eased = 1 - (1 - t) ** 3;
-      const nextPull = releaseFromRef.current * (1 - eased);
-      pullRef.current = nextPull;
-      setState(buildState(nextPull));
-
-      if (t < 1) {
-        releaseFrameRef.current = requestAnimationFrame(tick);
-      } else {
-        pullRef.current = 0;
-        setState(buildState(0));
-        releaseFrameRef.current = undefined;
+  const startRelease = useCallback(
+    (seedVelocity = 0) => {
+      if (pullRef.current <= 0) {
+        applyPull(0);
+        return;
       }
-    };
 
-    releaseFrameRef.current = requestAnimationFrame(tick);
-  }, [applyPull, cancelRelease]);
+      cancelRelease();
+      releaseVelocityRef.current = seedVelocity;
+
+      const tick = (now: number) => {
+        const previousTs = releaseLastTsRef.current ?? now;
+        const dt = Math.min((now - previousTs) / 1000, 1 / 20);
+        releaseLastTsRef.current = now;
+
+        const currentPull = pullRef.current;
+        const acceleration =
+          -FOOTER_OVERSCROLL_RELEASE_STIFFNESS * currentPull -
+          FOOTER_OVERSCROLL_RELEASE_DAMPING * releaseVelocityRef.current;
+
+        const nextVelocity = releaseVelocityRef.current + acceleration * dt;
+        const nextPull = Math.max(0, currentPull + nextVelocity * dt);
+
+        releaseVelocityRef.current = nextPull <= 0 ? 0 : nextVelocity;
+        pullRef.current = nextPull;
+        setState(buildState(nextPull));
+
+        const shouldStop =
+          nextPull <= FOOTER_OVERSCROLL_RELEASE_POSITION_EPSILON &&
+          Math.abs(releaseVelocityRef.current) <=
+            FOOTER_OVERSCROLL_RELEASE_VELOCITY_EPSILON;
+
+        if (shouldStop) {
+          pullRef.current = 0;
+          setState(buildState(0));
+          releaseFrameRef.current = undefined;
+          releaseLastTsRef.current = undefined;
+          return;
+        }
+
+        releaseFrameRef.current = requestAnimationFrame(tick);
+      };
+
+      releaseFrameRef.current = requestAnimationFrame(tick);
+    },
+    [applyPull, cancelRelease],
+  );
 
   const scheduleRelease = useCallback(() => {
     window.clearTimeout(wheelIdleTimerRef.current);
-    wheelIdleTimerRef.current = window.setTimeout(startRelease, 80);
+    wheelIdleTimerRef.current = window.setTimeout(() => {
+      startRelease(releaseVelocityRef.current);
+    }, 95);
   }, [startRelease]);
 
   const canOverscroll = useCallback(() => {
@@ -116,7 +142,8 @@ export function useFooterOverscroll(
   useEffect(() => {
     if (!enabled) {
       pullRef.current = 0;
-      setState(INITIAL_STATE);
+      window.clearTimeout(wheelIdleTimerRef.current);
+      cancelRelease();
       return undefined;
     }
 
@@ -132,17 +159,22 @@ export function useFooterOverscroll(
 
       if (delta > 0) {
         event.preventDefault();
-        applyPull(pullRef.current + delta * FOOTER_OVERSCROLL_WHEEL_GAIN);
+        const deltaPull = delta * FOOTER_OVERSCROLL_WHEEL_GAIN;
+        const nextPull = applyPullResistance(pullRef.current, deltaPull);
+        releaseVelocityRef.current = deltaPull * 0.018;
+        applyPull(nextPull);
         scheduleRelease();
         return;
       }
 
       if (delta < 0 && pullRef.current > 0) {
         event.preventDefault();
-        const nextPull = pullRef.current + delta * FOOTER_OVERSCROLL_WHEEL_GAIN;
+        const deltaPull = delta * FOOTER_OVERSCROLL_WHEEL_GAIN;
+        const nextPull = pullRef.current + deltaPull;
+        releaseVelocityRef.current = deltaPull * 0.016;
         applyPull(nextPull);
         if (nextPull <= 0) {
-          startRelease();
+          startRelease(0);
         } else {
           scheduleRelease();
         }
@@ -179,13 +211,19 @@ export function useFooterOverscroll(
       if (delta > 0) {
         isTouchPullingRef.current = true;
         event.preventDefault();
-        applyPull(pullRef.current + delta * FOOTER_OVERSCROLL_TOUCH_GAIN);
+        const deltaPull = delta * FOOTER_OVERSCROLL_TOUCH_GAIN;
+        const nextPull = applyPullResistance(pullRef.current, deltaPull);
+        releaseVelocityRef.current = deltaPull * 0.024;
+        applyPull(nextPull);
         return;
       }
 
       if (delta < 0 && pullRef.current > 0) {
         event.preventDefault();
-        applyPull(pullRef.current + delta * FOOTER_OVERSCROLL_TOUCH_GAIN);
+        const deltaPull = delta * FOOTER_OVERSCROLL_TOUCH_GAIN;
+        const nextPull = pullRef.current + deltaPull;
+        releaseVelocityRef.current = deltaPull * 0.02;
+        applyPull(nextPull);
       }
     };
 
@@ -193,7 +231,7 @@ export function useFooterOverscroll(
       touchStartYRef.current = null;
       if (isTouchPullingRef.current) {
         isTouchPullingRef.current = false;
-        startRelease();
+        startRelease(releaseVelocityRef.current);
       }
     };
 
@@ -226,9 +264,8 @@ export function useFooterOverscroll(
     canOverscroll,
     enabled,
     scheduleRelease,
-    shellRef,
     startRelease,
   ]);
 
-  return state;
+  return enabled ? state : INITIAL_STATE;
 }

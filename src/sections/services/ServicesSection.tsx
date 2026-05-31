@@ -1,32 +1,54 @@
 /**
  * @file ServicesSection.tsx
- * @description Services showcase — full-viewport shell below projects.
+ * @description Services showcase — Studio Namma-style stacked list with Silver Studios styling.
  */
+
+import Link from "next/link";
 
 import { servicesContent } from "@/lib/data/services";
 import { cn } from "@/lib/utils";
 
-const SECTION_SHELL =
-  "flex h-screen flex-col items-start justify-start bg-white px-4 py-12 sm:px-6 sm:py-14 md:px-9 md:py-16";
-
-const SECTION_INNER = "mx-auto w-full max-w-7xl";
-
-const SECTION_TITLE =
-  "font-display text-3xl font-normal tracking-tight text-neutral-900 sm:text-4xl md:text-5xl";
+import { ServiceListItem } from "./ServiceListItem";
+import {
+  SERVICES_EYEBROW,
+  SERVICES_INNER,
+  SERVICES_LIST,
+  SERVICES_SECTION,
+  SERVICES_SEE_ALL,
+  SERVICES_SEE_ALL_ARROW,
+  SERVICES_SEE_ALL_WRAP,
+} from "./services-styles";
 
 // ——— Main section ———
 
 export default function ServicesSection() {
+  const { title, items, seeAllLabel, seeAllHref } = servicesContent;
+
   return (
     <section
       id="services"
       aria-labelledby="services-title"
-      className={cn(SECTION_SHELL)}
+      className={cn(SERVICES_SECTION)}
     >
-      <div className={cn(SECTION_INNER)}>
-        <h2 id="services-title" className={cn(SECTION_TITLE)}>
-          {servicesContent.title}
+      <div className={cn(SERVICES_INNER)}>
+        <h2 id="services-title" className={cn(SERVICES_EYEBROW)}>
+          {title}
         </h2>
+
+        <ul className={cn(SERVICES_LIST)}>
+          {items.map((item) => (
+            <ServiceListItem key={item.id} item={item} />
+          ))}
+        </ul>
+
+        <div className={cn(SERVICES_SEE_ALL_WRAP)}>
+          <Link href={seeAllHref} className={cn(SERVICES_SEE_ALL)}>
+            <span>{seeAllLabel}</span>
+            <span className={cn(SERVICES_SEE_ALL_ARROW)} aria-hidden>
+              →
+            </span>
+          </Link>
+        </div>
       </div>
     </section>
   );
