@@ -3,6 +3,9 @@
  * @description Layout class strings for the Featured News section.
  */
 
+/** Temporarily hide the featured news section on the page (code kept for later). */
+export const FEATURED_NEWS_SECTION_HIDDEN = true;
+
 export const FEATURED_NEWS_SECTION =
   "relative bg-white px-4 pt-20 pb-8 sm:px-6 sm:pt-24 sm:pb-10 md:px-9 md:pt-28 md:pb-12";
 

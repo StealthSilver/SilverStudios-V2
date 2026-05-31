@@ -59,7 +59,10 @@ function HeroSlide({
       aria-hidden={hidden}
     >
       <div
-        className={cn("h-full w-full origin-center will-change-transform", zoomClassName)}
+        className={cn(
+          "relative h-full w-full origin-center will-change-transform",
+          zoomClassName,
+        )}
       >
         <Image
           src={getHeroSlideUrl(slide)}

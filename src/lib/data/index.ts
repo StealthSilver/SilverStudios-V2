@@ -4,6 +4,7 @@
  */
 
 export { heroContent } from "./hero";
+export { aboutContent } from "./about";
 export { logoTickerContent } from "./logo-ticker";
 export { footerContent } from "./footer";
 export {

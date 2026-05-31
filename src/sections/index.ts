@@ -4,6 +4,7 @@
  */
 
 export { default as HeroSection, HeroNavbar } from "./hero";
+export { default as AboutSection } from "./about";
 export { default as LogoTickerSection } from "./logo-ticker";
 export { default as ProjectsSection } from "./projects";
 export { default as ServicesSection } from "./services";

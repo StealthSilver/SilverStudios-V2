@@ -12,8 +12,10 @@ import { heroContent } from "@/lib/data";
 import { cn } from "@/lib/utils";
 import type { HeroBackgroundSlide, SiteNavLink } from "@/types";
 
+import { HeroScrollGlowLayers } from "./HeroAmbientGlow";
 import { HeroBackgroundSlideshow } from "./HeroBackgroundSlideshow";
 import HeroNavbar from "./HeroNavbar";
+import { HeroScrollTrap } from "./HeroScrollTrap";
 import { HeroRotatingTagline } from "./HeroRotatingTagline";
 import { HeroSectionGate } from "./HeroSectionGate";
 import {
@@ -31,8 +33,6 @@ interface HeroContainerProps {
   backgroundSlides: readonly HeroBackgroundSlide[];
   className?: string;
   children?: React.ReactNode;
-  gradientOpacity?: number;
-  contentOpacity?: number;
   initialHeroHour: number;
 }
 
@@ -57,13 +57,14 @@ function HeroBackgroundStack({
 }: {
   slides: readonly HeroBackgroundSlide[];
 }) {
+  if (HERO_VIDEO_CONTAINER_HIDDEN) {
+    return null;
+  }
+
   return (
     <div
       aria-hidden="true"
-      className={cn(
-        "absolute inset-0 z-0 isolate overflow-hidden",
-        HERO_VIDEO_CONTAINER_HIDDEN && "hidden",
-      )}
+      className="absolute inset-0 z-0 isolate overflow-hidden"
     >
       <HeroBackgroundSlideshow slides={slides} className="absolute inset-0" />
       <HeroBackgroundOverlay />
@@ -75,37 +76,34 @@ function HeroContainer({
   backgroundSlides,
   className,
   children,
-  gradientOpacity = 1,
-  contentOpacity = 1,
   initialHeroHour,
 }: HeroContainerProps) {
   return (
-    <div
-      className={cn(
-        "relative flex min-h-0 flex-1 flex-col overflow-hidden",
-        HERO_VIDEO_CONTAINER_HIDDEN && "min-h-full w-full",
-        !HERO_VIDEO_CONTAINER_HIDDEN && HERO_RADIUS,
-        !HERO_VIDEO_CONTAINER_HIDDEN && "bg-neutral-950",
-        className,
-      )}
-    >
-      <HeroGradientTimeProvider initialHour={initialHeroHour}>
+    <HeroGradientTimeProvider initialHour={initialHeroHour}>
+      <div
+        className={cn(
+          "relative flex min-h-0 flex-1 flex-col",
+          HERO_VIDEO_CONTAINER_HIDDEN && "min-h-full w-full",
+          !HERO_VIDEO_CONTAINER_HIDDEN && HERO_RADIUS,
+          !HERO_VIDEO_CONTAINER_HIDDEN && "bg-neutral-950",
+          className,
+        )}
+      >
         {HERO_VIDEO_CONTAINER_HIDDEN && (
-          <HeroGradientBackground
-            initialHour={initialHeroHour}
-            opacity={gradientOpacity}
-          />
+          <HeroGradientBackground initialHour={initialHeroHour} />
         )}
         <HeroBackgroundStack slides={backgroundSlides} />
 
         <div
-          className="relative z-10 flex min-h-0 w-full flex-1 flex-col px-4 sm:px-6 md:px-9"
-          style={{ opacity: contentOpacity }}
+          className="relative flex min-h-0 w-full flex-1 flex-col px-4 sm:px-6 md:px-9"
+          style={{ zIndex: 20 }}
         >
           {children}
         </div>
-      </HeroGradientTimeProvider>
-    </div>
+
+        <HeroScrollGlowLayers enabled={HERO_VIDEO_CONTAINER_HIDDEN} />
+      </div>
+    </HeroGradientTimeProvider>
   );
 }
 
@@ -168,49 +166,52 @@ function HeroCtaRow({
 // ——— Main section ———
 
 interface HeroSectionProps {
-  gradientOpacity?: number;
-  contentOpacity?: number;
   showNavbar?: boolean;
   initialHeroHour: number;
 }
 
 export default function HeroSection({
-  gradientOpacity = 1,
-  contentOpacity = 1,
   showNavbar = true,
   initialHeroHour,
 }: HeroSectionProps) {
   const { title, rotatingLines, backgroundSlides, primaryCta, secondaryCta } =
     heroContent;
 
+  const heroSection = (
+    <section
+      aria-label="Hero"
+      className={cn(
+        "relative box-border flex flex-col overflow-hidden",
+        HERO_VIDEO_CONTAINER_HIDDEN
+          ? "sticky top-0 p-0"
+          : "min-h-dvh bg-white p-6 sm:p-8 md:p-9",
+      )}
+      style={HERO_VIDEO_CONTAINER_HIDDEN ? { height: "100vh" } : undefined}
+    >
+      <HeroContainer
+        backgroundSlides={backgroundSlides}
+        className="min-h-0 flex-1"
+        initialHeroHour={initialHeroHour}
+      >
+        <div className="relative flex w-full shrink-0 flex-col items-center justify-start pt-32 sm:pt-36 md:pt-40">
+          <div className="flex flex-col items-center gap-3 sm:gap-4">
+            <HeroHeadline>{title}</HeroHeadline>
+            <HeroRotatingTagline lines={rotatingLines} />
+            <HeroCtaRow primary={primaryCta} secondary={secondaryCta} />
+          </div>
+        </div>
+      </HeroContainer>
+    </section>
+  );
+
   return (
     <HeroSectionGate slides={backgroundSlides}>
       {showNavbar && <HeroNavbar />}
-      <section
-        aria-label="Hero"
-        className={cn(
-          "relative box-border flex h-dvh flex-col",
-          HERO_VIDEO_CONTAINER_HIDDEN
-            ? "p-0"
-            : "bg-white p-6 sm:p-8 md:p-9",
-        )}
-      >
-        <HeroContainer
-          backgroundSlides={backgroundSlides}
-          className="min-h-0 flex-1"
-          gradientOpacity={gradientOpacity}
-          contentOpacity={contentOpacity}
-          initialHeroHour={initialHeroHour}
-        >
-          <div className="flex min-h-0 w-full flex-1 items-center justify-center">
-            <div className="-translate-y-28 flex flex-col items-center gap-3 sm:gap-4">
-              <HeroHeadline>{title}</HeroHeadline>
-              <HeroRotatingTagline lines={rotatingLines} />
-              <HeroCtaRow primary={primaryCta} secondary={secondaryCta} />
-            </div>
-          </div>
-        </HeroContainer>
-      </section>
+      {HERO_VIDEO_CONTAINER_HIDDEN ? (
+        <HeroScrollTrap>{heroSection}</HeroScrollTrap>
+      ) : (
+        heroSection
+      )}
     </HeroSectionGate>
   );
 }

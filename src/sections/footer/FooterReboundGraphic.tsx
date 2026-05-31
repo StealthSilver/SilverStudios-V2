@@ -110,18 +110,24 @@ export default function FooterReboundGraphic({
   pullPx,
   className,
 }: FooterReboundGraphicProps) {
-  const [hour, setHour] = useState(() => getFractionalHour());
+  const [hour, setHour] = useState<number | null>(null);
 
   useEffect(() => {
-    const interval = window.setInterval(() => setHour(getFractionalHour()), 1000);
+    const syncHour = () =>
+      setHour(Math.round(getFractionalHour() * 60) / 60);
+
+    syncHour();
+    const interval = window.setInterval(syncHour, 1000);
     return () => {
       window.clearInterval(interval);
     };
   }, []);
 
+  const resolvedHour = hour ?? 12;
+
   const [stopA, stopB, stopC, stopD] = useMemo(
-    () => getInterpolatedHeroStops(hour),
-    [hour],
+    () => getInterpolatedHeroStops(resolvedHour),
+    [resolvedHour],
   );
   const reveal = clamp(pullPx / 22, 0, 1);
   const opacity = reveal * clamp(0.72 + progress * 0.32, 0, 1);
@@ -146,6 +152,7 @@ export default function FooterReboundGraphic({
       }}
     >
       <div
+        suppressHydrationWarning
         className="absolute inset-x-0 bottom-0 h-full w-full"
         style={{
           backgroundImage: gradient,
@@ -155,6 +162,7 @@ export default function FooterReboundGraphic({
         }}
       />
       <div
+        suppressHydrationWarning
         className="absolute inset-x-0 bottom-0 h-full w-full"
         style={{
           backgroundImage: diffusion,

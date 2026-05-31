@@ -7,6 +7,7 @@
 
 import {
   createContext,
+  memo,
   useCallback,
   useContext,
   useEffect,
@@ -223,10 +224,41 @@ function getCurrentBrowserHour(): number {
 
 /** Fractional hour (0–23.99) → `HH:MM` in 24-hour clock. */
 function formatHour24(fractionalHour: number): string {
-  const clamped = Math.min(23.99, Math.max(0, fractionalHour));
+  const clamped = Math.min(SCRUBBER_HOUR_MAX, Math.max(0, fractionalHour));
   const hours = Math.floor(clamped);
   const minutes = Math.round((clamped % 1) * 60) % 60;
   return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
+}
+
+function clampScrubberHour(hour: number): number {
+  return Math.min(SCRUBBER_HOUR_MAX, Math.max(0, hour));
+}
+
+/** Imperative scrubber update — avoids React re-renders while dragging. */
+function applyScrubberHourVisual(
+  scrubber: HTMLDivElement | null,
+  label: HTMLSpanElement | null,
+  thumb: HTMLDivElement | null,
+  hour: number,
+): void {
+  if (!scrubber) {
+    return;
+  }
+
+  const clamped = clampScrubberHour(hour);
+  const ratio = clamped / SCRUBBER_HOUR_MAX;
+  const timeLabel = formatHour24(clamped);
+
+  scrubber.style.setProperty("--scrubber-hour-ratio", String(ratio));
+
+  if (label) {
+    label.textContent = timeLabel;
+  }
+
+  if (thumb) {
+    thumb.setAttribute("aria-valuenow", String(Math.round(clamped)));
+    thumb.setAttribute("aria-valuetext", timeLabel);
+  }
 }
 
 // ——— Context ———
@@ -246,7 +278,11 @@ function useHeroTimeState(initialHour: number): HeroTimeState {
   }, []);
 
   useEffect(() => {
-    syncToLiveClock();
+    const sync = () => {
+      queueMicrotask(syncToLiveClock);
+    };
+
+    sync();
 
     const tick = () => {
       if (!isDraggingRef.current) {
@@ -271,8 +307,7 @@ function useHeroTimeState(initialHour: number): HeroTimeState {
   }, [syncToLiveClock]);
 
   const setHour = useCallback((nextHour: number) => {
-    const clamped = Math.min(SCRUBBER_HOUR_MAX, Math.max(0, nextHour));
-    setHourState(clamped);
+    setHourState(clampScrubberHour(nextHour));
   }, []);
 
   const setIsDragging = useCallback(
@@ -317,7 +352,7 @@ export function useHeroTime(): { hour: number; label: string; textDark: boolean 
 
 export function HeroGradientTimeProvider({
   children,
-  initialHour = getFractionalHour(),
+  initialHour = 12,
 }: HeroGradientTimeProviderProps) {
   const value = useHeroTimeState(initialHour);
 
@@ -328,7 +363,7 @@ export function HeroGradientTimeProvider({
 
 // ——— Grain canvas ———
 
-function HeroGrainCanvas({
+const HeroGrainCanvas = memo(function HeroGrainCanvas({
   containerRef,
 }: {
   containerRef: React.RefObject<HTMLDivElement | null>;
@@ -398,26 +433,32 @@ function HeroGrainCanvas({
       style={{ opacity: GRAIN_OPACITY }}
     />
   );
-}
+});
 
 // ——— Scrubber ———
 
 function HeroTimeScrubber({
   hour,
   isDragging,
-  onHourChange,
+  onHourPreview,
+  onHourCommit,
   onDragStart,
   onDragEnd,
 }: {
   hour: number;
   isDragging: boolean;
-  onHourChange: (hour: number) => void;
+  onHourPreview: (hour: number) => void;
+  onHourCommit: (hour: number) => void;
   onDragStart: () => void;
   onDragEnd: () => void;
 }) {
   const scrubberRef = useRef<HTMLDivElement>(null);
+  const labelRef = useRef<HTMLSpanElement>(null);
+  const thumbRef = useRef<HTMLDivElement>(null);
   const trackMetricsRef = useRef({ top: TRACK_INSET_PX, height: 1 });
   const isDraggingRef = useRef(false);
+  const dragHourRef = useRef(hour);
+  const previewRafRef = useRef<number | null>(null);
 
   const updateTrackMetrics = useCallback(() => {
     const scrubber = scrubberRef.current;
@@ -445,13 +486,91 @@ function HeroTimeScrubber({
     return ratio * SCRUBBER_HOUR_MAX;
   }, []);
 
-  const onHourChangeRef = useRef(onHourChange);
+  const onHourPreviewRef = useRef(onHourPreview);
+  const onHourCommitRef = useRef(onHourCommit);
   const onDragEndRef = useRef(onDragEnd);
 
   useEffect(() => {
-    onHourChangeRef.current = onHourChange;
+    onHourPreviewRef.current = onHourPreview;
+    onHourCommitRef.current = onHourCommit;
     onDragEndRef.current = onDragEnd;
-  }, [onDragEnd, onHourChange]);
+  }, [onDragEnd, onHourCommit, onHourPreview]);
+
+  const applyLocalHour = useCallback((nextHour: number) => {
+    const clamped = clampScrubberHour(nextHour);
+    dragHourRef.current = clamped;
+    applyScrubberHourVisual(
+      scrubberRef.current,
+      labelRef.current,
+      thumbRef.current,
+      clamped,
+    );
+  }, []);
+
+  const cancelPreviewRaf = useCallback(() => {
+    if (previewRafRef.current != null) {
+      cancelAnimationFrame(previewRafRef.current);
+      previewRafRef.current = null;
+    }
+  }, []);
+
+  const scheduleGradientPreview = useCallback(() => {
+    if (previewRafRef.current != null) {
+      return;
+    }
+
+    previewRafRef.current = requestAnimationFrame(() => {
+      previewRafRef.current = null;
+      onHourPreviewRef.current(dragHourRef.current);
+    });
+  }, []);
+
+  const updateDragHour = useCallback(
+    (clientY: number) => {
+      applyLocalHour(hourFromClientY(clientY));
+      scheduleGradientPreview();
+    },
+    [applyLocalHour, hourFromClientY, scheduleGradientPreview],
+  );
+
+  useEffect(() => {
+    if (!isDraggingRef.current) {
+      dragHourRef.current = hour;
+      applyScrubberHourVisual(
+        scrubberRef.current,
+        labelRef.current,
+        thumbRef.current,
+        hour,
+      );
+    }
+  }, [hour]);
+
+  const handleMouseMove = useCallback(
+    (event: MouseEvent) => {
+      updateDragHour(event.clientY);
+    },
+    [updateDragHour],
+  );
+
+  const handleTouchMove = useCallback(
+    (event: TouchEvent) => {
+      const touch = event.touches[0];
+      if (touch) {
+        updateDragHour(touch.clientY);
+      }
+    },
+    [updateDragHour],
+  );
+
+  const endDragRef = useRef<() => void>(() => {});
+
+  const handleMouseUp = useCallback(() => {
+    endDragRef.current();
+  }, []);
+
+  const handleTouchEnd = useCallback(() => {
+    endDragRef.current();
+  }, []);
 
   const endDrag = useCallback(() => {
     if (!isDraggingRef.current) {
@@ -459,30 +578,24 @@ function HeroTimeScrubber({
     }
 
     isDraggingRef.current = false;
+    cancelPreviewRaf();
+    onHourPreviewRef.current(dragHourRef.current);
+    onHourCommitRef.current(dragHourRef.current);
     onDragEndRef.current();
     window.removeEventListener("mousemove", handleMouseMove);
     window.removeEventListener("mouseup", handleMouseUp);
     window.removeEventListener("touchmove", handleTouchMove);
     window.removeEventListener("touchend", handleTouchEnd);
-  }, []);
+  }, [
+    cancelPreviewRaf,
+    handleMouseMove,
+    handleMouseUp,
+    handleTouchMove,
+    handleTouchEnd,
+  ]);
 
-  const handleMouseMove = useCallback((event: MouseEvent) => {
-    onHourChangeRef.current(hourFromClientY(event.clientY));
-  }, [hourFromClientY]);
-
-  const handleMouseUp = useCallback(() => {
-    endDrag();
-  }, [endDrag]);
-
-  const handleTouchMove = useCallback((event: TouchEvent) => {
-    const touch = event.touches[0];
-    if (touch) {
-      onHourChangeRef.current(hourFromClientY(touch.clientY));
-    }
-  }, [hourFromClientY]);
-
-  const handleTouchEnd = useCallback(() => {
-    endDrag();
+  useEffect(() => {
+    endDragRef.current = endDrag;
   }, [endDrag]);
 
   const startDrag = useCallback(
@@ -490,7 +603,7 @@ function HeroTimeScrubber({
       updateTrackMetrics();
       isDraggingRef.current = true;
       onDragStart();
-      onHourChangeRef.current(hourFromClientY(clientY));
+      updateDragHour(clientY);
       window.addEventListener("mousemove", handleMouseMove);
       window.addEventListener("mouseup", handleMouseUp);
       window.addEventListener("touchmove", handleTouchMove, { passive: true });
@@ -501,8 +614,8 @@ function HeroTimeScrubber({
       handleMouseUp,
       handleTouchEnd,
       handleTouchMove,
-      hourFromClientY,
       onDragStart,
+      updateDragHour,
       updateTrackMetrics,
     ],
   );
@@ -519,10 +632,11 @@ function HeroTimeScrubber({
 
     return () => {
       observer.disconnect();
+      cancelPreviewRaf();
       handleMouseUp();
       handleTouchEnd();
     };
-  }, [handleMouseUp, handleTouchEnd, updateTrackMetrics]);
+  }, [cancelPreviewRaf, handleMouseUp, handleTouchEnd, updateTrackMetrics]);
 
   const timeLabel = formatHour24(hour);
   const scrubberStyle = {
@@ -533,6 +647,7 @@ function HeroTimeScrubber({
   return (
     <div
       ref={scrubberRef}
+      suppressHydrationWarning
       className={cn(
         "hero-scrubber absolute top-0 bottom-0 left-0 z-30",
         isDragging && "hero-scrubber--dragging",
@@ -588,6 +703,7 @@ function HeroTimeScrubber({
       />
 
       <div
+        ref={thumbRef}
         role="slider"
         aria-valuemin={0}
         aria-valuemax={24}
@@ -602,7 +718,9 @@ function HeroTimeScrubber({
       />
 
       <span
+        ref={labelRef}
         aria-hidden="true"
+        suppressHydrationWarning
         className="hero-scrubber-time-label pointer-events-none absolute -translate-y-1/2 font-nav text-[10px] leading-none font-normal tracking-[0.04em] whitespace-nowrap text-white/90 tabular-nums sm:text-[11px]"
         style={{ left: "calc(50% + 14px)" }}
       >
@@ -627,7 +745,19 @@ function HeroGradientBackgroundLayers({
   }
 
   const containerRef = useRef<HTMLDivElement>(null);
+  const primaryBlobRef = useRef<HTMLDivElement>(null);
+  const secondaryBlobRef = useRef<HTMLDivElement>(null);
   const { gradient, hour, setHour, isDragging, setIsDragging } = state;
+
+  const previewGradient = useCallback((previewHour: number) => {
+    const { gradient: nextGradient } = resolveHeroTime(previewHour);
+    primaryBlobRef.current?.style.setProperty("background", nextGradient);
+    secondaryBlobRef.current?.style.setProperty("background", nextGradient);
+  }, []);
+
+  const gradientTransition = isDragging
+    ? "none"
+    : "background 0.8s ease, filter 0.8s ease";
 
   return (
     <>
@@ -639,6 +769,8 @@ function HeroGradientBackgroundLayers({
       >
         <div className="absolute inset-0 bg-[#0f1533]" />
         <div
+          ref={primaryBlobRef}
+          suppressHydrationWarning
           className="absolute left-1/2 top-1/2 rounded-full"
           style={{
             width: HERO_RADIAL_BLOB_SIZE,
@@ -646,11 +778,13 @@ function HeroGradientBackgroundLayers({
             transform: "translate(-50%, -50%)",
             background: gradient,
             filter: `blur(${HERO_RADIAL_BLUR})`,
-            transition: "background 0.8s ease, filter 0.8s ease",
+            transition: gradientTransition,
             opacity: 0.98,
           }}
         />
         <div
+          ref={secondaryBlobRef}
+          suppressHydrationWarning
           className="absolute left-1/2 top-1/2 rounded-full"
           style={{
             width: HERO_RADIAL_BLOB_SIZE,
@@ -658,7 +792,7 @@ function HeroGradientBackgroundLayers({
             transform: "translate(-50%, -50%) scale(1.12)",
             background: gradient,
             filter: "blur(280px)",
-            transition: "background 0.8s ease, filter 0.8s ease",
+            transition: gradientTransition,
             opacity: 0.58,
           }}
         />
@@ -668,7 +802,8 @@ function HeroGradientBackgroundLayers({
         <HeroTimeScrubber
           hour={hour}
           isDragging={isDragging}
-          onHourChange={setHour}
+          onHourPreview={previewGradient}
+          onHourCommit={setHour}
           onDragStart={() => setIsDragging(true)}
           onDragEnd={() => setIsDragging(false)}
         />

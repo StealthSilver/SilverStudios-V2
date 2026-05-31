@@ -10,7 +10,7 @@ import Image from "next/image";
 import {
   getHeroSlideUrl,
   HERO_SLIDE_IMAGE_QUALITY,
-  HERO_SLIDE_IMAGE_SIZES,
+  HERO_SLIDE_PRELOAD_SIZES,
 } from "@/lib/hero-slides";
 import type { HeroBackgroundSlide } from "@/types";
 
@@ -45,7 +45,7 @@ export function HeroSlidesPreloader({
               src={src}
               alt=""
               fill
-              sizes={HERO_SLIDE_IMAGE_SIZES}
+              sizes={HERO_SLIDE_PRELOAD_SIZES}
               quality={HERO_SLIDE_IMAGE_QUALITY}
               priority
               className="object-cover"

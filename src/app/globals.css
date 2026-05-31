@@ -319,8 +319,9 @@ body {
 .scroll-reveal-word {
   display: inline-block;
   opacity: 0;
-  filter: blur(8px);
-  will-change: opacity, filter;
+  filter: blur(10px);
+  transform: translateX(4rem);
+  will-change: opacity, filter, transform;
 }
 
 @media (hover: none) and (pointer: coarse) {
@@ -333,6 +334,7 @@ body {
   .scroll-reveal-word {
     opacity: 1;
     filter: none;
+    transform: none;
     will-change: auto;
   }
 }

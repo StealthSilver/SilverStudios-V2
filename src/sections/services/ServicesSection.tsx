@@ -16,6 +16,7 @@ import {
   SERVICES_SECTION,
   SERVICES_SEE_ALL,
   SERVICES_SEE_ALL_ARROW,
+  SERVICES_SEE_ALL_HIDDEN,
   SERVICES_SEE_ALL_WRAP,
 } from "./services-styles";
 
@@ -41,14 +42,16 @@ export default function ServicesSection() {
           ))}
         </ul>
 
-        <div className={cn(SERVICES_SEE_ALL_WRAP)}>
-          <Link href={seeAllHref} className={cn(SERVICES_SEE_ALL)}>
-            <span>{seeAllLabel}</span>
-            <span className={cn(SERVICES_SEE_ALL_ARROW)} aria-hidden>
-              →
-            </span>
-          </Link>
-        </div>
+        {!SERVICES_SEE_ALL_HIDDEN && (
+          <div className={cn(SERVICES_SEE_ALL_WRAP)}>
+            <Link href={seeAllHref} className={cn(SERVICES_SEE_ALL)}>
+              <span>{seeAllLabel}</span>
+              <span className={cn(SERVICES_SEE_ALL_ARROW)} aria-hidden>
+                →
+              </span>
+            </Link>
+          </div>
+        )}
       </div>
     </section>
   );

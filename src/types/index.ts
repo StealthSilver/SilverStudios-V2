@@ -11,6 +11,7 @@ export type {
   SiteConfig,
   SiteNavLink,
 } from "./site";
+export type { AboutContent } from "./about";
 export type { ClientLogo } from "./logo-ticker";
 export type { Project, ProjectsContent } from "./projects";
 export type { FeaturedNewsContent, FeaturedNewsSlide } from "./featured-news";

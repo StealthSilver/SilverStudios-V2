@@ -39,10 +39,10 @@ export const FOOTER_NAV_LINK =
   "inline-flex shrink-0 items-center justify-end whitespace-nowrap text-right";
 
 export const FOOTER_BOTTOM =
-  "flex shrink-0 flex-col gap-2 border-t border-white/15 pt-3 sm:flex-row sm:items-end sm:justify-between";
+  "flex shrink-0 flex-col gap-2 border-t border-white/15 pt-3 sm:flex-row sm:items-start sm:justify-between";
 
 export const FOOTER_BOTTOM_LEFT =
-  "flex flex-wrap items-end gap-x-6 gap-y-1 sm:gap-x-8";
+  "flex flex-wrap items-start gap-x-6 gap-y-1 sm:gap-x-8";
 
 export const FOOTER_SOCIAL_LIST =
   "flex flex-wrap items-center justify-end gap-2 sm:gap-2.5";

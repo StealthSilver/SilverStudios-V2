@@ -11,7 +11,8 @@ import type { RefObject } from "react";
 
 export const SCROLL_REVEAL_START_RATIO = 0.75;
 export const SCROLL_REVEAL_END_RATIO = 0.6;
-export const SCROLL_REVEAL_BLUR_PX = 8;
+export const SCROLL_REVEAL_BLUR_PX = 10;
+export const SCROLL_REVEAL_TRANSLATE_REM = 4;
 
 export function getScrollRevealProgress(
   wordTop: number,
@@ -68,6 +69,7 @@ export function useScrollWordReveal(
         if (reducedMotion) {
           word.style.opacity = "1";
           word.style.filter = "none";
+          word.style.transform = "none";
           return;
         }
 
@@ -77,6 +79,10 @@ export function useScrollWordReveal(
         );
 
         word.style.opacity = String(progress);
+
+        const translateRem = SCROLL_REVEAL_TRANSLATE_REM * (1 - progress);
+        word.style.transform =
+          translateRem > 0.01 ? `translateX(${translateRem}rem)` : "none";
 
         if (noBlur) {
           word.style.filter = "none";
