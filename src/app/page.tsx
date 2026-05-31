@@ -14,8 +14,6 @@ import {
   SilverUISection,
   FeaturedNewsSection,
 } from "@/sections";
-import { FEATURED_NEWS_SECTION_HIDDEN } from "@/sections/featured-news/featured-news-styles";
-import { SILVER_UI_SECTION_HIDDEN } from "@/sections/silver-ui/silver-ui-styles";
 import { getFractionalHour } from "@/lib/hero-time";
 
 export const dynamic = "force-dynamic";
@@ -33,8 +31,8 @@ export default function Home() {
           <AboutSection />
           <ServicesSection />
           <ProjectsSection />
-          {!FEATURED_NEWS_SECTION_HIDDEN && <FeaturedNewsSection />}
-          {!SILVER_UI_SECTION_HIDDEN && <SilverUISection />}
+          <FeaturedNewsSection />
+          <SilverUISection />
           <FooterInviteTransition />
           <FooterScrollSection />
         </div>

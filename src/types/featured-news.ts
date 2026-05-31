@@ -5,7 +5,6 @@
 
 export interface FeaturedNewsSlide {
   id: string;
-  title: string;
   headline: string;
   gradientClassName: string;
 }

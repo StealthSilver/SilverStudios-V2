@@ -11,9 +11,6 @@ export const SERVICES_ITEM_MEDIA_HIDDEN = true;
 /** Hide secondary labels beside each service (code kept for later). */
 export const SERVICES_ITEM_SECONDARY_HIDDEN = true;
 
-/** Hide the “See all” link below the list (code kept for later). */
-export const SERVICES_SEE_ALL_HIDDEN = true;
-
 export const SERVICES_SECTION =
   "relative bg-white px-4 py-24 sm:px-6 sm:py-32 md:px-9 md:py-40 lg:py-48";
 
@@ -51,10 +48,12 @@ export const SERVICES_ITEM_MEDIA =
 export const SERVICES_ITEM_MEDIA_GRADIENT =
   "h-full w-full bg-gradient-to-br from-neutral-200 via-neutral-100 to-neutral-300";
 
-export const SERVICES_SEE_ALL_WRAP = "mt-12 flex justify-center sm:mt-14 md:mt-16";
+export const SERVICES_CTA_WRAP =
+  "mt-16 flex w-full justify-start sm:mt-20 md:mt-24";
 
-export const SERVICES_SEE_ALL =
-  "group/cta inline-flex items-center gap-2 font-nav text-[11px] font-normal uppercase leading-none tracking-[0.06em] text-neutral-900 transition-colors duration-200 hover:text-neutral-600 sm:text-xs";
+export const SERVICES_CTA_LABEL =
+  "font-nav text-xs font-normal uppercase leading-none tracking-[0.06em] sm:text-sm md:text-base";
 
-export const SERVICES_SEE_ALL_ARROW =
-  "inline-block transition-transform duration-200 ease-out group-hover/cta:translate-x-0.5";
+/** Matches About section pill size. */
+export const SERVICES_CTA_BUTTON =
+  "inline-flex h-11 min-w-[13rem] items-center justify-center rounded-full px-12 font-bold text-white transition-[color,background-color] duration-300 ease-in-out hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent sm:h-12 sm:min-w-[14.5rem] sm:px-14 md:h-[3.25rem] md:min-w-[16rem] md:px-16";

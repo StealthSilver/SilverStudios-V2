@@ -3,23 +3,22 @@
  * @description Services showcase — Studio Namma-style stacked list with Silver Studios styling.
  */
 
-import Link from "next/link";
-
+import { GlassSurface } from "@/components/ui/GlassSurface";
+import { LetterWaveLink } from "@/components/ui/LetterWaveLink";
 import { ScrollRevealWords } from "@/components/ui/ScrollRevealWords";
 import { servicesContent } from "@/lib/data/services";
 import { cn } from "@/lib/utils";
 
 import { ServiceListItem } from "./ServiceListItem";
 import {
+  SERVICES_CTA_BUTTON,
+  SERVICES_CTA_LABEL,
+  SERVICES_CTA_WRAP,
   SERVICES_HEADLINE,
   SERVICES_HEADLINE_WRAP,
   SERVICES_INNER,
   SERVICES_LIST,
   SERVICES_SECTION,
-  SERVICES_SEE_ALL,
-  SERVICES_SEE_ALL_ARROW,
-  SERVICES_SEE_ALL_HIDDEN,
-  SERVICES_SEE_ALL_WRAP,
 } from "./services-styles";
 
 // ——— Main section ———
@@ -46,16 +45,15 @@ export default function ServicesSection() {
           ))}
         </ul>
 
-        {!SERVICES_SEE_ALL_HIDDEN && (
-          <div className={cn(SERVICES_SEE_ALL_WRAP)}>
-            <Link href={seeAllHref} className={cn(SERVICES_SEE_ALL)}>
-              <span>{seeAllLabel}</span>
-              <span className={cn(SERVICES_SEE_ALL_ARROW)} aria-hidden>
-                →
-              </span>
-            </Link>
-          </div>
-        )}
+        <div className={cn(SERVICES_CTA_WRAP)}>
+          <GlassSurface className="inline-flex rounded-full bg-neutral-950">
+            <LetterWaveLink
+              href={seeAllHref}
+              label={seeAllLabel}
+              className={cn(SERVICES_CTA_LABEL, SERVICES_CTA_BUTTON)}
+            />
+          </GlassSurface>
+        </div>
       </div>
     </section>
   );

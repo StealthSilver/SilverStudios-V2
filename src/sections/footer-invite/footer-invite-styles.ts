@@ -4,7 +4,7 @@
  */
 
 export const FOOTER_INVITE_STICKY =
-  "sticky top-0 flex h-screen flex-col items-center justify-end px-4 pb-16 sm:px-6 sm:pb-20 md:px-9 md:pb-24";
+  "sticky top-0 z-10 flex h-screen flex-col items-center justify-end px-4 pb-16 sm:px-6 sm:pb-20 md:px-9 md:pb-24";
 
 export const FOOTER_INVITE_CONTENT =
   "flex w-full max-w-5xl flex-col items-center gap-2 sm:gap-2.5";

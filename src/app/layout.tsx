@@ -6,6 +6,7 @@
 import { Cormorant_Garamond, DM_Sans } from "next/font/google";
 import localFont from "next/font/local";
 
+import { GlobalExploreCursor } from "@/components/ui/GlobalExploreCursor";
 import { GlassScrollbar } from "@/components/ui/GlassScrollbar";
 
 import "./globals.css";
@@ -81,6 +82,7 @@ export default function RootLayout({
       </head>
       <body className="flex min-h-full flex-col bg-white font-sans text-foreground">
         {children}
+        <GlobalExploreCursor />
         <GlassScrollbar />
       </body>
     </html>

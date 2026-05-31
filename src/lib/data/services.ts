@@ -15,6 +15,6 @@ export const servicesContent = {
     { id: "websites", primary: "Websites", secondary: "" },
     { id: "content-seo", primary: "Content & SEO", secondary: "" },
   ],
-  seeAllLabel: "See all",
-  seeAllHref: "#contact",
+  seeAllLabel: "VIEW ALL SERVICES",
+  seeAllHref: "#services",
 } satisfies ServicesContent;

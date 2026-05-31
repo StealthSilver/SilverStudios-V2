@@ -28,4 +28,6 @@ export interface Project {
 export interface ProjectsContent {
   title: string;
   projects: readonly Project[];
+  ctaLabel: string;
+  ctaHref: string;
 }

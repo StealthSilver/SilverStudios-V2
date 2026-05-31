@@ -7,6 +7,8 @@ import type { ProjectsContent } from "@/types/projects";
 
 export const projectsContent = {
   title: "FEATURED PROJECTS",
+  ctaLabel: "VIEW ALL WORK",
+  ctaHref: "#projects",
   projects: [
     {
       id: "8th-light",

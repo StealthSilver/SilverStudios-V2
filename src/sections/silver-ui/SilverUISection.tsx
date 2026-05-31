@@ -1,18 +1,19 @@
 /**
  * @file SilverUISection.tsx
- * @description Silver UI showcase — full-viewport shell below services.
+ * @description Silver UI showcase below Featured News.
  */
 
+import { ScrollRevealWords } from "@/components/ui/ScrollRevealWords";
 import { silverUiContent } from "@/lib/data/silver-ui";
 import { cn } from "@/lib/utils";
 
-const SECTION_SHELL =
-  "flex h-screen flex-col items-start justify-start bg-white px-4 py-12 sm:px-6 sm:py-14 md:px-9 md:py-16";
-
-const SECTION_INNER = "mx-auto w-full max-w-7xl";
-
-const SECTION_TITLE =
-  "font-display text-3xl font-normal tracking-tight text-neutral-900 sm:text-4xl md:text-5xl";
+import {
+  SILVER_UI_INNER,
+  SILVER_UI_SECTION,
+  SILVER_UI_TITLE,
+  SILVER_UI_TITLE_WRAP,
+} from "./silver-ui-styles";
+import { SilverUiShowcase } from "./SilverUiShowcase";
 
 // ——— Main section ———
 
@@ -21,12 +22,18 @@ export default function SilverUISection() {
     <section
       id="silver-ui"
       aria-labelledby="silver-ui-title"
-      className={cn(SECTION_SHELL)}
+      className={cn(SILVER_UI_SECTION)}
     >
-      <div className={cn(SECTION_INNER)}>
-        <h2 id="silver-ui-title" className={cn(SECTION_TITLE)}>
-          {silverUiContent.title}
-        </h2>
+      <div className={cn(SILVER_UI_INNER)}>
+        <div className={cn(SILVER_UI_TITLE_WRAP)}>
+          <ScrollRevealWords
+            id="silver-ui-title"
+            text={silverUiContent.title}
+            className={cn(SILVER_UI_TITLE)}
+          />
+        </div>
+
+        <SilverUiShowcase content={silverUiContent} />
       </div>
     </section>
   );

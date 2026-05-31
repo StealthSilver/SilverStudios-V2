@@ -8,7 +8,7 @@ import { SECTION_HEADLINE } from "@/lib/section-headline-styles";
 export const PROJECTS_SECTION =
   "relative z-40 bg-white px-5 py-28 sm:px-7 sm:py-36 md:px-8 md:py-44 lg:py-52";
 
-export const PROJECTS_INNER = "mx-auto w-full max-w-[88rem]";
+export const PROJECTS_INNER = "mx-auto w-full max-w-7xl";
 
 export const PROJECTS_TITLE = SECTION_HEADLINE;
 
@@ -50,7 +50,17 @@ export const PROJECT_CARD_MEDIA_LARGE =
 export const PROJECT_CARD_COPY = "mt-5 flex flex-col gap-1.5 sm:mt-6 md:mt-7";
 
 export const PROJECT_CARD_NAME =
-  "font-sans text-lg font-semibold leading-snug tracking-tight text-neutral-950 sm:text-xl";
+  "font-nav text-xl font-bold leading-snug tracking-tight text-neutral-950 sm:text-2xl md:text-[1.75rem]";
 
 export const PROJECT_CARD_DESCRIPTION =
-  "max-w-md overflow-hidden font-sans text-sm font-medium leading-relaxed text-neutral-600 opacity-0 max-h-0 translate-y-1 transition-all duration-300 ease-out group-hover:opacity-100 group-hover:max-h-28 group-hover:translate-y-0 group-hover:text-neutral-900 group-focus-within:opacity-100 group-focus-within:max-h-28 group-focus-within:translate-y-0 sm:text-[0.9375rem]";
+  "max-w-md overflow-hidden font-nav text-base font-normal leading-relaxed tracking-tight text-neutral-600 opacity-0 max-h-0 translate-y-1 transition-all duration-300 ease-out group-hover:opacity-100 group-hover:max-h-32 group-hover:translate-y-0 group-hover:text-neutral-900 group-focus-within:opacity-100 group-focus-within:max-h-32 group-focus-within:translate-y-0 sm:text-[1.0625rem]";
+
+export const PROJECTS_CTA_WRAP =
+  "mt-16 flex w-full justify-start sm:mt-20 md:mt-24";
+
+export const PROJECTS_CTA_LABEL =
+  "font-nav text-xs font-normal uppercase leading-none tracking-[0.06em] sm:text-sm md:text-base";
+
+/** Matches About / Services pill size. */
+export const PROJECTS_CTA_BUTTON =
+  "inline-flex h-11 min-w-[13rem] items-center justify-center rounded-full px-12 font-bold text-white transition-[color,background-color] duration-300 ease-in-out hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent sm:h-12 sm:min-w-[14.5rem] sm:px-14 md:h-[3.25rem] md:min-w-[16rem] md:px-16";

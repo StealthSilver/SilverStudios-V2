@@ -56,8 +56,10 @@ export function ProjectCard({ project }: ProjectCardProps) {
       <div
         className={cn(
           PROJECT_CARD_MEDIA,
+          "explore-cursor-target",
           PROJECT_CARD_MEDIA_BY_SIZE[size],
         )}
+        data-explore-label="Explore"
       >
         <Image
           src={project.imageSrc}

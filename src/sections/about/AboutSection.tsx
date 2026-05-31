@@ -11,11 +11,11 @@ import { ScrollRevealWords } from "@/components/ui/ScrollRevealWords";
 import { aboutContent } from "@/lib/data/about";
 import { cn } from "@/lib/utils";
 
-import { HERO_NAV_LINK_TYPOGRAPHY } from "../hero/hero-styles";
 import {
   ABOUT_BODY,
   ABOUT_BODY_STACK,
   ABOUT_CTA_BUTTON,
+  ABOUT_CTA_LABEL,
   ABOUT_CTA_WRAP,
   ABOUT_HEADLINE,
   ABOUT_INNER,
@@ -74,7 +74,7 @@ export default function AboutSection() {
               <LetterWaveLink
                 href="#"
                 label={ctaLabel}
-                className={cn(HERO_NAV_LINK_TYPOGRAPHY, ABOUT_CTA_BUTTON)}
+                className={cn(ABOUT_CTA_LABEL, ABOUT_CTA_BUTTON)}
               />
             </GlassSurface>
           </div>

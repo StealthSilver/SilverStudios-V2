@@ -31,7 +31,12 @@ export const ABOUT_LOGO_TICKER_ITEM =
 export const ABOUT_LOGO_TICKER_IMAGE =
   "h-full w-full cursor-pointer object-contain";
 
-export const ABOUT_CTA_WRAP = "mt-12 flex w-full justify-start";
+export const ABOUT_CTA_WRAP =
+  "mt-16 flex w-full justify-start sm:mt-20 md:mt-24";
 
+export const ABOUT_CTA_LABEL =
+  "font-nav text-xs font-normal uppercase leading-none tracking-[0.06em] sm:text-sm md:text-base";
+
+/** Larger pill than shared section CTAs (Services / Projects). */
 export const ABOUT_CTA_BUTTON =
-  "inline-flex h-9 min-w-[10.5rem] items-center justify-center rounded-full px-10 font-bold text-white transition-[color,background-color] duration-300 ease-in-out hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent";
+  "inline-flex h-11 min-w-[13rem] items-center justify-center rounded-full px-12 font-bold text-white transition-[color,background-color] duration-300 ease-in-out hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent sm:h-12 sm:min-w-[14.5rem] sm:px-14 md:h-[3.25rem] md:min-w-[16rem] md:px-16";

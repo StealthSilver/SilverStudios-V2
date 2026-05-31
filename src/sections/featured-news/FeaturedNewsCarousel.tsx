@@ -5,13 +5,23 @@
 
 "use client";
 
-import Link from "next/link";
 import { useId, useMemo, useState } from "react";
 
+import { GlassSurface } from "@/components/ui/GlassSurface";
+import { LetterWaveLink } from "@/components/ui/LetterWaveLink";
 import { cn } from "@/lib/utils";
 import type { FeaturedNewsSlide } from "@/types/featured-news";
 
-import { FEATURED_NEWS_CTA } from "./featured-news-styles";
+import {
+  FEATURED_NEWS_CARD,
+  FEATURED_NEWS_CARD_MIN_WIDTH,
+  FEATURED_NEWS_CAROUSEL_LIST,
+  FEATURED_NEWS_CAROUSEL_TRACK,
+  FEATURED_NEWS_CONTROL,
+  FEATURED_NEWS_CTA_BUTTON,
+  FEATURED_NEWS_CTA_LABEL,
+  FEATURED_NEWS_HEADLINE,
+} from "./featured-news-styles";
 
 // ——— Types ———
 
@@ -21,13 +31,18 @@ interface FeaturedNewsCarouselProps {
   ctaLabel: string;
 }
 
+interface NewsCardLayout {
+  flexGrow: number;
+  inactiveDistance: number;
+}
+
 interface NewsCardProps {
   slide: FeaturedNewsSlide;
   index: number;
   isActive: boolean;
   isNextPreview: boolean;
   isHistory: boolean;
-  widthPct: number;
+  layout: NewsCardLayout;
   onSelect: (index: number) => void;
 }
 
@@ -47,7 +62,7 @@ function CarouselControl({
       type="button"
       onClick={onClick}
       title={isPrevious ? "Go to previous slide" : "Go to next slide"}
-      className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-neutral-300 bg-white text-lg text-neutral-800 transition-colors duration-300 hover:border-neutral-900 hover:bg-neutral-900 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900/25 focus-visible:ring-offset-2"
+      className={cn(FEATURED_NEWS_CONTROL)}
     >
       <span aria-hidden>{isPrevious ? "←" : "→"}</span>
     </button>
@@ -60,24 +75,31 @@ function NewsCard({
   isActive,
   isNextPreview,
   isHistory,
-  widthPct,
+  layout,
   onSelect,
 }: NewsCardProps) {
   const imageOpacity = isActive ? 1 : isNextPreview ? 0.82 : isHistory ? 0.64 : 0.54;
+  const { flexGrow, inactiveDistance } = layout;
 
   return (
     <li
       role="group"
       aria-roledescription="slide"
       aria-current={isActive ? "true" : undefined}
-      aria-label={`${index + 1}: ${slide.title}${isActive ? " (active)" : ""}`}
-      className="h-[350px] min-w-0 shrink-0 transition-[width] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] sm:h-[390px] md:h-[440px]"
-      style={{ width: `${widthPct}%` }}
+      aria-label={`News story ${index + 1}${isActive ? " (active)" : ""}`}
+      className={cn(
+        FEATURED_NEWS_CARD,
+        !isActive &&
+          (FEATURED_NEWS_CARD_MIN_WIDTH[inactiveDistance] ??
+            FEATURED_NEWS_CARD_MIN_WIDTH[5]),
+      )}
+      style={{ flexGrow }}
     >
       <button
         type="button"
         onClick={() => onSelect(index)}
-        className="group relative h-full w-full overflow-hidden rounded-xl border border-black/5 text-left shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900/25 focus-visible:ring-offset-2"
+        className="group explore-cursor-target relative h-full w-full overflow-hidden rounded-xl border border-black/5 text-left shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900/25 focus-visible:ring-offset-2"
+        data-explore-label="Explore"
       >
         <div
           className={cn(
@@ -88,28 +110,61 @@ function NewsCard({
           style={{ opacity: imageOpacity }}
           aria-hidden
         />
-        <div
-          className={cn(
-            "absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/35",
-            !isActive && "to-black/45",
-          )}
-          aria-hidden
-        />
-
-        <div className="absolute inset-x-0 bottom-0 p-5 sm:p-6">
-          <p className="font-sans text-sm font-semibold tracking-tight text-white drop-shadow-sm sm:text-base">
-            {slide.title}
-          </p>
-        </div>
       </button>
     </li>
   );
 }
 
-// ——— Main component ———
+// ——— Layout helpers ———
 
-const ACTIVE_PCT = 72;
-const INACTIVE_TOTAL_PCT = 100 - ACTIVE_PCT;
+/** Dominant flex share for the expanded card. */
+const ACTIVE_FLEX_GROW = 36;
+
+/** Highest flex share among collapsed strips (immediate next). */
+const INACTIVE_FLEX_GROW_MAX = 3;
+
+/** Even flex step down per priority level (distance 2 → 2, 3 → 1, 4+ → 1). */
+const INACTIVE_FLEX_GROW_STEP = 1;
+
+/** Forward steps from the active slide (1 = immediate next, wraps around). */
+function getInactiveDistance(
+  index: number,
+  activeIndex: number,
+  slideCount: number,
+): number {
+  return (index - activeIndex + slideCount) % slideCount;
+}
+
+/**
+ * Smaller, evenly stepped flex-grow for inactive cards (closer = wider strip).
+ */
+function getInactiveFlexGrow(distance: number): number {
+  return Math.max(1, INACTIVE_FLEX_GROW_MAX - (distance - 1) * INACTIVE_FLEX_GROW_STEP);
+}
+
+function computeCardLayouts(
+  slideCount: number,
+  activeIndex: number,
+): NewsCardLayout[] {
+  if (slideCount <= 1) {
+    return [{ flexGrow: 1, inactiveDistance: 0 }];
+  }
+
+  return Array.from({ length: slideCount }, (_, index) => {
+    if (index === activeIndex) {
+      return { flexGrow: ACTIVE_FLEX_GROW, inactiveDistance: 0 };
+    }
+
+    const inactiveDistance = getInactiveDistance(index, activeIndex, slideCount);
+
+    return {
+      flexGrow: getInactiveFlexGrow(inactiveDistance),
+      inactiveDistance,
+    };
+  });
+}
+
+// ——— Main component ———
 
 export function FeaturedNewsCarousel({
   slides,
@@ -120,22 +175,11 @@ export function FeaturedNewsCarousel({
   const id = useId();
   const slideCount = slides.length;
 
-  const inactiveCount = slideCount > 1 ? slideCount - 1 : 0;
-  const squishedWidthPct =
-    inactiveCount > 0 ? INACTIVE_TOTAL_PCT / inactiveCount : 0;
-
   const activeSlide = slides[currentIndex];
 
-  const cardWidths = useMemo(
-    () =>
-      slides.map((_, index) => {
-        if (slideCount <= 1) {
-          return 100;
-        }
-
-        return index === currentIndex ? ACTIVE_PCT : squishedWidthPct;
-      }),
-    [currentIndex, slideCount, slides, squishedWidthPct],
+  const cardLayouts = useMemo(
+    () => computeCardLayouts(slideCount, currentIndex),
+    [currentIndex, slideCount],
   );
 
   const goToPreviousSlide = () => {
@@ -157,13 +201,17 @@ export function FeaturedNewsCarousel({
       </h3>
 
       <div className="mb-5 flex w-full items-center justify-between gap-4 sm:mb-6">
-        <Link href={ctaHref} className={cn(FEATURED_NEWS_CTA)}>
-          {ctaLabel}
-        </Link>
+        <GlassSurface className="inline-flex rounded-full bg-neutral-950">
+          <LetterWaveLink
+            href={ctaHref}
+            label={ctaLabel}
+            className={cn(FEATURED_NEWS_CTA_LABEL, FEATURED_NEWS_CTA_BUTTON)}
+          />
+        </GlassSurface>
 
         {slideCount > 1 && (
           <div
-            className="ml-auto flex items-center gap-2 sm:gap-3"
+            className="ml-auto flex shrink-0 items-center gap-2 sm:gap-3"
             role="group"
             aria-label="Featured news carousel navigation"
           >
@@ -173,12 +221,16 @@ export function FeaturedNewsCarousel({
         )}
       </div>
 
-      <div className="w-full overflow-hidden">
-        <ul className="flex w-full max-w-full flex-row gap-2 sm:gap-3">
+      <div className={cn(FEATURED_NEWS_CAROUSEL_TRACK)}>
+        <ul className={cn(FEATURED_NEWS_CAROUSEL_LIST)}>
           {slides.map((slide, index) => {
             const isActive = index === currentIndex;
+            const layout = cardLayouts[index] ?? {
+              flexGrow: 1,
+              inactiveDistance: 0,
+            };
             const isNextPreview =
-              slideCount > 1 && !isActive && index === (currentIndex + 1) % slideCount;
+              slideCount > 1 && !isActive && layout.inactiveDistance === 1;
 
             return (
               <NewsCard
@@ -187,8 +239,8 @@ export function FeaturedNewsCarousel({
                 index={index}
                 isActive={isActive}
                 isNextPreview={isNextPreview}
-                isHistory={index < currentIndex}
-                widthPct={cardWidths[index] ?? 0}
+                isHistory={!isActive && layout.inactiveDistance > 1}
+                layout={layout}
                 onSelect={setCurrentIndex}
               />
             );
@@ -199,7 +251,7 @@ export function FeaturedNewsCarousel({
       <p
         id={`featured-news-headline-${id}`}
         aria-live="polite"
-        className="mt-6 max-w-[min(100%,54rem)] font-sans text-base font-medium leading-snug tracking-tight text-neutral-700 sm:mt-8 sm:text-lg md:mt-9 md:text-xl"
+        className={cn(FEATURED_NEWS_HEADLINE)}
       >
         {activeSlide?.headline}
       </p>
