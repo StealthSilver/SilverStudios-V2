@@ -24,7 +24,8 @@ html {
 body {
   background-color: #ffffff;
   color: var(--foreground);
-  overflow-x: clip;
+  /* Keep overflow visible so fixed navbar backdrop-filter can sample page content. */
+  overflow-x: visible;
 }
 
 @keyframes hero-tagline-enter {
@@ -109,12 +110,7 @@ body {
     will-change: transform, background-position;
   }
 
-  .glass-surface {
-    border: 1px solid rgb(255 255 255 / 0.08);
-    background-color: rgb(255 255 255 / 0.18);
-    backdrop-filter: blur(40px) saturate(150%);
-    -webkit-backdrop-filter: blur(40px) saturate(150%);
-  }
+  /* Frost lives on Tailwind backdrop-* utilities (GlassSurface) — not in @layer (v4 strips it). */
 
   .glass-surface::before {
     content: "";

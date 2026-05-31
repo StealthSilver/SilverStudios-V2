@@ -50,19 +50,21 @@ export default function HeroNavbar({ className }: HeroNavbarProps) {
     : HERO_NAVBAR_FIXED_POSITION;
 
   return (
-    <header
+    <GlassSurface
+      as="header"
+      variant="nav"
       className={cn(
-        "relative mx-auto w-full shrink-0",
+        "mx-auto w-full shrink-0 overflow-hidden",
         HERO_NAVBAR_MAX_WIDTH,
         positionClass,
+        NAV_RADIUS,
         className,
       )}
     >
-      <GlassSurface className={NAV_RADIUS}>
-        <nav
-          aria-label="Primary"
-          className="flex h-10 items-center justify-between px-4 sm:h-11 sm:px-5"
-        >
+      <nav
+        aria-label="Primary"
+        className="flex h-10 items-center justify-between px-4 sm:h-11 sm:px-5"
+      >
           <Link
             href="/"
             className="flex h-full shrink-0 items-center"
@@ -111,8 +113,7 @@ export default function HeroNavbar({ className }: HeroNavbarProps) {
               </li>
             ))}
           </ul>
-        </nav>
-      </GlassSurface>
-    </header>
+      </nav>
+    </GlassSurface>
   );
 }

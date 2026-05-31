@@ -27,15 +27,17 @@ export default function Home() {
   return (
     <>
       <HeroNavbar />
-      <HeroTickerScrollTransition initialHeroHour={initialHeroHour} />
-      <div className="relative z-10 bg-white">
-        <AboutSection />
-        <ProjectsSection />
-        <ServicesSection />
-        {!FEATURED_NEWS_SECTION_HIDDEN && <FeaturedNewsSection />}
-        {!SILVER_UI_SECTION_HIDDEN && <SilverUISection />}
-        <FooterInviteTransition />
-        <FooterScrollSection />
+      <div className="overflow-x-clip">
+        <HeroTickerScrollTransition initialHeroHour={initialHeroHour} />
+        <div className="relative z-10 bg-white">
+          <AboutSection />
+          <ProjectsSection />
+          <ServicesSection />
+          {!FEATURED_NEWS_SECTION_HIDDEN && <FeaturedNewsSection />}
+          {!SILVER_UI_SECTION_HIDDEN && <SilverUISection />}
+          <FooterInviteTransition />
+          <FooterScrollSection />
+        </div>
       </div>
     </>
   );

@@ -14,8 +14,12 @@ export {
 } from "./Button";
 export {
   GlassSurface,
+  GLASS_SURFACE_FROST,
+  GLASS_SURFACE_NAV_FROST,
+  GLASS_SURFACE_NAV_SHADOW,
   GLASS_SURFACE_SHADOW,
   type GlassSurfaceProps,
+  type GlassSurfaceVariant,
 } from "./GlassSurface";
 export {
   LetterWaveLink,

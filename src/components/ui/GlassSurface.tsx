@@ -19,9 +19,22 @@ import { cn } from "@/lib/utils";
 export const GLASS_SURFACE_SHADOW =
   "shadow-[0_4px_24px_rgba(0,0,0,0.1),inset_0_1px_0_0_rgba(255,255,255,0.45)]";
 
+export const GLASS_SURFACE_NAV_SHADOW =
+  "shadow-[0_8px_40px_rgba(0,0,0,0.14),inset_0_1px_0_0_rgba(255,255,255,0.55),inset_0_-1px_0_0_rgba(255,255,255,0.12)]";
+
+/** Tailwind utilities — backdrop-* in @layer CSS is stripped by Tailwind v4. */
+export const GLASS_SURFACE_FROST =
+  "border border-white/[0.08] bg-white/[0.18] backdrop-blur-[40px] backdrop-saturate-150";
+
+export const GLASS_SURFACE_NAV_FROST =
+  "border border-white/45 bg-white/35 backdrop-blur-[80px] backdrop-saturate-[180%] [transform:translateZ(0)]";
+
+export type GlassSurfaceVariant = "default" | "nav";
+
 export interface GlassSurfaceProps extends HTMLAttributes<HTMLElement> {
   as?: ElementType;
   shadow?: boolean;
+  variant?: GlassSurfaceVariant;
 }
 
 export function GlassSurface({
@@ -29,6 +42,7 @@ export function GlassSurface({
   className,
   children,
   shadow = true,
+  variant = "default",
   style,
   onMouseMove,
   onMouseLeave,
@@ -72,8 +86,11 @@ export function GlassSurface({
     <Component
       ref={ref}
       className={cn(
-        "glass-surface relative isolate [&>*]:relative [&>*]:z-10",
-        shadow && GLASS_SURFACE_SHADOW,
+        "glass-surface relative [&>*]:relative [&>*]:z-10",
+        variant === "nav" ? "glass-surface-nav" : "isolate",
+        variant === "nav" ? GLASS_SURFACE_NAV_FROST : GLASS_SURFACE_FROST,
+        shadow &&
+          (variant === "nav" ? GLASS_SURFACE_NAV_SHADOW : GLASS_SURFACE_SHADOW),
         className,
       )}
       style={spotlightStyle}
