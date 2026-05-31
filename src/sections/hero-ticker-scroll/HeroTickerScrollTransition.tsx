@@ -11,6 +11,7 @@ import { useScrollProgress } from "@/hooks/useScrollProgress";
 
 import HeroSection from "../hero/HeroSection";
 import LogoTickerSection from "../logo-ticker/LogoTickerSection";
+import { LOGO_TICKER_SECTION_HIDDEN } from "../logo-ticker/logo-ticker-styles";
 
 // ——— Helpers ———
 
@@ -49,7 +50,7 @@ export default function HeroTickerScrollTransition({
           initialHeroHour={initialHeroHour}
         />
       </div>
-      <LogoTickerSection />
+      {!LOGO_TICKER_SECTION_HIDDEN && <LogoTickerSection />}
     </>
   );
 }

@@ -11,7 +11,6 @@ import { useMemo } from "react";
 
 import { GlassSurface } from "@/components/ui/GlassSurface";
 import { LetterWaveLink } from "@/components/ui/LetterWaveLink";
-import { NavExternalLinkArrow } from "@/components/ui/NavExternalLinkArrow";
 import {
   isNavbarForegroundLight,
   useNavbarForegroundColor,
@@ -23,6 +22,7 @@ import {
   HERO_NAV_LINK_TYPOGRAPHY,
   HERO_NAVBAR_FIXED_POSITION,
   HERO_NAVBAR_FIXED_POSITION_FULL_BLEED,
+  HERO_NAVBAR_MAX_WIDTH,
   HERO_VIDEO_CONTAINER_HIDDEN,
 } from "./hero-styles";
 
@@ -52,7 +52,8 @@ export default function HeroNavbar({ className }: HeroNavbarProps) {
   return (
     <header
       className={cn(
-        "relative mx-auto w-full max-w-5xl shrink-0",
+        "relative mx-auto w-full shrink-0",
+        HERO_NAVBAR_MAX_WIDTH,
         positionClass,
         className,
       )}
@@ -105,15 +106,7 @@ export default function HeroNavbar({ className }: HeroNavbarProps) {
                   className={cn(
                     "flex items-center transition-[color] duration-150 ease-linear",
                     HERO_NAV_LINK_TYPOGRAPHY,
-                    external && "group inline-flex items-center gap-1",
                   )}
-                  suffix={
-                    external ? (
-                      <span className="inline-flex opacity-0 transition-[opacity,transform] duration-300 ease-in-out group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 motion-reduce:opacity-100 motion-reduce:transform-none">
-                        <NavExternalLinkArrow />
-                      </span>
-                    ) : undefined
-                  }
                 />
               </li>
             ))}

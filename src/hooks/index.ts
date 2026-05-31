@@ -20,3 +20,5 @@ export {
   SCROLL_REVEAL_START_RATIO,
   useScrollWordReveal,
 } from "./useScrollWordReveal";
+export { useProjectCardsScroll } from "./useProjectCardsScroll";
+export { useFooterOverscroll } from "./useFooterOverscroll";

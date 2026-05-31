@@ -11,4 +11,7 @@ export {
   FOOTER_INVITE_SCROLL_RUNWAY_VH,
 } from "./footer-invite";
 export { projectsContent } from "./projects";
+export { servicesContent } from "./services";
+export { silverUiContent } from "./silver-ui";
+export { featuredNewsContent } from "./featured-news";
 export { siteConfig, siteNavLinks } from "./site";

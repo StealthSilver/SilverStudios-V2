@@ -26,6 +26,7 @@ import { cn } from "@/lib/utils";
 import { HeroRotatingTagline } from "../hero/HeroRotatingTagline";
 import {
   HERO_HEADLINE_FONT,
+  HERO_NAV_LINK_TYPOGRAPHY,
   HERO_TAGLINE_FONT_FAMILY,
   HERO_TITLE_SIZE,
 } from "../hero/hero-styles";
@@ -33,6 +34,7 @@ import {
   FOOTER_INVITE_CONTENT,
   FOOTER_INVITE_CTA_WRAP,
   FOOTER_INVITE_STICKY,
+  FOOTER_INVITE_TAGLINE_SIZE,
 } from "./footer-invite-styles";
 
 // ——— Helpers ———
@@ -135,7 +137,7 @@ export default function FooterInviteTransition() {
       >
         <div className={cn(FOOTER_INVITE_CONTENT)}>
           <div
-            className="flex w-full flex-col items-center gap-3 sm:gap-4"
+            className="flex w-full flex-col items-center gap-1 sm:gap-1.5"
             style={contentTransform}
           >
             <h2
@@ -153,6 +155,7 @@ export default function FooterInviteTransition() {
               lines={pillars}
               fontClassName={HERO_TAGLINE_FONT_FAMILY}
               textStyle={textStyle}
+              className={FOOTER_INVITE_TAGLINE_SIZE}
             />
           </div>
 
@@ -161,7 +164,8 @@ export default function FooterInviteTransition() {
               href={cta.href}
               label={cta.label}
               className={cn(
-                "inline-flex h-11 min-w-[10.5rem] shrink-0 items-center justify-center whitespace-nowrap rounded-full px-10 text-sm font-bold transition-[background-color,color] duration-150 ease-linear focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2",
+                HERO_NAV_LINK_TYPOGRAPHY,
+                "inline-flex h-11 min-w-[10.5rem] shrink-0 items-center justify-center whitespace-nowrap rounded-full px-10 font-bold transition-[background-color,color] duration-150 ease-linear focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2",
               )}
               style={{
                 backgroundColor: styles.ctaBackground,

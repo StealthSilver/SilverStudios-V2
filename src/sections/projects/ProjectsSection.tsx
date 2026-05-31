@@ -1,29 +1,30 @@
 /**
  * @file ProjectsSection.tsx
- * @description Projects showcase — full-viewport shell below the logo ticker.
+ * @description Cuberto-style featured projects — staggered grid on a light panel.
  */
 
 import { projectsContent } from "@/lib/data/projects";
 import { cn } from "@/lib/utils";
+
+import { ProjectsGrid } from "./ProjectsGrid";
+import { PROJECTS_INNER, PROJECTS_SECTION, PROJECTS_TITLE } from "./projects-styles";
 
 // ——— Main section ———
 
 export default function ProjectsSection() {
   return (
     <section
+      id="projects"
       aria-labelledby="projects-title"
-      className={cn(
-        "flex h-screen flex-col items-start justify-start bg-white px-4 py-12 sm:px-6 sm:py-14 md:px-9 md:py-16",
-      )}
+      className={cn(PROJECTS_SECTION)}
     >
-      <h2
-        id="projects-title"
-        className={cn(
-          "font-display text-3xl font-normal tracking-tight text-neutral-900 sm:text-4xl md:text-5xl",
-        )}
-      >
-        {projectsContent.title}
-      </h2>
+      <div className={cn(PROJECTS_INNER)}>
+        <h2 id="projects-title" className={cn(PROJECTS_TITLE)}>
+          {projectsContent.title}
+        </h2>
+
+        <ProjectsGrid projects={projectsContent.projects} />
+      </div>
     </section>
   );
 }

@@ -3,4 +3,6 @@
  * @description Barrel export for the footer section.
  */
 
-export { default } from "./FooterSection";
+export { default } from "./FooterScrollSection";
+export { default as FooterSection } from "./FooterSection";
+export { default as FooterScrollSection } from "./FooterScrollSection";

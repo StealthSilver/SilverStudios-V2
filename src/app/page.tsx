@@ -5,10 +5,13 @@
 
 import {
   FooterInviteTransition,
-  FooterSection,
+  FooterScrollSection,
   HeroNavbar,
   HeroTickerScrollTransition,
   ProjectsSection,
+  ServicesSection,
+  SilverUISection,
+  FeaturedNewsSection,
 } from "@/sections";
 import { getFractionalHour } from "@/lib/hero-time";
 
@@ -20,8 +23,11 @@ export default function Home() {
       <HeroNavbar />
       <HeroTickerScrollTransition initialHeroHour={initialHeroHour} />
       <ProjectsSection />
+      <ServicesSection />
+      <SilverUISection />
+      <FeaturedNewsSection />
       <FooterInviteTransition />
-      <FooterSection />
+      <FooterScrollSection />
     </>
   );
 }

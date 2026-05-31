@@ -3,6 +3,8 @@
  * @description Layout class strings for the footer section.
  */
 
+export const FOOTER_MAX_WIDTH = "mx-auto w-full max-w-7xl";
+
 export const FOOTER_LOWER = "flex w-full shrink-0 flex-col gap-8";
 
 export const FOOTER_PRE_BOTTOM =
@@ -41,3 +43,18 @@ export const FOOTER_SOCIAL_LIST =
 
 export const FOOTER_SOCIAL_BUTTON =
   "inline-flex size-10 items-center justify-center rounded-xl text-white transition-colors duration-150 ease-linear hover:text-white/90 sm:size-11";
+
+/** Wrapper for footer + overscroll runway (sui.io scroll_footer pattern). */
+export const FOOTER_SCROLL_SHELL =
+  "footer-scroll-shell relative z-[2] overflow-visible bg-black";
+
+/** In-flow runway below footer — sui.io custom_scroll pattern. */
+export const FOOTER_OVERSCROLL_RUNWAY =
+  "relative z-0 flex w-full items-end justify-center overflow-visible bg-black";
+
+export const FOOTER_OVERSCROLL_EXPander =
+  "relative block w-full min-w-0 overflow-visible";
+
+/** Rebound SVG graphic — scaled from bottom on overscroll. */
+export const FOOTER_REBOUND_GRAPHIC =
+  "pointer-events-none block w-full min-w-0 overflow-visible will-change-transform";

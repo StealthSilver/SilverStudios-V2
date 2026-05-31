@@ -49,13 +49,16 @@ export const HERO_TAGLINE_FONT_LIGHT = `${HERO_TAGLINE_FONT_FAMILY} text-neutral
 export const HERO_NAV_LINK_TYPOGRAPHY =
   "font-nav text-[11px] font-normal uppercase leading-none tracking-[0.06em] sm:text-xs";
 
+/** Max width of the navbar glass bar (content sizing unchanged). */
+export const HERO_NAVBAR_MAX_WIDTH = "max-w-7xl";
+
 /**
  * Pins the navbar to the viewport. Top aligns with hero section padding;
  * horizontal inset matches section padding + inner card inset.
  */
 export const HERO_NAVBAR_FIXED_POSITION =
-  "fixed left-[calc(1.5rem+1rem)] right-[calc(1.5rem+1rem)] top-3 z-50 sm:left-[calc(2rem+1.5rem)] sm:right-[calc(2rem+1.5rem)] sm:top-5 md:left-[calc(2.25rem+2.25rem)] md:right-[calc(2.25rem+2.25rem)] md:top-5";
+  "fixed left-[calc(1.25rem+1rem)] right-[calc(1.25rem+1rem)] top-3 z-50 sm:left-[calc(1.75rem+1.5rem)] sm:right-[calc(1.75rem+1.5rem)] sm:top-5 md:left-[calc(2rem+2.25rem)] md:right-[calc(2rem+2.25rem)] md:top-5";
 
 /** Navbar inset when the hero fills the viewport (gradient mode, no outer card padding). */
 export const HERO_NAVBAR_FIXED_POSITION_FULL_BLEED =
-  "fixed left-6 right-6 top-3 z-50 sm:left-8 sm:right-8 sm:top-5 md:left-9 md:right-9 md:top-5";
+  "fixed left-5 right-5 top-3 z-50 sm:left-7 sm:right-7 sm:top-5 md:left-8 md:right-8 md:top-5";

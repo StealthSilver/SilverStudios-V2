@@ -12,3 +12,4 @@ export type {
   SiteNavLink,
 } from "./site";
 export type { ClientLogo } from "./logo-ticker";
+export type { Project, ProjectsContent } from "./projects";
