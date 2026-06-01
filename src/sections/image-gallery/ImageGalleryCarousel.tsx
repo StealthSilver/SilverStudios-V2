@@ -1,6 +1,6 @@
 /**
  * @file ImageGalleryCarousel.tsx
- * @description In-flow sticky gallery trail that reveals and then releases naturally.
+ * @description Scroll-scrubbed bento collage — tiles enter one-by-one, settle, then scroll releases.
  */
 
 "use client";
@@ -8,8 +8,20 @@
 import Image from "next/image";
 import { useEffect, useMemo, useRef, useState } from "react";
 
+import { useMediaQuery } from "@/hooks/use-media-query";
 import type { GalleryImage } from "@/types";
 import { cn } from "@/lib/utils";
+
+import {
+  COLLAGE_DESKTOP_COLUMNS,
+  COLLAGE_DESKTOP_ROWS,
+  COLLAGE_DESKTOP_SLOT_AREAS,
+  COLLAGE_DESKTOP_TEMPLATE_AREAS,
+  COLLAGE_MOBILE_COLUMNS,
+  COLLAGE_MOBILE_ROWS,
+  COLLAGE_MOBILE_SLOT_AREAS,
+  COLLAGE_MOBILE_TEMPLATE_AREAS,
+} from "./image-gallery-layout";
 
 // ——— Types ———
 
@@ -23,10 +35,18 @@ interface StreamImage extends GalleryImage {
 }
 
 const TARGET_CARD_COUNT = 12;
-const ENTRY_STEP = 0.026;
-const TRAVEL_SPAN = 0.86;
+/** Stagger: each index starts this much later in reveal progress (0–1). */
+const ENTRY_STEP = 0.06;
+/** How long each tile takes to slide into its grid slot (reveal progress units). */
+const TRAVEL_SPAN = 0.34;
+const LAST_TILE_APPEAR_AT = (TARGET_CARD_COUNT - 1) * ENTRY_STEP;
+/** Reveal progress when the final tile has fully settled. */
+const ALL_TILES_SETTLED_REVEAL = LAST_TILE_APPEAR_AT + TRAVEL_SPAN;
 const REVEAL_START_PROGRESS = -0.2;
-const REVEAL_END_PROGRESS = 0.88;
+/** Section progress (0–1) at which every tile is locked in the grid. */
+const ANIMATION_END_PROGRESS = 0.72;
+const SLIDE_UP_OFFSET_PX = 96;
+const DESKTOP_MEDIA_QUERY = "(min-width: 768px)";
 
 function clamp01(value: number): number {
   if (value < 0) {
@@ -43,56 +63,27 @@ function easeOutCubic(value: number): number {
   return 1 - (1 - t) ** 3;
 }
 
-function seededNoise(seed: number): number {
-  const raw = Math.sin(seed * 12.9898) * 43758.5453;
-  return raw - Math.floor(raw);
-}
+function sectionToRevealProgress(sectionProgress: number): number {
+  const span = ANIMATION_END_PROGRESS - REVEAL_START_PROGRESS;
+  if (span <= 0) {
+    return ALL_TILES_SETTLED_REVEAL;
+  }
 
-interface ScatterTarget {
-  x: number;
-  y: number;
+  const normalized = clamp01((sectionProgress - REVEAL_START_PROGRESS) / span);
+  return normalized * ALL_TILES_SETTLED_REVEAL;
 }
 
 /** Stable inline styles so SSR HTML matches the client on hydration. */
-function galleryCardStyle(
-  x: number,
-  y: number,
+function collageTileMotionStyle(
+  translateY: number,
   opacity: number,
   zIndex: number,
 ): { transform: string; opacity: number; zIndex: number } {
   return {
-    transform: `translate3d(${x.toFixed(4)}vw, ${y.toFixed(4)}vh, 0px)`,
+    transform: `translate3d(0, ${translateY.toFixed(4)}px, 0)`,
     opacity: Math.round(opacity * 1e5) / 1e5,
     zIndex: Math.round(zIndex),
   };
-}
-
-function createScatterTargets(count: number): ScatterTarget[] {
-  const targets: ScatterTarget[] = [];
-  const columns = Math.max(3, Math.ceil(Math.sqrt(count)));
-  const rows = Math.max(1, Math.ceil(count / columns));
-  const minX = 2;
-  const maxX = 82;
-  const xSpan = maxX - minX;
-  const minY = 20;
-  const maxY = 80;
-  const ySpan = maxY - minY;
-
-  for (let index = 0; index < count; index += 1) {
-    const column = index % columns;
-    const row = Math.floor(index / columns);
-
-    const baseX = minX + ((column + 0.5) / columns) * xSpan;
-    const baseY = minY + ((row + 0.5) / rows) * ySpan;
-    const jitterX = (seededNoise(index * 31 + 7) - 0.5) * 7;
-    const jitterY = (seededNoise(index * 31 + 13) - 0.5) * 6;
-
-    const x = Math.min(maxX, Math.max(minX, baseX + jitterX));
-    const y = Math.min(maxY, Math.max(minY, baseY + jitterY));
-    targets.push({ x, y });
-  }
-
-  return targets;
 }
 
 // ——— Main component ———
@@ -101,67 +92,44 @@ export function ImageGalleryCarousel({ images }: ImageGalleryCarouselProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const frameRef = useRef<number | null>(null);
   const [sectionProgress, setSectionProgress] = useState(0);
+  const isDesktopLayout = useMediaQuery(DESKTOP_MEDIA_QUERY);
 
-  if (images.length === 0) {
-    return null;
-  }
+  const streamImages = useMemo<StreamImage[]>(() => {
+    if (images.length === 0) {
+      return [];
+    }
 
-  const streamImages = useMemo<StreamImage[]>(
-    () => {
-      const nextImages: StreamImage[] = [];
+    const nextImages: StreamImage[] = [];
 
-      for (let index = 0; index < TARGET_CARD_COUNT; index += 1) {
-        const image = images[index % images.length];
-        const cycle = Math.floor(index / images.length);
+    for (let index = 0; index < TARGET_CARD_COUNT; index += 1) {
+      const image = images[index % images.length];
+      const cycle = Math.floor(index / images.length);
 
-        nextImages.push({
-          ...image,
-          key: `${image.id}-${index}`,
-          decorative: cycle > 0,
-        });
-      }
+      nextImages.push({
+        ...image,
+        key: `${image.id}-${index}`,
+        decorative: cycle > 0,
+      });
+    }
 
-      return nextImages;
-    },
-    [images],
-  );
-  const scatterTargets = useMemo(
-    () => createScatterTargets(streamImages.length),
-    [streamImages.length],
-  );
+    return nextImages;
+  }, [images]);
 
-  const cardHeights = [
-    "h-[128px] sm:h-[156px] md:h-[188px]",
-    "h-[142px] sm:h-[176px] md:h-[212px]",
-    "h-[158px] sm:h-[194px] md:h-[232px]",
-    "h-[136px] sm:h-[168px] md:h-[204px]",
-    "h-[170px] sm:h-[210px] md:h-[252px]",
-    "h-[150px] sm:h-[186px] md:h-[224px]",
-  ];
-  const cardWidths = [
-    "w-[148px] sm:w-[188px] md:w-[236px]",
-    "w-[168px] sm:w-[212px] md:w-[266px]",
-    "w-[186px] sm:w-[232px] md:w-[294px]",
-    "w-[160px] sm:w-[202px] md:w-[258px]",
-    "w-[206px] sm:w-[256px] md:w-[324px]",
-    "w-[176px] sm:w-[220px] md:w-[280px]",
-  ];
-  const cardRotations = [
-    "-rotate-5",
-    "rotate-3",
-    "-rotate-2",
-    "rotate-4",
-    "-rotate-4",
-    "rotate-2",
-  ];
-  const cardScale = [
-    "scale-[0.98]",
-    "scale-[1.02]",
-    "scale-[0.96]",
-    "scale-[1.04]",
-    "scale-[1]",
-    "scale-[0.94]",
-  ];
+  const slotAreas = isDesktopLayout
+    ? COLLAGE_DESKTOP_SLOT_AREAS
+    : COLLAGE_MOBILE_SLOT_AREAS;
+
+  const gridTemplateAreas = isDesktopLayout
+    ? COLLAGE_DESKTOP_TEMPLATE_AREAS
+    : COLLAGE_MOBILE_TEMPLATE_AREAS;
+
+  const gridTemplateColumns = isDesktopLayout
+    ? COLLAGE_DESKTOP_COLUMNS
+    : COLLAGE_MOBILE_COLUMNS;
+
+  const gridTemplateRows = isDesktopLayout
+    ? COLLAGE_DESKTOP_ROWS
+    : COLLAGE_MOBILE_ROWS;
 
   useEffect(() => {
     const updateProgress = () => {
@@ -203,11 +171,17 @@ export function ImageGalleryCarousel({ images }: ImageGalleryCarouselProps) {
     };
   }, []);
 
-  const revealProgress = clamp01(
-    (sectionProgress - REVEAL_START_PROGRESS) /
-      (REVEAL_END_PROGRESS - REVEAL_START_PROGRESS),
-  );
-  const sceneFade = clamp01((revealProgress - 0.02) / 0.2);
+  if (streamImages.length === 0) {
+    return null;
+  }
+
+  const animationComplete = sectionProgress >= ANIMATION_END_PROGRESS;
+  const revealProgress = animationComplete
+    ? ALL_TILES_SETTLED_REVEAL
+    : sectionToRevealProgress(sectionProgress);
+  const sceneFade = animationComplete
+    ? 1
+    : clamp01((revealProgress / ALL_TILES_SETTLED_REVEAL - 0.02) / 0.18);
 
   return (
     <section
@@ -215,52 +189,60 @@ export function ImageGalleryCarousel({ images }: ImageGalleryCarouselProps) {
       className="pointer-events-none relative z-30 -mt-[52vh] h-[255vh] bg-transparent sm:-mt-[54vh] md:-mt-[56vh]"
       aria-hidden
     >
-      <div className="sticky top-0 h-screen overflow-hidden">
-        {streamImages.map((image, index) => {
-          const appearAt = index * ENTRY_STEP;
-          const phaseProgress = clamp01((revealProgress - appearAt) / TRAVEL_SPAN);
+      <div className="sticky top-0 flex h-screen items-center justify-center overflow-hidden bg-transparent px-4 sm:px-6">
+        <div
+          className="grid w-full max-w-7xl gap-3"
+          style={{
+            gridTemplateAreas,
+            gridTemplateColumns,
+            gridTemplateRows,
+            height: isDesktopLayout
+              ? "min(78vh, 52rem)"
+              : "min(88vh, 44rem)",
+          }}
+        >
+          {streamImages.map((image, index) => {
+            const appearAt = index * ENTRY_STEP;
+            const phaseProgress = clamp01((revealProgress - appearAt) / TRAVEL_SPAN);
 
-          if (index > 0 && phaseProgress <= 0.001) {
-            return null;
-          }
+            if (!animationComplete && index > 0 && phaseProgress <= 0.001) {
+              return null;
+            }
 
-          const eased = easeOutCubic(phaseProgress);
-          const target = scatterTargets[index] ?? { x: 50, y: 50 };
-          const targetX = target.x;
-          const targetY = target.y;
-          const startX = 30 + (index % 3) * 10.0;
-          const startY = 50 - (index % 4) * 2.8;
-          const x = startX + (targetX - startX) * eased;
-          const y = startY + (targetY - startY) * eased;
-          const fadeIn = clamp01(phaseProgress / 0.2);
-          const opacity = fadeIn * sceneFade * 0.94;
-          const zIndex = 20 + index;
-          const cardStyle = galleryCardStyle(x, y, opacity, zIndex);
+            const eased = easeOutCubic(phaseProgress);
+            const translateY = (1 - eased) * SLIDE_UP_OFFSET_PX;
+            const fadeIn = clamp01(phaseProgress / 0.22);
+            const opacity = fadeIn * sceneFade * 0.94;
+            const zIndex = 20 + index;
+            const tileStyle = collageTileMotionStyle(translateY, opacity, zIndex);
+            const areaName = slotAreas[index] ?? slotAreas[0];
 
-          return (
-            <article
-              key={image.key}
-              className={cn(
-                "absolute left-0 top-0 overflow-hidden rounded-md border border-black/10 bg-neutral-100 shadow-[0_8px_26px_rgba(0,0,0,0.15)]",
-                cardHeights[index % cardHeights.length],
-                cardWidths[index % cardWidths.length],
-                cardRotations[index % cardRotations.length],
-                cardScale[index % cardScale.length],
-              )}
-              style={cardStyle}
-              aria-hidden={image.decorative}
-            >
-              <Image
-                src={image.src}
-                alt={image.decorative ? "" : image.alt}
-                fill
-                sizes="(min-width: 1280px) 320px, (min-width: 768px) 34vw, 52vw"
-                className="object-cover"
-                priority={index < images.length}
-              />
-            </article>
-          );
-        })}
+            return (
+              <div
+                key={image.key}
+                className="min-h-0 min-w-0"
+                style={{ gridArea: areaName }}
+              >
+                <article
+                  className={cn(
+                    "relative h-full w-full overflow-hidden rounded-sm border border-black/15 bg-neutral-100 shadow-[0_8px_26px_rgba(0,0,0,0.15)]",
+                  )}
+                  style={tileStyle}
+                  aria-hidden={image.decorative}
+                >
+                  <Image
+                    src={image.src}
+                    alt={image.decorative ? "" : image.alt}
+                    fill
+                    sizes="(min-width: 768px) 18vw, 44vw"
+                    className="object-cover"
+                    priority={index < images.length}
+                  />
+                </article>
+              </div>
+            );
+          })}
+        </div>
       </div>
     </section>
   );

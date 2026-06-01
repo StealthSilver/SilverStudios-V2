@@ -3,9 +3,12 @@
  * @description Client logo grid — muted by default, full color on hover.
  */
 
+"use client";
+
 import Image from "next/image";
 
 import { LetterWaveLink } from "@/components/ui/LetterWaveLink";
+import { ScrollRevealGroup } from "@/components/ui/ScrollRevealGroup";
 import { heroContent } from "@/lib/data/hero";
 import { cn } from "@/lib/utils";
 
@@ -23,6 +26,9 @@ import {
   LOGO_TICKER_LOGO_ROW_TWO_SPARDHA,
   LOGO_TICKER_PRIMARY_CTA,
 } from "./logo-ticker-styles";
+
+const LOGO_TICKER_SCROLL_REVEAL_ITEM =
+  "scroll-reveal-word flex w-full justify-center";
 
 // ——— Types ———
 
@@ -82,28 +88,52 @@ export function LogoTickerClientLogos({
   }
 
   return (
-    <div className={cn(LOGO_TICKER_LOGO_ROWS, className)}>
+    <ScrollRevealGroup className={cn(LOGO_TICKER_LOGO_ROWS, className)}>
       <ul aria-label="Client logos" className={cn(LOGO_TICKER_LOGO_ROW)}>
-        {rowOneLogos.map((logo) => (
+        {rowOneLogos.map((logo, index) => (
           <li key={logo.name} className={cn(LOGO_TICKER_LOGO_CELL)}>
-            <ClientLogoMark logo={logo} />
+            <div
+              className={LOGO_TICKER_SCROLL_REVEAL_ITEM}
+              data-scroll-reveal-word=""
+              data-scroll-reveal-index={index}
+            >
+              <ClientLogoMark logo={logo} />
+            </div>
           </li>
         ))}
       </ul>
 
       <div className={cn(LOGO_TICKER_LOGO_ROW)}>
         <div className={cn(LOGO_TICKER_LOGO_CELL, LOGO_TICKER_LOGO_ROW_TWO_BRILLIANT)}>
-          <ClientLogoMark logo={brilliantLogo} />
+          <div
+            className={LOGO_TICKER_SCROLL_REVEAL_ITEM}
+            data-scroll-reveal-word=""
+            data-scroll-reveal-index={4}
+          >
+            <ClientLogoMark logo={brilliantLogo} />
+          </div>
         </div>
 
         <div className={cn(LOGO_TICKER_LOGO_CELL, LOGO_TICKER_LOGO_ROW_TWO_SPARDHA)}>
-          <ClientLogoMark logo={spardhaLogo} />
+          <div
+            className={LOGO_TICKER_SCROLL_REVEAL_ITEM}
+            data-scroll-reveal-word=""
+            data-scroll-reveal-index={5}
+          >
+            <ClientLogoMark logo={spardhaLogo} />
+          </div>
         </div>
 
         <div className={cn(LOGO_TICKER_LOGO_ROW_TWO_BUTTON)}>
-          <LogoTickerPrimaryCta />
+          <div
+            className={LOGO_TICKER_SCROLL_REVEAL_ITEM}
+            data-scroll-reveal-word=""
+            data-scroll-reveal-index={6}
+          >
+            <LogoTickerPrimaryCta />
+          </div>
         </div>
       </div>
-    </div>
+    </ScrollRevealGroup>
   );
 }

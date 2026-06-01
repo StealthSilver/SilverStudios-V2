@@ -29,6 +29,10 @@ export {
 } from "./LetterWaveLink";
 export { NavExternalLinkArrow } from "./NavExternalLinkArrow";
 export {
+  ScrollRevealGroup,
+  type ScrollRevealGroupProps,
+} from "./ScrollRevealGroup";
+export {
   ScrollRevealWords,
   type ScrollRevealWordsProps,
 } from "./ScrollRevealWords";

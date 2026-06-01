@@ -3,9 +3,6 @@
  * @description Single service row — large primary label with secondary tag (Namma-style).
  */
 
-"use client";
-
-import { ScrollRevealWords } from "@/components/ui/ScrollRevealWords";
 import { cn } from "@/lib/utils";
 import type { ServiceItem } from "@/types/services";
 
@@ -25,6 +22,7 @@ import {
 
 interface ServiceListItemProps {
   item: ServiceItem;
+  scrollRevealIndex?: number;
 }
 
 // ——— Local sub-components ———
@@ -43,27 +41,41 @@ function ServiceHoverMedia({ id }: { id: string }) {
 
 // ——— Main component ———
 
-export function ServiceListItem({ item }: ServiceListItemProps) {
+export function ServiceListItem({
+  item,
+  scrollRevealIndex,
+}: ServiceListItemProps) {
+  const primaryLabel = (
+    <span className={cn(SERVICES_ITEM_PRIMARY)}>{item.primary}</span>
+  );
+
   return (
     <li className={cn(SERVICES_ITEM)}>
       {!SERVICES_ITEM_MEDIA_HIDDEN && <ServiceHoverMedia id={item.id} />}
 
       <div className={cn(SERVICES_ITEM_INNER)}>
-        <ScrollRevealWords
-          text={item.primary}
-          className={cn(SERVICES_ITEM_PRIMARY)}
-        />
+        {scrollRevealIndex === undefined ? (
+          primaryLabel
+        ) : (
+          <div
+            className="scroll-reveal-word block w-full text-left"
+            data-scroll-reveal-word=""
+            data-scroll-reveal-index={scrollRevealIndex}
+          >
+            {primaryLabel}
+          </div>
+        )}
         {!SERVICES_ITEM_SECONDARY_HIDDEN && (
           <>
-            <ScrollRevealWords
-              text={item.secondary}
-              className={cn(SERVICES_ITEM_SECONDARY_MOBILE)}
-            />
-            <ScrollRevealWords
-              text={item.secondary}
+            <span className={cn(SERVICES_ITEM_SECONDARY_MOBILE)}>
+              {item.secondary}
+            </span>
+            <span
               className={cn(SERVICES_ITEM_SECONDARY)}
               aria-hidden
-            />
+            >
+              {item.secondary}
+            </span>
           </>
         )}
       </div>
