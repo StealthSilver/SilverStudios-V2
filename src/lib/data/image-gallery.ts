@@ -37,8 +37,18 @@ export const imageGalleryContent = {
     },
     {
       id: "gallery-image-6",
-      alt: "LEGO Batman minifigure on textured fabric",
+      alt: "Black backpack with minimalist logo on a white desk",
       src: "/Images/image6.jpeg",
+    },
+    {
+      id: "gallery-image-7",
+      alt: "Satellite landscapes forming the words Silver Linings",
+      src: "/Images/image7.jpeg",
+    },
+    {
+      id: "gallery-image-8",
+      alt: "Technical clock face with Arabic numerals and Roman numerals on blue",
+      src: "/Images/image8.png",
     },
   ],
 } satisfies ImageGalleryContent;
