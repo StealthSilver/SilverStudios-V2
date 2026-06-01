@@ -10,16 +10,15 @@ import { useEffect, useMemo, useRef, useState } from "react";
 
 import { useMediaQuery } from "@/hooks/use-media-query";
 import type { GalleryImage } from "@/types";
-import { cn } from "@/lib/utils";
 
 import {
   COLLAGE_DESKTOP_COLUMNS,
   COLLAGE_DESKTOP_ROWS,
   COLLAGE_DESKTOP_SLOT_AREAS,
-  COLLAGE_DESKTOP_TEMPLATE_AREAS,
   COLLAGE_MOBILE_COLUMNS,
   COLLAGE_MOBILE_ROWS,
   COLLAGE_MOBILE_SLOT_AREAS,
+  COLLAGE_DESKTOP_TEMPLATE_AREAS,
   COLLAGE_MOBILE_TEMPLATE_AREAS,
 } from "./image-gallery-layout";
 
@@ -29,9 +28,8 @@ interface ImageGalleryCarouselProps {
   images: readonly GalleryImage[];
 }
 
-interface StreamImage extends GalleryImage {
+interface CollageTile extends GalleryImage {
   key: string;
-  decorative: boolean;
 }
 
 const TARGET_CARD_COUNT = 12;
@@ -94,30 +92,22 @@ export function ImageGalleryCarousel({ images }: ImageGalleryCarouselProps) {
   const [sectionProgress, setSectionProgress] = useState(0);
   const isDesktopLayout = useMediaQuery(DESKTOP_MEDIA_QUERY);
 
-  const streamImages = useMemo<StreamImage[]>(() => {
+  const slotAreas = isDesktopLayout
+    ? COLLAGE_DESKTOP_SLOT_AREAS
+    : COLLAGE_MOBILE_SLOT_AREAS;
+
+  const collageTiles = useMemo<CollageTile[]>(() => {
     if (images.length === 0) {
       return [];
     }
 
-    const nextImages: StreamImage[] = [];
+    const tileCount = Math.min(TARGET_CARD_COUNT, images.length);
 
-    for (let index = 0; index < TARGET_CARD_COUNT; index += 1) {
-      const image = images[index % images.length];
-      const cycle = Math.floor(index / images.length);
-
-      nextImages.push({
-        ...image,
-        key: `${image.id}-${index}`,
-        decorative: cycle > 0,
-      });
-    }
-
-    return nextImages;
+    return Array.from({ length: tileCount }, (_, index) => ({
+      ...images[index],
+      key: images[index].id,
+    }));
   }, [images]);
-
-  const slotAreas = isDesktopLayout
-    ? COLLAGE_DESKTOP_SLOT_AREAS
-    : COLLAGE_MOBILE_SLOT_AREAS;
 
   const gridTemplateAreas = isDesktopLayout
     ? COLLAGE_DESKTOP_TEMPLATE_AREAS
@@ -171,7 +161,7 @@ export function ImageGalleryCarousel({ images }: ImageGalleryCarouselProps) {
     };
   }, []);
 
-  if (streamImages.length === 0) {
+  if (collageTiles.length === 0) {
     return null;
   }
 
@@ -191,17 +181,17 @@ export function ImageGalleryCarousel({ images }: ImageGalleryCarouselProps) {
     >
       <div className="sticky top-0 flex h-screen items-center justify-center overflow-hidden bg-transparent px-4 sm:px-6">
         <div
-          className="grid w-full max-w-7xl gap-3"
+          className="grid w-full max-w-7xl gap-2.5 sm:gap-3"
           style={{
             gridTemplateAreas,
             gridTemplateColumns,
             gridTemplateRows,
             height: isDesktopLayout
-              ? "min(78vh, 52rem)"
-              : "min(88vh, 44rem)",
+              ? "min(80vh, 54rem)"
+              : "min(90vh, 46rem)",
           }}
         >
-          {streamImages.map((image, index) => {
+          {collageTiles.map((image, index) => {
             const appearAt = index * ENTRY_STEP;
             const phaseProgress = clamp01((revealProgress - appearAt) / TRAVEL_SPAN);
 
@@ -212,10 +202,11 @@ export function ImageGalleryCarousel({ images }: ImageGalleryCarouselProps) {
             const eased = easeOutCubic(phaseProgress);
             const translateY = (1 - eased) * SLIDE_UP_OFFSET_PX;
             const fadeIn = clamp01(phaseProgress / 0.22);
-            const opacity = fadeIn * sceneFade * 0.94;
+            const opacity = fadeIn * sceneFade;
             const zIndex = 20 + index;
             const tileStyle = collageTileMotionStyle(translateY, opacity, zIndex);
             const areaName = slotAreas[index] ?? slotAreas[0];
+            const isFeatureTile = areaName === "i" || areaName === "l" || areaName === "m";
 
             return (
               <div
@@ -224,19 +215,23 @@ export function ImageGalleryCarousel({ images }: ImageGalleryCarouselProps) {
                 style={{ gridArea: areaName }}
               >
                 <article
-                  className={cn(
-                    "relative h-full w-full overflow-hidden rounded-sm border border-black/15 bg-neutral-100 shadow-[0_8px_26px_rgba(0,0,0,0.15)]",
-                  )}
+                  className="relative h-full w-full overflow-hidden rounded-sm border border-black/15 bg-neutral-900 shadow-[0_8px_26px_rgba(0,0,0,0.15)]"
                   style={tileStyle}
-                  aria-hidden={image.decorative}
                 >
                   <Image
                     src={image.src}
-                    alt={image.decorative ? "" : image.alt}
+                    alt={image.alt}
                     fill
-                    sizes="(min-width: 768px) 18vw, 44vw"
-                    className="object-cover"
-                    priority={index < images.length}
+                    sizes={
+                      isFeatureTile
+                        ? "(min-width: 768px) 42vw, 92vw"
+                        : "(min-width: 768px) 22vw, 46vw"
+                    }
+                    className="object-cover object-center"
+                    style={{
+                      objectPosition: image.objectPosition ?? "center",
+                    }}
+                    priority={index < 4}
                   />
                 </article>
               </div>
