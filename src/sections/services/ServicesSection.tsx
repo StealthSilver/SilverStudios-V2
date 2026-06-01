@@ -12,7 +12,8 @@ import { SERVICES_SECTION } from "./services-styles";
 // ——— Main section ———
 
 export default function ServicesSection() {
-  const { title, items, seeAllLabel, seeAllHref } = servicesContent;
+  const { title, defaultImageSrc, items, seeAllLabel, seeAllHref } =
+    servicesContent;
 
   return (
     <section
@@ -22,6 +23,7 @@ export default function ServicesSection() {
     >
       <ServicesSectionReveal
         title={title}
+        defaultImageSrc={defaultImageSrc}
         items={items}
         seeAllLabel={seeAllLabel}
         seeAllHref={seeAllHref}
