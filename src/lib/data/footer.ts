@@ -5,21 +5,14 @@
 
 import type { FooterSocialLink, SiteNavLink } from "@/types";
 
+import {
+  footerNavPrimaryLinks,
+  footerNavSecondaryLinks,
+} from "./site";
+
 export const footerContent = {
-  primaryColumn: [
-    { label: "Services", href: "#services" },
-    { label: "Projects", href: "#projects" },
-    { label: "Blogs", href: "#blog" },
-  ] satisfies readonly SiteNavLink[],
-  secondaryColumn: [
-    {
-      label: "Silver UI",
-      href: "https://silver-ui.vercel.app/",
-      external: true,
-    },
-    { label: "Workflow", href: "#workflow" },
-    { label: "Contact", href: "#contact" },
-  ] satisfies readonly SiteNavLink[],
+  primaryColumn: footerNavPrimaryLinks satisfies readonly SiteNavLink[],
+  secondaryColumn: footerNavSecondaryLinks satisfies readonly SiteNavLink[],
   privacyPolicy: {
     label: "Privacy Policy",
     href: "#privacy",
@@ -32,32 +25,34 @@ export const footerContent = {
   socialLinks: [
     {
       label: "Instagram",
-      href: "https://www.instagram.com/",
+      href: "https://www.instagram.com/silverstudios.art?igsh=dGVyN2xhOHd0bHFu",
       icon: "instagram",
+      external: true,
     },
     {
       label: "LinkedIn",
-      href: "https://www.linkedin.com/",
+      href: "https://www.linkedin.com/company/silver-studios-art",
       icon: "linkedin",
+      external: true,
     },
     {
       label: "X",
-      href: "https://x.com/",
+      href: "/",
       icon: "x",
     },
     {
       label: "Dribbble",
-      href: "https://dribbble.com/",
+      href: "/",
       icon: "dribbble",
     },
     {
       label: "Figma",
-      href: "https://www.figma.com/",
+      href: "/",
       icon: "figma",
     },
     {
       label: "GitHub",
-      href: "https://github.com/",
+      href: "/",
       icon: "github",
     },
   ] satisfies readonly FooterSocialLink[],

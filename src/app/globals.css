@@ -332,6 +332,92 @@ body {
   }
 }
 
+/* Footer invite “Let’s talk” — gooey fill phases via data-gooey-phase (FooterInviteCta) */
+.footer-invite-cta .footer-invite-cta__gooey {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  overflow: hidden;
+  opacity: 0;
+}
+
+.footer-invite-cta[data-gooey-phase="enter"] .footer-invite-cta__gooey,
+.footer-invite-cta[data-gooey-phase="hold"] .footer-invite-cta__gooey,
+.footer-invite-cta[data-gooey-phase="exit"] .footer-invite-cta__gooey {
+  opacity: 1;
+}
+
+.footer-invite-cta .footer-invite-cta__gooey-inner {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.footer-invite-cta .footer-invite-cta__gooey-sweep {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  border-radius: 9999px;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.55s cubic-bezier(0.33, 1, 0.68, 1);
+  will-change: transform;
+}
+
+.footer-invite-cta .footer-invite-cta__gooey-cap {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  height: 155%;
+  aspect-ratio: 1;
+  background: #000;
+  border-radius: 50%;
+  transform: translate(-160%, -50%);
+  transition:
+    left 0.55s cubic-bezier(0.33, 1, 0.68, 1),
+    transform 0.55s cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+.footer-invite-cta[data-gooey-phase="enter"] .footer-invite-cta__gooey-sweep,
+.footer-invite-cta[data-gooey-phase="hold"] .footer-invite-cta__gooey-sweep {
+  transform: scaleX(1);
+  transform-origin: left center;
+}
+
+.footer-invite-cta[data-gooey-phase="enter"] .footer-invite-cta__gooey-cap,
+.footer-invite-cta[data-gooey-phase="hold"] .footer-invite-cta__gooey-cap {
+  left: 100%;
+  transform: translate(-50%, -50%);
+}
+
+.footer-invite-cta[data-gooey-lit="true"] {
+  color: #fff;
+  border-color: #fff;
+}
+
+.footer-invite-cta[data-gooey-phase="exit"] .footer-invite-cta__gooey-sweep {
+  transform: scaleX(0);
+  transform-origin: right center;
+}
+
+.footer-invite-cta[data-gooey-phase="exit"] .footer-invite-cta__gooey-cap {
+  left: 100%;
+  transform: translate(85%, -50%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .footer-invite-cta .footer-invite-cta__gooey-sweep,
+  .footer-invite-cta .footer-invite-cta__gooey-cap {
+    transition-duration: 0.01ms;
+  }
+}
+
 /* Scroll-scrubbed word reveal (Luke Baffait about-text pattern) */
 .scroll-reveal-word {
   display: inline-block;

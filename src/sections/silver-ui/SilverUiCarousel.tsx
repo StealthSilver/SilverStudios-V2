@@ -54,8 +54,7 @@ export function SilverUiCarousel({
               key={image.id}
               src={image.src}
               alt={isActive ? image.alt : ""}
-              width={image.width}
-              height={image.height}
+              fill
               className={cn(
                 SILVER_UI_CAROUSEL_IMAGE_LAYER,
                 isActive
@@ -63,7 +62,7 @@ export function SilverUiCarousel({
                   : SILVER_UI_CAROUSEL_IMAGE_LAYER_INACTIVE,
               )}
               priority={index < 2}
-              sizes="(max-width: 768px) 92vw, 52rem"
+              sizes="(max-width: 768px) 92vw, (max-width: 1280px) 56rem, 64rem"
               aria-hidden={!isActive}
             />
           );

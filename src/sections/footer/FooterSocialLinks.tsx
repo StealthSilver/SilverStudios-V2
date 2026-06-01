@@ -1,6 +1,6 @@
 /**
  * @file FooterSocialLinks.tsx
- * @description Footer social icons in glass buttons — single row, navbar silver border.
+ * @description Footer social icons — dark footer glass matching the navbar, silver border on hover.
  */
 
 "use client";
@@ -41,17 +41,19 @@ export default function FooterSocialLinks() {
 
   return (
     <ul className={cn(FOOTER_SOCIAL_LIST)}>
-      {socialLinks.map(({ label, href, icon }) => {
+      {socialLinks.map(({ label, href, icon, external }) => {
         const Icon = SOCIAL_ICONS[icon];
 
         return (
           <li key={icon}>
-            <GlassSurface className={cn(FOOTER_SOCIAL_BUTTON)}>
+            <GlassSurface variant="footer" className={cn(FOOTER_SOCIAL_BUTTON)}>
               <a
                 href={href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={label}
+                target={external ? "_blank" : undefined}
+                rel={external ? "noopener noreferrer" : undefined}
+                aria-label={
+                  external ? `${label} (opens in new tab)` : label
+                }
                 className="flex size-full items-center justify-center"
               >
                 <Icon className="size-4 sm:size-[1.125rem]" aria-hidden />

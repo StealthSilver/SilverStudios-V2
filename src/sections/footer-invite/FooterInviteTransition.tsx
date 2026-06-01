@@ -7,7 +7,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 
-import { LetterWaveLink } from "@/components/ui/LetterWaveLink";
+import { FooterInviteCta } from "./FooterInviteCta";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { usePinnedScrollProgress } from "@/hooks/usePinnedScrollProgress";
 import {
@@ -24,15 +24,11 @@ import {
 import { cn } from "@/lib/utils";
 
 import { HeroRotatingTagline } from "../hero/HeroRotatingTagline";
-import {
-  HERO_HEADLINE_FONT,
-  HERO_NAV_LINK_TYPOGRAPHY,
-  HERO_TAGLINE_FONT_FAMILY,
-  HERO_TITLE_SIZE,
-} from "../hero/hero-styles";
+import { HERO_HEADLINE_FONT, HERO_TAGLINE_FONT_FAMILY } from "../hero/hero-styles";
 import {
   FOOTER_INVITE_CONTENT,
   FOOTER_INVITE_CTA_WRAP,
+  FOOTER_INVITE_HEADLINE_SIZE,
   FOOTER_INVITE_STICKY,
   FOOTER_INVITE_TAGLINE_SIZE,
 } from "./footer-invite-styles";
@@ -80,8 +76,6 @@ export default function FooterInviteTransition() {
   const styles = useMemo(() => {
     const backgroundColor = mixRgb(resolvedProgress, WHITE, BLACK);
     const foregroundColor = mixRgb(resolvedProgress, BLACK, WHITE);
-    const ctaBackground = mixRgb(resolvedProgress, BLACK, WHITE);
-    const ctaForeground = mixRgb(resolvedProgress, WHITE, BLACK);
     const ctaRing = mixRgb(resolvedProgress, BLACK, WHITE);
     const contentScale = lerp(
       FOOTER_INVITE_MIN_CONTENT_SCALE,
@@ -93,8 +87,6 @@ export default function FooterInviteTransition() {
     return {
       backgroundColor,
       foregroundColor,
-      ctaBackground,
-      ctaForeground,
       ctaRing,
       contentScale,
       ctaScale,
@@ -144,7 +136,7 @@ export default function FooterInviteTransition() {
               className={cn(
                 "shrink-0 whitespace-nowrap",
                 HERO_HEADLINE_FONT,
-                HERO_TITLE_SIZE,
+                FOOTER_INVITE_HEADLINE_SIZE,
               )}
               style={textStyle}
             >
@@ -160,18 +152,10 @@ export default function FooterInviteTransition() {
           </div>
 
           <div className={cn(FOOTER_INVITE_CTA_WRAP)} style={ctaTransform}>
-            <LetterWaveLink
+            <FooterInviteCta
               href={cta.href}
               label={cta.label}
-              className={cn(
-                HERO_NAV_LINK_TYPOGRAPHY,
-                "inline-flex h-11 min-w-[10.5rem] shrink-0 items-center justify-center whitespace-nowrap rounded-full px-10 font-bold transition-[background-color,color] duration-150 ease-linear focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2",
-              )}
-              style={{
-                backgroundColor: styles.ctaBackground,
-                color: styles.ctaForeground,
-                outlineColor: styles.ctaRing,
-              }}
+              outlineColor={styles.ctaRing}
             />
           </div>
         </div>

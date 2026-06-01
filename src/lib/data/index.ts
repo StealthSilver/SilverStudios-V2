@@ -16,4 +16,11 @@ export { servicesContent } from "./services";
 export { silverUiContent } from "./silver-ui";
 export { featuredNewsContent } from "./featured-news";
 export { imageGalleryContent } from "./image-gallery";
-export { siteConfig, siteNavLinks } from "./site";
+export {
+  footerNavPrimaryLinks,
+  footerNavSecondaryLinks,
+  siteConfig,
+  siteNavLinks,
+  SILVER_UI_URL,
+} from "./site";
+export { workflowPageContent } from "./workflow";

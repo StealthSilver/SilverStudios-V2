@@ -11,9 +11,11 @@ import { useMemo } from "react";
 
 import { GlassSurface } from "@/components/ui/GlassSurface";
 import { LetterWaveLink } from "@/components/ui/LetterWaveLink";
+import { NavExternalLinkArrow } from "@/components/ui/NavExternalLinkArrow";
 import {
   isNavbarForegroundLight,
   useNavbarForegroundColor,
+  useNavbarOverFooter,
 } from "@/hooks/useNavbarScrollProgress";
 import { siteConfig, siteNavLinks } from "@/lib/data";
 import { cn } from "@/lib/utils";
@@ -38,6 +40,7 @@ export interface HeroNavbarProps {
 
 export default function HeroNavbar({ className }: HeroNavbarProps) {
   const foregroundColor = useNavbarForegroundColor();
+  const navOverFooter = useNavbarOverFooter();
   const foregroundIsLight = useMemo(
     () => isNavbarForegroundLight(foregroundColor),
     [foregroundColor],
@@ -53,6 +56,7 @@ export default function HeroNavbar({ className }: HeroNavbarProps) {
     <GlassSurface
       as="header"
       variant="nav"
+      navOverFooter={navOverFooter}
       className={cn(
         "mx-auto w-full shrink-0 overflow-hidden",
         HERO_NAVBAR_MAX_WIDTH,
@@ -108,7 +112,15 @@ export default function HeroNavbar({ className }: HeroNavbarProps) {
                   className={cn(
                     "flex items-center transition-[color] duration-150 ease-linear",
                     HERO_NAV_LINK_TYPOGRAPHY,
+                    external && "group gap-1.5",
                   )}
+                  suffix={
+                    external ? (
+                      <span className="inline-flex opacity-0 transition-[opacity,transform] duration-300 ease-in-out group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 motion-reduce:opacity-100 motion-reduce:transform-none [&_svg]:size-3 sm:[&_svg]:size-3.5">
+                        <NavExternalLinkArrow />
+                      </span>
+                    ) : undefined
+                  }
                 />
               </li>
             ))}

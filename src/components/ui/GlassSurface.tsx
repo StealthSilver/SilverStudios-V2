@@ -29,12 +29,18 @@ export const GLASS_SURFACE_FROST =
 export const GLASS_SURFACE_NAV_FROST =
   "border border-white/45 bg-white/35 backdrop-blur-[80px] backdrop-saturate-[180%] [transform:translateZ(0)]";
 
-export type GlassSurfaceVariant = "default" | "nav";
+/** Footer navbar + social chips — dark fill, subtle border, top inset highlight via {@link GLASS_SURFACE_SHADOW}. */
+export const GLASS_SURFACE_FOOTER_FROST =
+  "border border-white/[0.08] bg-neutral-900/60 backdrop-blur-[80px] backdrop-saturate-[140%] [transform:translateZ(0)]";
+
+export type GlassSurfaceVariant = "default" | "nav" | "footer";
 
 export interface GlassSurfaceProps extends HTMLAttributes<HTMLElement> {
   as?: ElementType;
   shadow?: boolean;
   variant?: GlassSurfaceVariant;
+  /** Darker frosted fill for the nav bar over the site footer. */
+  navOverFooter?: boolean;
 }
 
 export function GlassSurface({
@@ -43,6 +49,7 @@ export function GlassSurface({
   children,
   shadow = true,
   variant = "default",
+  navOverFooter = false,
   style,
   onMouseMove,
   onMouseLeave,
@@ -88,9 +95,17 @@ export function GlassSurface({
       className={cn(
         "glass-surface relative [&>*]:relative [&>*]:z-10",
         variant === "nav" ? "glass-surface-nav" : "isolate",
-        variant === "nav" ? GLASS_SURFACE_NAV_FROST : GLASS_SURFACE_FROST,
+        variant === "footer" || (variant === "nav" && navOverFooter)
+          ? GLASS_SURFACE_FOOTER_FROST
+          : variant === "nav"
+            ? GLASS_SURFACE_NAV_FROST
+            : GLASS_SURFACE_FROST,
         shadow &&
-          (variant === "nav" ? GLASS_SURFACE_NAV_SHADOW : GLASS_SURFACE_SHADOW),
+          (variant === "footer" || (variant === "nav" && navOverFooter)
+            ? GLASS_SURFACE_SHADOW
+            : variant === "nav"
+              ? GLASS_SURFACE_NAV_SHADOW
+              : GLASS_SURFACE_SHADOW),
         className,
       )}
       style={spotlightStyle}

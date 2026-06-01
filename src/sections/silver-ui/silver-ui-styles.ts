@@ -15,16 +15,16 @@ export const SILVER_UI_TITLE = SECTION_HEADLINE;
 export const SILVER_UI_TITLE_WRAP = "mb-10 sm:mb-12 md:mb-14";
 
 export const SILVER_UI_SHOWCASE_GRID =
-  "grid w-full gap-8 md:gap-10 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:items-stretch lg:gap-12 xl:gap-14";
+  "grid w-full gap-8 md:gap-10 lg:grid-cols-[minmax(0,1.25fr)_minmax(0,0.75fr)] lg:items-stretch lg:gap-12 xl:gap-14";
 
 export const SILVER_UI_CAROUSEL_WRAP =
-  "flex w-full max-w-[46rem] flex-col items-start gap-3 sm:gap-4";
+  "flex w-full max-w-[54rem] flex-col items-start gap-3 sm:max-w-[56rem] sm:gap-4";
 
 export const SILVER_UI_CAROUSEL_MAIN_FRAME =
-  "relative aspect-[3/2] w-full overflow-hidden rounded-xl border border-neutral-200/90 bg-neutral-100 shadow-[0_16px_42px_rgba(0,0,0,0.16)] sm:rounded-2xl";
+  "relative aspect-[16/9] w-full min-h-[14rem] overflow-hidden rounded-xl border border-neutral-200/90 bg-neutral-950 shadow-[0_16px_42px_rgba(0,0,0,0.16)] sm:min-h-[18rem] sm:rounded-2xl md:min-h-[22rem] lg:min-h-[26rem]";
 
 export const SILVER_UI_CAROUSEL_IMAGE_LAYER =
-  "absolute inset-0 transition-[opacity,transform,filter] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]";
+  "absolute inset-0 h-full w-full object-cover transition-[opacity,transform,filter] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]";
 
 export const SILVER_UI_CAROUSEL_IMAGE_LAYER_ACTIVE =
   "z-10 scale-100 opacity-100 blur-0";
@@ -45,13 +45,13 @@ export const SILVER_UI_CAROUSEL_DOT_PROGRESS =
   "absolute inset-0 origin-left rounded-full bg-neutral-900";
 
 export const SILVER_UI_COPY_WRAP =
-  "flex w-full flex-col items-start justify-between gap-10 lg:min-h-full lg:py-1";
+  "flex w-full flex-col items-end justify-between gap-10 text-right lg:min-h-full lg:py-1";
 
 export const SILVER_UI_COPY_LINE_STAGE =
-  "relative min-h-[5rem] w-full max-w-[30ch] sm:min-h-[6rem] md:min-h-[6.75rem]";
+  "relative ml-auto min-h-[5rem] w-full max-w-[30ch] sm:min-h-[6rem] md:min-h-[6.75rem]";
 
 export const SILVER_UI_COPY_LINE =
-  "absolute inset-0 font-nav text-[1.35rem] leading-[1.28] tracking-tight text-neutral-900 transition-[opacity,transform,filter] duration-550 ease-[cubic-bezier(0.22,1,0.36,1)] sm:text-[1.6rem] md:text-[1.95rem] md:leading-[1.24]";
+  "absolute inset-0 text-right font-nav text-[1.35rem] leading-[1.28] tracking-tight text-neutral-900 transition-[opacity,transform,filter] duration-550 ease-[cubic-bezier(0.22,1,0.36,1)] sm:text-[1.6rem] md:text-[1.95rem] md:leading-[1.24]";
 
 export const SILVER_UI_COPY_LINE_ACTIVE = "translate-y-0 opacity-100 blur-0";
 
@@ -59,7 +59,7 @@ export const SILVER_UI_COPY_LINE_INACTIVE =
   "translate-y-2 opacity-0 blur-[1.5px]";
 
 export const SILVER_UI_CTA_WRAP =
-  "mt-2 flex w-full justify-start sm:mt-4 md:mt-6";
+  "mt-2 flex w-full justify-end sm:mt-4 md:mt-6";
 
 export const SILVER_UI_CTA_LABEL =
   "font-nav text-xs font-normal uppercase leading-none tracking-[0.06em] sm:text-sm md:text-base";

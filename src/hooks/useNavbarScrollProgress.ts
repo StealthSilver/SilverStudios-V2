@@ -26,6 +26,10 @@ export function mixNavbarForeground(progress: number): string {
 }
 
 function resolveNavbarForeground(): string {
+  if (typeof window === "undefined") {
+    return mixNavbarForeground(0);
+  }
+
   const viewportHeight = window.innerHeight || 1;
   const scrollY = window.scrollY;
 
@@ -58,6 +62,21 @@ function resolveNavbarForeground(): string {
   }
 
   return mixNavbarForeground(1);
+}
+
+/** True while the fixed navbar sits over the dark footer block. */
+function resolveNavbarOverFooter(): boolean {
+  if (typeof window === "undefined") {
+    return false;
+  }
+
+  const viewportHeight = window.innerHeight || 1;
+  const footer = document.getElementById(FOOTER_SECTION_ID);
+  if (!footer) {
+    return false;
+  }
+  const footerTop = footer.getBoundingClientRect().top;
+  return footerTop <= viewportHeight * 0.85;
 }
 
 /** True when foreground reads as light (show dark logo asset). */
@@ -154,4 +173,47 @@ export function useNavbarForegroundColor(): string {
   }, []);
 
   return foreground;
+}
+
+/** True when the navbar should use a darker glass fill (over the footer). */
+export function useNavbarOverFooter(): boolean {
+  const [overFooter, setOverFooter] = useState(false);
+  const rafId = useRef<number | null>(null);
+
+  useEffect(() => {
+    const update = (): void => {
+      rafId.current = null;
+      setOverFooter(resolveNavbarOverFooter());
+    };
+
+    const scheduleUpdate = (): void => {
+      if (rafId.current === null) {
+        rafId.current = requestAnimationFrame(update);
+      }
+    };
+
+    const footer = document.getElementById(FOOTER_SECTION_ID);
+    const observer = new IntersectionObserver(scheduleUpdate, {
+      threshold: [0, 0.25, 0.5, 0.75, 1],
+    });
+
+    if (footer) {
+      observer.observe(footer);
+    }
+
+    window.addEventListener("scroll", scheduleUpdate, { passive: true });
+    window.addEventListener("resize", scheduleUpdate, { passive: true });
+    scheduleUpdate();
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("scroll", scheduleUpdate);
+      window.removeEventListener("resize", scheduleUpdate);
+      if (rafId.current !== null) {
+        cancelAnimationFrame(rafId.current);
+      }
+    };
+  }, []);
+
+  return overFooter;
 }

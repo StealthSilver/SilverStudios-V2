@@ -22,6 +22,8 @@ export interface FooterSocialLink {
   label: string;
   href: string;
   icon: FooterSocialIcon;
+  /** Opens in a new tab (off-site profiles). Omit for same-site links. */
+  external?: boolean;
 }
 
 export interface SiteConfig {

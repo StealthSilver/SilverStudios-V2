@@ -1,9 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  experimental: {
+  logging: {
     // Cursor's embedded browser injects data-cursor-ref before hydration, which spams the dev terminal.
-    browserDebugInfoInTerminal: false,
+    browserToTerminal: false,
   },
   images: {
     formats: ["image/avif", "image/webp"],
@@ -23,6 +23,10 @@ const nextConfig: NextConfig = {
       },
       {
         pathname: "/Services/**",
+        search: "",
+      },
+      {
+        pathname: "/SilverUi/**",
         search: "",
       },
       {

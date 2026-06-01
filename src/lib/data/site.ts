@@ -17,14 +17,32 @@ export const siteConfig: SiteConfig = {
   themeColor: "#0d0d0d",
 };
 
+export const SILVER_UI_URL = "https://silver-ui.vercel.app/";
+
 export const siteNavLinks: SiteNavLink[] = [
-  { label: "Services", href: "#services" },
-  { label: "Projects", href: "#projects" },
+  { label: "Services", href: "/services" },
+  { label: "Projects", href: "/projects" },
+  { label: "Blog", href: "/blog" },
+  { label: "Contact", href: "/contact" },
   {
     label: "Silver UI",
-    href: "https://silver-ui.vercel.app/",
+    href: SILVER_UI_URL,
     external: true,
   },
-  { label: "Blog", href: "#blog" },
-  { label: "Contact", href: "#contact" },
+];
+
+export const footerNavPrimaryLinks: SiteNavLink[] = [
+  { label: "Services", href: "/services" },
+  { label: "Projects", href: "/projects" },
+  { label: "Blog", href: "/blog" },
+];
+
+export const footerNavSecondaryLinks: SiteNavLink[] = [
+  {
+    label: "Silver UI",
+    href: SILVER_UI_URL,
+    external: true,
+  },
+  { label: "Workflow", href: "/workflow" },
+  { label: "Contact", href: "/contact" },
 ];

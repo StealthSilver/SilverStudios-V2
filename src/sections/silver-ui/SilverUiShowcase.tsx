@@ -1,6 +1,6 @@
 /**
  * @file SilverUiShowcase.tsx
- * @description Left-aligned Silver UI carousel with synced right-side copy and CTA.
+ * @description Silver UI carousel with synced right-aligned copy and CTA.
  */
 
 "use client";

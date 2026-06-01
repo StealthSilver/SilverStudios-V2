@@ -8,6 +8,7 @@ export {
   isNavbarForegroundLight,
   mixNavbarForeground,
   useNavbarForegroundColor,
+  useNavbarOverFooter,
   useNavbarScrollProgress,
 } from "./useNavbarScrollProgress";
 export { usePreloadHeroSlides } from "./use-preload-hero-slides";
