@@ -8,6 +8,7 @@ import localFont from "next/font/local";
 
 import { GlobalExploreCursor } from "@/components/ui/GlobalExploreCursor";
 import { GlassScrollbar } from "@/components/ui/GlassScrollbar";
+import { SmoothScrollEnhancer } from "@/components/ui/SmoothScrollEnhancer";
 
 import "./globals.css";
 
@@ -81,6 +82,7 @@ export default function RootLayout({
         <link rel="stylesheet" href="/scrollbar.css" />
       </head>
       <body className="flex min-h-full flex-col bg-white font-sans text-foreground">
+        <SmoothScrollEnhancer />
         {children}
         <GlobalExploreCursor />
         <GlassScrollbar />

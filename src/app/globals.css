@@ -3,6 +3,14 @@
 :root {
   --background: #ffffff;
   --foreground: #0d0d0d;
+  /* Fixed navbar clearance for hash / anchor scroll targets */
+  --scroll-padding-top: 4.5rem;
+}
+
+@media (min-width: 640px) {
+  :root {
+    --scroll-padding-top: 5.25rem;
+  }
 }
 
 @theme inline {
@@ -19,6 +27,19 @@ html {
   background-color: #000000;
   overflow-x: clip;
   overscroll-behavior-y: none;
+  scroll-behavior: smooth;
+  scroll-padding-top: var(--scroll-padding-top);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+section[id],
+footer[id] {
+  scroll-margin-top: var(--scroll-padding-top);
 }
 
 body {

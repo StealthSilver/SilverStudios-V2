@@ -21,7 +21,7 @@ import {
 export default function FeaturedNewsSection() {
   return (
     <section
-      id="featured-news"
+      id="blog"
       aria-labelledby="featured-news-title"
       className={cn(FEATURED_NEWS_SECTION)}
     >

@@ -53,6 +53,20 @@ interface ScatterTarget {
   y: number;
 }
 
+/** Stable inline styles so SSR HTML matches the client on hydration. */
+function galleryCardStyle(
+  x: number,
+  y: number,
+  opacity: number,
+  zIndex: number,
+): { transform: string; opacity: number; zIndex: number } {
+  return {
+    transform: `translate3d(${x.toFixed(4)}vw, ${y.toFixed(4)}vh, 0px)`,
+    opacity: Math.round(opacity * 1e5) / 1e5,
+    zIndex: Math.round(zIndex),
+  };
+}
+
 function createScatterTargets(count: number): ScatterTarget[] {
   const targets: ScatterTarget[] = [];
   const columns = Math.max(3, Math.ceil(Math.sqrt(count)));
@@ -221,6 +235,7 @@ export function ImageGalleryCarousel({ images }: ImageGalleryCarouselProps) {
           const fadeIn = clamp01(phaseProgress / 0.2);
           const opacity = fadeIn * sceneFade * 0.94;
           const zIndex = 20 + index;
+          const cardStyle = galleryCardStyle(x, y, opacity, zIndex);
 
           return (
             <article
@@ -232,11 +247,7 @@ export function ImageGalleryCarousel({ images }: ImageGalleryCarouselProps) {
                 cardRotations[index % cardRotations.length],
                 cardScale[index % cardScale.length],
               )}
-              style={{
-                transform: `translate3d(${x}vw, ${y}vh, 0)`,
-                opacity,
-                zIndex,
-              }}
+              style={cardStyle}
               aria-hidden={image.decorative}
             >
               <Image
