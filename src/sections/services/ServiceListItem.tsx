@@ -23,6 +23,8 @@ import {
 interface ServiceListItemProps {
   item: ServiceItem;
   scrollRevealIndex?: number;
+  onHoverStart?: (id: string) => void;
+  onTap?: (id: string) => void;
 }
 
 // ——— Local sub-components ———
@@ -44,6 +46,8 @@ function ServiceHoverMedia({ id }: { id: string }) {
 export function ServiceListItem({
   item,
   scrollRevealIndex,
+  onHoverStart,
+  onTap,
 }: ServiceListItemProps) {
   const primaryLabel = (
     <span className={cn(SERVICES_ITEM_PRIMARY)}>{item.primary}</span>
@@ -54,17 +58,26 @@ export function ServiceListItem({
       {!SERVICES_ITEM_MEDIA_HIDDEN && <ServiceHoverMedia id={item.id} />}
 
       <div className={cn(SERVICES_ITEM_INNER)}>
-        {scrollRevealIndex === undefined ? (
-          primaryLabel
-        ) : (
-          <div
-            className="scroll-reveal-word block w-full text-left"
-            data-scroll-reveal-word=""
-            data-scroll-reveal-index={scrollRevealIndex}
-          >
-            {primaryLabel}
-          </div>
-        )}
+        <button
+          type="button"
+          className="w-full cursor-pointer border-none bg-transparent p-0 text-left"
+          onMouseEnter={() => onHoverStart?.(item.id)}
+          onFocus={() => onHoverStart?.(item.id)}
+          onClick={() => onTap?.(item.id)}
+          aria-label={item.primary}
+        >
+          {scrollRevealIndex === undefined ? (
+            primaryLabel
+          ) : (
+            <div
+              className="scroll-reveal-word block w-full text-left"
+              data-scroll-reveal-word=""
+              data-scroll-reveal-index={scrollRevealIndex}
+            >
+              {primaryLabel}
+            </div>
+          )}
+        </button>
         {!SERVICES_ITEM_SECONDARY_HIDDEN && (
           <>
             <span className={cn(SERVICES_ITEM_SECONDARY_MOBILE)}>

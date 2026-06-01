@@ -39,7 +39,7 @@ export function ProjectsGrid({ projects }: ProjectsGridProps) {
   return (
     <ul ref={gridRef} className={cn(PROJECTS_GRID)}>
       {projects.map((project) => (
-        <li key={project.id} className="contents">
+        <li key={project.id}>
           <ProjectCard project={project} />
         </li>
       ))}

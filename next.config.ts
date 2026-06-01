@@ -22,6 +22,10 @@ const nextConfig: NextConfig = {
         search: "",
       },
       {
+        pathname: "/Services/**",
+        search: "",
+      },
+      {
         pathname: "/icon.svg",
         search: "",
       },

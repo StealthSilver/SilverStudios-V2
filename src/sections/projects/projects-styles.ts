@@ -6,7 +6,7 @@
 import { SECTION_HEADLINE } from "@/lib/section-headline-styles";
 
 export const PROJECTS_SECTION =
-  "relative z-40 bg-white px-5 py-28 sm:px-7 sm:py-36 md:px-8 md:py-44 lg:py-52";
+  "relative z-40 bg-white px-5 py-24 sm:px-7 sm:py-32 md:px-8 md:py-40 lg:py-48";
 
 export const PROJECTS_INNER = "mx-auto w-full max-w-7xl";
 
@@ -14,38 +14,38 @@ export const PROJECTS_TITLE = SECTION_HEADLINE;
 
 /** Space between the section headline and the work grid. */
 export const PROJECTS_TITLE_WRAP =
-  "mb-24 sm:mb-28 md:mb-32 lg:mb-36 xl:mb-40";
+  "mb-20 sm:mb-24 md:mb-28 lg:mb-32 xl:mb-36";
 
-/** Asymmetric flex-wrap grid inspired by Ramotion's projects rhythm. */
+/** Alternating left/right project rhythm with anchored rows. */
 export const PROJECTS_GRID =
-  "flex flex-wrap items-start gap-x-6 gap-y-20 sm:gap-x-8 sm:gap-y-24 md:gap-x-10 md:gap-y-28 lg:gap-x-12 lg:gap-y-32 xl:gap-x-14 xl:gap-y-36";
+  "flex w-full flex-col gap-y-12 sm:gap-y-14 md:gap-y-16 lg:gap-y-20 [&>li]:flex [&>li]:w-full [&>li:nth-child(1)]:justify-start [&>li:nth-child(1)_[data-project-card]]:max-w-[20rem] sm:[&>li:nth-child(1)_[data-project-card]]:max-w-[25rem] md:[&>li:nth-child(1)_[data-project-card]]:max-w-[29rem] lg:[&>li:nth-child(1)_[data-project-card]]:max-w-[32rem] [&>li:nth-child(1)_.project-card__media]:min-h-[24rem] sm:[&>li:nth-child(1)_.project-card__media]:min-h-[30rem] md:[&>li:nth-child(1)_.project-card__media]:min-h-[35rem] lg:[&>li:nth-child(1)_.project-card__media]:min-h-[40rem] [&>li:nth-child(2)]:justify-end [&>li:nth-child(2)]:-mt-[18rem] sm:[&>li:nth-child(2)]:-mt-[22rem] md:[&>li:nth-child(2)]:-mt-[25rem] lg:[&>li:nth-child(2)]:-mt-[28.5rem] [&>li:nth-child(3)]:mt-12 [&>li:nth-child(3)]:justify-start sm:[&>li:nth-child(3)]:mt-16 md:[&>li:nth-child(3)]:mt-20 lg:[&>li:nth-child(3)]:mt-28 [&>li:nth-child(4)]:justify-end [&>li:nth-child(5)]:justify-start [&>li:nth-child(5)]:-mt-[30rem] sm:[&>li:nth-child(5)]:-mt-[36rem] md:[&>li:nth-child(5)]:-mt-[40rem] lg:[&>li:nth-child(5)]:-mt-[44rem] [&>li:nth-child(6)]:mt-12 [&>li:nth-child(6)]:justify-end sm:[&>li:nth-child(6)]:mt-16 md:[&>li:nth-child(6)]:mt-20 lg:[&>li:nth-child(6)]:mt-28";
 
 export const PROJECT_CARD =
   "project-card group flex w-full flex-col text-left";
 
 export const PROJECT_CARD_WIDTH_SMALL =
-  "md:w-[calc(40%-1rem)] lg:w-[calc(40%-1.25rem)] xl:w-[calc(38%-1.5rem)]";
+  "w-full max-w-[23rem] sm:max-w-[29rem] md:max-w-[33rem] lg:max-w-[36rem]";
 
 export const PROJECT_CARD_WIDTH_MEDIUM =
-  "md:w-[calc(54%-1rem)] lg:w-[calc(54%-1.25rem)] xl:w-[calc(56%-1.5rem)]";
+  "w-full max-w-[23rem] sm:max-w-[29rem] md:max-w-[33rem] lg:max-w-[36rem]";
 
-export const PROJECT_CARD_WIDTH_LARGE = "md:mx-auto md:w-[90%]";
+export const PROJECT_CARD_WIDTH_LARGE =
+  "w-full max-w-[36rem] sm:max-w-[50rem] md:max-w-[64rem] lg:max-w-[72rem]";
 
 /** Pushes paired cards down to mimic Clay's bottom-aligned rows. */
-export const PROJECT_CARD_ALIGN_BOTTOM =
-  "md:pt-28 lg:pt-36 xl:pt-44";
+export const PROJECT_CARD_ALIGN_BOTTOM = "";
 
 export const PROJECT_CARD_MEDIA =
-  "project-card__media relative w-full overflow-hidden rounded-lg bg-neutral-100 sm:rounded-xl";
+  "project-card__media relative w-full overflow-hidden rounded-none bg-neutral-100";
 
 export const PROJECT_CARD_MEDIA_SMALL =
-  "aspect-[3/4] min-h-[16rem] sm:min-h-[19rem] md:min-h-[21rem] lg:min-h-[24rem] xl:min-h-[27rem]";
+  "aspect-[4/5] min-h-[28rem] sm:min-h-[35rem] md:min-h-[40rem] lg:min-h-[45rem]";
 
 export const PROJECT_CARD_MEDIA_MEDIUM =
-  "aspect-[5/6] min-h-[18rem] sm:min-h-[22rem] md:min-h-[26rem] lg:min-h-[30rem] xl:min-h-[34rem]";
+  "aspect-[3/4] min-h-[35rem] sm:min-h-[43rem] md:min-h-[49rem] lg:min-h-[54rem]";
 
 export const PROJECT_CARD_MEDIA_LARGE =
-  "aspect-[21/10] min-h-[14rem] sm:min-h-[17rem] md:min-h-[20rem] lg:min-h-[24rem] xl:min-h-[28rem]";
+  "aspect-[16/8] min-h-[20rem] sm:min-h-[26rem] md:min-h-[32rem] lg:min-h-[38rem]";
 
 export const PROJECT_CARD_COPY = "mt-5 flex flex-col gap-1.5 sm:mt-6 md:mt-7";
 
@@ -56,7 +56,7 @@ export const PROJECT_CARD_DESCRIPTION =
   "max-w-md overflow-hidden font-nav text-base font-normal leading-relaxed tracking-tight text-neutral-600 opacity-0 max-h-0 translate-y-1 transition-all duration-300 ease-out group-hover:opacity-100 group-hover:max-h-32 group-hover:translate-y-0 group-hover:text-neutral-900 group-focus-within:opacity-100 group-focus-within:max-h-32 group-focus-within:translate-y-0 sm:text-[1.0625rem]";
 
 export const PROJECTS_CTA_WRAP =
-  "mt-16 flex w-full justify-start sm:mt-20 md:mt-24";
+  "mt-14 flex w-full justify-start sm:mt-16 md:mt-20";
 
 export const PROJECTS_CTA_LABEL =
   "font-nav text-xs font-normal uppercase leading-none tracking-[0.06em] sm:text-sm md:text-base";

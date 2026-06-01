@@ -41,16 +41,6 @@ export const projectsContent = {
       layout: { size: "large" },
     },
     {
-      id: "sgrids",
-      name: "Sgrids",
-      description:
-        "Smart solar grid management for a cleaner, more resilient energy future",
-      imageSrc: "/Hero_Mockups/sgrids.png",
-      imageWidth: 1654,
-      imageHeight: 951,
-      layout: { size: "small", align: "bottom" },
-    },
-    {
       id: "spardha",
       name: "Spardha",
       description:
@@ -59,6 +49,16 @@ export const projectsContent = {
       imageWidth: 1536,
       imageHeight: 1024,
       layout: { size: "medium", align: "top" },
+    },
+    {
+      id: "sgrids",
+      name: "Sgrids",
+      description:
+        "Smart solar grid management for a cleaner, more resilient energy future",
+      imageSrc: "/Hero_Mockups/sgrids.png",
+      imageWidth: 1654,
+      imageHeight: 951,
+      layout: { size: "small", align: "bottom" },
     },
     {
       id: "solx",

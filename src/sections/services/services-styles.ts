@@ -23,6 +23,17 @@ export const SERVICES_SECTION =
 
 export const SERVICES_INNER = "mx-auto flex w-full max-w-7xl flex-col";
 
+export const SERVICES_IMAGE_PANEL =
+  "pointer-events-none fixed inset-y-0 right-0 z-30 hidden h-screen w-[42vw] min-w-[26rem] max-w-[42rem] lg:block";
+
+export const SERVICES_IMAGE_STAGE = "relative h-full w-full overflow-hidden";
+
+export const SERVICES_IMAGE_MOBILE_STAGE =
+  "relative mt-8 h-[50vh] w-full overflow-hidden lg:hidden";
+
+export const SERVICES_IMAGE_LIVE_LINE =
+  "pointer-events-none absolute left-0 z-[3] h-px w-full bg-white/95 shadow-[0_0_10px_rgba(255,255,255,0.35)]";
+
 export const SERVICES_HEADLINE = SECTION_HEADLINE;
 
 /** Space between the section headline and the services list. */
