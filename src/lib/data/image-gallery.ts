@@ -30,5 +30,15 @@ export const imageGalleryContent = {
       alt: "Waterfront walkway with mural architecture at golden hour",
       src: "/Images/image4.jpeg",
     },
+    {
+      id: "gallery-image-5",
+      alt: "Developer workspace with laptop and external monitor displaying code",
+      src: "/Images/image5.jpeg",
+    },
+    {
+      id: "gallery-image-6",
+      alt: "LEGO Batman minifigure on textured fabric",
+      src: "/Images/image6.jpeg",
+    },
   ],
 } satisfies ImageGalleryContent;
