@@ -40,16 +40,6 @@ const SERVICES_TITLE_WORD =
 
 const SERVICES_HOVER_DEBOUNCE_MS = 110;
 const SERVICES_IMAGE_TRANSITION_MS = 550;
-const SERVICES_DEFAULT_SERVICE_ID = "branding";
-
-const SERVICES_IMAGE_MAP: Record<string, string> = {
-  branding: "/Services/Branding.png",
-  development: "/Services/development.png",
-  "digital-products": "/Services/digital_products.png",
-  "ui-ux": "/Services/UX.png",
-  websites: "/Services/websites.png",
-  "content-seo": "/Services/seo.png",
-};
 
 function splitWordTokens(text: string): string[] {
   return text.split(/(\s+)/).filter((token) => token.length > 0);
@@ -61,6 +51,7 @@ function isWhitespace(token: string): boolean {
 
 interface ServicesSectionRevealProps {
   title: string;
+  defaultImageSrc: string;
   items: readonly ServiceItem[];
   seeAllLabel: string;
   seeAllHref: string;
@@ -69,9 +60,22 @@ interface ServicesSectionRevealProps {
 type TransitionDirection = "up" | "down";
 
 interface TransitionState {
-  from: number;
-  to: number;
+  from: string | null;
+  to: string | null;
   direction: TransitionDirection;
+}
+
+function resolveServiceImageSrc(
+  serviceId: string | null,
+  items: readonly ServiceItem[],
+  defaultImageSrc: string,
+): string {
+  if (serviceId === null) {
+    return defaultImageSrc;
+  }
+
+  const item = items.find((entry) => entry.id === serviceId);
+  return item?.imageSrc ?? defaultImageSrc;
 }
 
 interface TitleTokenSegment {
@@ -82,6 +86,7 @@ interface TitleTokenSegment {
 
 export function ServicesSectionReveal({
   title,
+  defaultImageSrc,
   items,
   seeAllLabel,
   seeAllHref,
@@ -90,7 +95,7 @@ export function ServicesSectionReveal({
   const hoverDebounceRef = useRef<number | null>(null);
   const animationFrameRef = useRef<number | null>(null);
   const animationStartRef = useRef<number | null>(null);
-  const previousIntentIndexRef = useRef<number>(0);
+  const previousIntentIndexRef = useRef<number>(-1);
 
   const [isSectionVisible, setIsSectionVisible] = useState(false);
   const [transitionProgress, setTransitionProgress] = useState(0);
@@ -102,8 +107,7 @@ export function ServicesSectionReveal({
   const itemIndexById = useMemo(() => {
     return new Map(itemIds.map((id, index) => [id, index]));
   }, [itemIds]);
-  const defaultIndex = itemIndexById.get(SERVICES_DEFAULT_SERVICE_ID) ?? 0;
-  const [activeIndex, setActiveIndex] = useState(defaultIndex);
+  const [activeServiceId, setActiveServiceId] = useState<string | null>(null);
   const titleTokens = useMemo(() => splitWordTokens(title), [title]);
   const titleSegments = useMemo(() => {
     return titleTokens.map<TitleTokenSegment>((token, index) => {
@@ -133,10 +137,6 @@ export function ServicesSectionReveal({
   const ctaRevealIndex = listRevealStart + items.length;
 
   useEffect(() => {
-    previousIntentIndexRef.current = defaultIndex;
-  }, [defaultIndex]);
-
-  useEffect(() => {
     const section = contentRef.current?.closest("section");
     if (!section) return;
 
@@ -163,15 +163,15 @@ export function ServicesSectionReveal({
   }, []);
 
   const runImageTransition = useCallback(
-    (nextIndex: number, direction: TransitionDirection) => {
+    (nextServiceId: string | null, direction: TransitionDirection) => {
       if (animationFrameRef.current !== null) {
         cancelAnimationFrame(animationFrameRef.current);
       }
       animationStartRef.current = null;
       setTransitionProgress(0);
       setTransitionState({
-        from: activeIndex,
-        to: nextIndex,
+        from: activeServiceId,
+        to: nextServiceId,
         direction,
       });
 
@@ -191,13 +191,13 @@ export function ServicesSectionReveal({
 
         setTransitionState(null);
         setTransitionProgress(0);
-        setActiveIndex(nextIndex);
+        setActiveServiceId(nextServiceId);
         animationFrameRef.current = null;
       };
 
       animationFrameRef.current = requestAnimationFrame(animate);
     },
-    [activeIndex],
+    [activeServiceId],
   );
 
   const switchToServiceId = useCallback(
@@ -212,38 +212,39 @@ export function ServicesSectionReveal({
       hoverDebounceRef.current = window.setTimeout(() => {
         const previousIntent = previousIntentIndexRef.current;
         previousIntentIndexRef.current = nextIndex;
-        if (nextIndex === activeIndex) return;
+        if (id === activeServiceId) return;
 
         const direction: TransitionDirection =
           nextIndex > previousIntent ? "down" : "up";
-        runImageTransition(nextIndex, direction);
+        runImageTransition(id, direction);
       }, SERVICES_HOVER_DEBOUNCE_MS);
     },
-    [activeIndex, itemIndexById, runImageTransition],
+    [activeServiceId, itemIndexById, runImageTransition],
   );
 
-  const resetToDefaultService = useCallback(() => {
-    const defaultIndex = itemIndexById.get(SERVICES_DEFAULT_SERVICE_ID) ?? 0;
-    previousIntentIndexRef.current = defaultIndex;
-
+  const resetToDefaultImage = useCallback(() => {
     if (hoverDebounceRef.current !== null) {
       window.clearTimeout(hoverDebounceRef.current);
       hoverDebounceRef.current = null;
     }
 
-    if (defaultIndex === activeIndex) return;
+    if (activeServiceId === null) return;
 
+    const currentIndex = itemIndexById.get(activeServiceId) ?? 0;
     const direction: TransitionDirection =
-      defaultIndex > activeIndex ? "down" : "up";
-    runImageTransition(defaultIndex, direction);
-  }, [activeIndex, itemIndexById, runImageTransition]);
+      currentIndex > previousIntentIndexRef.current ? "up" : "down";
+    previousIntentIndexRef.current = -1;
+    runImageTransition(null, direction);
+  }, [activeServiceId, itemIndexById, runImageTransition]);
 
-  const fromIndex = transitionState?.from ?? activeIndex;
-  const toIndex = transitionState?.to ?? activeIndex;
-  const fromItem = items[fromIndex];
-  const toItem = items[toIndex];
-  const fromImageSrc = SERVICES_IMAGE_MAP[fromItem?.id] ?? SERVICES_IMAGE_MAP.branding;
-  const toImageSrc = SERVICES_IMAGE_MAP[toItem?.id] ?? SERVICES_IMAGE_MAP.branding;
+  const fromServiceId = transitionState?.from ?? activeServiceId;
+  const toServiceId = transitionState?.to ?? activeServiceId;
+  const fromImageSrc = resolveServiceImageSrc(
+    fromServiceId,
+    items,
+    defaultImageSrc,
+  );
+  const toImageSrc = resolveServiceImageSrc(toServiceId, items, defaultImageSrc);
 
   const seamTopPercent =
     transitionState?.direction === "down"
@@ -321,7 +322,7 @@ export function ServicesSectionReveal({
             })}
           </p>
 
-          <ul className={cn(SERVICES_LIST)} onMouseLeave={resetToDefaultService}>
+          <ul className={cn(SERVICES_LIST)} onMouseLeave={resetToDefaultImage}>
             {items.map((item, index) => (
               <ServiceListItem
                 key={item.id}
