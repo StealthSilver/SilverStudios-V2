@@ -18,6 +18,10 @@ const nextConfig: NextConfig = {
         pathname: "/Images/**",
       },
       {
+        pathname: "/News/**",
+        search: "",
+      },
+      {
         pathname: "/Logos/**",
         search: "",
       },

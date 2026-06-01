@@ -6,7 +6,8 @@
 export interface FeaturedNewsSlide {
   id: string;
   headline: string;
-  gradientClassName: string;
+  imageSrc: string;
+  imageAlt: string;
 }
 
 export interface FeaturedNewsContent {

@@ -48,5 +48,11 @@ export const FEATURED_NEWS_CARD_MIN_WIDTH: Record<number, string> = {
 export const FEATURED_NEWS_CARD =
   "h-[350px] min-w-0 shrink grow basis-0 transition-[flex-grow] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] sm:h-[390px] md:h-[440px]";
 
+/** Full-bleed news artwork inside each carousel card. */
+export const FEATURED_NEWS_CARD_MEDIA_WRAP =
+  "pointer-events-none absolute inset-0 overflow-hidden transition-[opacity,transform] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]";
+
+export const FEATURED_NEWS_CARD_IMAGE = "object-cover object-center";
+
 export const FEATURED_NEWS_CONTROL =
   "inline-flex h-11 w-11 items-center justify-center rounded-full border border-neutral-300 bg-white font-nav text-lg font-normal text-neutral-800 transition-colors duration-300 hover:border-neutral-900 hover:bg-neutral-900 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900/25 focus-visible:ring-offset-2";

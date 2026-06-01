@@ -12,40 +12,39 @@ export const featuredNewsContent = {
   ctaHref: "/proof/news",
   slides: [
     {
-      id: "smart-grid-leadership",
+      id: "silverstudios-art-launch",
       headline:
-        "Design press on Silver Studios’ brand and product work for a climate-tech leader—one system across web, product, and investor touchpoints.",
-      gradientClassName: "from-violet-600 via-fuchsia-500 to-amber-300",
+        "We Dumped our old page to welcome a new one. Launching silverstudios.art.",
+      imageSrc: "/News/news1.png",
+      imageAlt: "Silver Studios website relaunch",
     },
     {
-      id: "energy-transition-spotlight",
+      id: "silver-ui-launch",
       headline:
-        "Trade coverage of our AI-informed studio workflow that accelerated a global SaaS launch without sacrificing craft or narrative clarity.",
-      gradientClassName: "from-cyan-500 via-sky-500 to-indigo-600",
+        "Launching Silver UI. The inhouse Ui library for Templates, Blocks and more.",
+      imageSrc: "/News/news2.png",
+      imageAlt: "Silver UI library launch",
     },
     {
-      id: "innovation-in-the-news",
+      id: "social-instagram-linkedin",
       headline:
-        "Outlets highlight how we helped a fintech scale from MVP to Series B with a unified design language, design system, and marketing site.",
-      gradientClassName: "from-emerald-500 via-teal-400 to-blue-500",
+        "We are active on Instagram and LinkedIn, check us out there.",
+      imageSrc: "/News/news3.png",
+      imageAlt: "Silver Studios on Instagram and LinkedIn",
     },
     {
-      id: "press-highlights",
+      id: "dribbble-github",
       headline:
-        "Awwwards and industry blogs profile an immersive web experience we built for a renewable-energy portfolio—strategy, UI, and motion in sync.",
-      gradientClassName: "from-rose-500 via-orange-400 to-yellow-300",
+        "We share our work on Dribble and Github frequently, check out our work there.",
+      imageSrc: "/News/news4.png",
+      imageAlt: "Silver Studios work on Dribbble and GitHub",
     },
     {
-      id: "powering-the-future",
+      id: "levender-ai-partnership",
       headline:
-        "Features on Silver Studios’ integrated model: functional design, creative storytelling, and engineering under one roof for world-leading brands.",
-      gradientClassName: "from-purple-600 via-blue-500 to-cyan-300",
-    },
-    {
-      id: "sga-in-the-headlines",
-      headline:
-        "Interviews on blending AI, design, and technology to build transformative digital experiences—and what that means for the next decade of client work.",
-      gradientClassName: "from-lime-500 via-emerald-500 to-cyan-500",
+        "We partnered with Levender AI. We love their brand and we are gonna help them with their story.",
+      imageSrc: "/News/news5.png",
+      imageAlt: "Silver Studios partnership with Levender AI",
     },
   ],
 } satisfies FeaturedNewsContent;

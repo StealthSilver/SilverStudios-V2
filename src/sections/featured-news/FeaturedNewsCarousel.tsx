@@ -1,10 +1,11 @@
 /**
  * @file FeaturedNewsCarousel.tsx
- * @description Interactive gradient card carousel for Featured News.
+ * @description Interactive image card carousel for Featured News.
  */
 
 "use client";
 
+import Image from "next/image";
 import { useId, useMemo, useState } from "react";
 
 import { GlassSurface } from "@/components/ui/GlassSurface";
@@ -14,6 +15,8 @@ import type { FeaturedNewsSlide } from "@/types/featured-news";
 
 import {
   FEATURED_NEWS_CARD,
+  FEATURED_NEWS_CARD_IMAGE,
+  FEATURED_NEWS_CARD_MEDIA_WRAP,
   FEATURED_NEWS_CARD_MIN_WIDTH,
   FEATURED_NEWS_CAROUSEL_LIST,
   FEATURED_NEWS_CAROUSEL_TRACK,
@@ -86,7 +89,7 @@ function NewsCard({
       role="group"
       aria-roledescription="slide"
       aria-current={isActive ? "true" : undefined}
-      aria-label={`News story ${index + 1}${isActive ? " (active)" : ""}`}
+      aria-label={`${slide.headline}${isActive ? " (active)" : ""}`}
       className={cn(
         FEATURED_NEWS_CARD,
         !isActive &&
@@ -103,13 +106,21 @@ function NewsCard({
       >
         <div
           className={cn(
-            "absolute inset-0 bg-linear-to-br transition-[opacity,transform] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]",
-            slide.gradientClassName,
+            FEATURED_NEWS_CARD_MEDIA_WRAP,
             isActive ? "scale-105" : "scale-100",
           )}
           style={{ opacity: imageOpacity }}
           aria-hidden
-        />
+        >
+          <Image
+            src={slide.imageSrc}
+            alt=""
+            fill
+            className={cn(FEATURED_NEWS_CARD_IMAGE)}
+            sizes="(max-width: 768px) 72vw, 36rem"
+            priority={index < 2}
+          />
+        </div>
       </button>
     </li>
   );
