@@ -12,6 +12,13 @@ export const featuredNewsContent = {
   ctaHref: "/proof/news",
   slides: [
     {
+      id: "social-instagram-linkedin",
+      headline:
+        "We are active on Instagram and LinkedIn, check us out there.",
+      imageSrc: "/News/news3.png",
+      imageAlt: "Silver Studios on Instagram and LinkedIn",
+    },
+    {
       id: "silverstudios-art-launch",
       headline:
         "We Dumped our old page to welcome a new one. Launching silverstudios.art.",
@@ -24,13 +31,6 @@ export const featuredNewsContent = {
         "Launching Silver UI. The inhouse Ui library for Templates, Blocks and more.",
       imageSrc: "/News/news2.png",
       imageAlt: "Silver UI library launch",
-    },
-    {
-      id: "social-instagram-linkedin",
-      headline:
-        "We are active on Instagram and LinkedIn, check us out there.",
-      imageSrc: "/News/news3.png",
-      imageAlt: "Silver Studios on Instagram and LinkedIn",
     },
     {
       id: "dribbble-github",

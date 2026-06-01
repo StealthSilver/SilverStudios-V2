@@ -11,9 +11,24 @@ export const imageGalleryContent = {
     "A quick carousel of recent creative frames. Use the left and right controls to explore each image.",
   images: [
     {
-      id: "gallery-wa-6",
-      alt: "Creative Cue inspired gallery frame 6",
-      src: "/Images/WhatsApp%20Image%202026-06-01%20at%2001.15.50%20%282%29.jpeg",
+      id: "gallery-image-1",
+      alt: "Paint-by-numbers floral still life with vases on a table",
+      src: "/Images/image1.jpeg",
+    },
+    {
+      id: "gallery-image-2",
+      alt: "Colorful mini canvas paintings arranged on a gallery wall",
+      src: "/Images/image2.jpeg",
+    },
+    {
+      id: "gallery-image-3",
+      alt: "Black and white photograph of a branded ceramic mug on wood",
+      src: "/Images/image3.jpeg",
+    },
+    {
+      id: "gallery-image-4",
+      alt: "Waterfront walkway with mural architecture at golden hour",
+      src: "/Images/image4.jpeg",
     },
   ],
 } satisfies ImageGalleryContent;
